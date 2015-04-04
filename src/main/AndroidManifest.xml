@@ -36,6 +36,18 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name=".BreweryListActivity"
+            android:label="@string/title_activity_brewery_list" >
+        </activity>
+        <activity
+            android:name=".BeerListActivity"
+            android:label="@string/title_activity_beer_list" >
+        </activity>
+        <activity
+            android:name=".CategoryListActivity"
+            android:label="@string/title_activity_category_list" >
+        </activity>
     </application>
 
 </manifest>

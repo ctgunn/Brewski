@@ -13,4 +13,7 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+    <string name="title_activity_brewery_list">BreweryListActivity</string>
+    <string name="title_activity_beer_list">BeerListActivity</string>
+    <string name="title_activity_category_list">CategoryListActivity</string>
 </resources>

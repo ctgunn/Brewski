@@ -1,39 +1,89 @@
 package gunn.brewski.app;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
-public class DashboardActivity extends ActionBarActivity {
+public class DashboardActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
-    }
+        setContentView(R.layout.dashboard_layout);
 
+        /**
+         * Creating all buttons instances
+         * */
+        // Dashboard News feed button
+        Button btn_newsfeed = (Button) findViewById(R.id.btn_news_feed);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
-        return true;
-    }
+        // Dashboard Friends button
+        Button btn_friends = (Button) findViewById(R.id.btn_friends);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        // Dashboard Messages button
+        Button btn_messages = (Button) findViewById(R.id.btn_messages);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        // Dashboard Places button
+        Button btn_places = (Button) findViewById(R.id.btn_places);
 
-        return super.onOptionsItemSelected(item);
+        // Dashboard Events button
+        Button btn_events = (Button) findViewById(R.id.btn_events);
+
+        // Dashboard Photos button
+        Button btn_photos = (Button) findViewById(R.id.btn_photos);
+
+        /**
+         * Handling all button click events
+         * */
+
+        // Listening to News Feed button click
+        btn_newsfeed.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // Listening Friends button click
+        btn_friends.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), CategoryListActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // Listening Messages button click
+        btn_messages.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), BeerListActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // Listening to Places button click
+        btn_places.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), BreweryListActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
