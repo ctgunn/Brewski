@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 /**
  * Created by SESA300553 on 4/3/2015.
  */
+
 public class DashboardLayout extends ViewGroup {
 
     private static final int UNEVEN_GRID_PENALTY_MULTIPLIER = 10;
@@ -40,8 +41,10 @@ public class DashboardLayout extends ViewGroup {
                 MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
 
         final int count = getChildCount();
+
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+
             if (child.getVisibility() == GONE) {
                 continue;
             }
@@ -61,6 +64,7 @@ public class DashboardLayout extends ViewGroup {
 
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+
             if (child.getVisibility() == GONE) {
                 continue;
             }
@@ -82,8 +86,10 @@ public class DashboardLayout extends ViewGroup {
 
         // Calculate the number of visible children.
         int visibleCount = 0;
+
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+
             if (child.getVisibility() == GONE) {
                 continue;
             }
@@ -132,6 +138,7 @@ public class DashboardLayout extends ViewGroup {
                 rows = (visibleCount - 1) / cols + 1;
                 hSpace = ((width - mMaxChildWidth * cols) / (cols + 1));
                 vSpace = ((height - mMaxChildHeight * rows) / (rows + 1));
+
                 break;
             }
 
@@ -151,8 +158,10 @@ public class DashboardLayout extends ViewGroup {
         int left, top;
         int col, row;
         int visibleIndex = 0;
+
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+
             if (child.getVisibility() == GONE) {
                 continue;
             }
@@ -166,6 +175,7 @@ public class DashboardLayout extends ViewGroup {
             child.layout(left, top,
                     (hSpace == 0 && col == cols - 1) ? r : (left + width),
                     (vSpace == 0 && row == rows - 1) ? b : (top + height));
+
             ++visibleIndex;
         }
     }

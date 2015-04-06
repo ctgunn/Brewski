@@ -1,19 +1,32 @@
 <resources>
     <string name="app_name">Brewski</string>
 
-    <string name="title_activity_main">Breweries</string>
-
     <string name="action_settings">Settings</string>
-    <string name="title_activity_dashboard">Dashboard</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_profile">Profile</string>
 
+    <string name="pref_location_key">location</string>
+    <string name="pref_location_default">37244</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="title_activity_brewery_list">BreweryListActivity</string>
-    <string name="title_activity_beer_list">BeerListActivity</string>
-    <string name="title_activity_category_list">CategoryListActivity</string>
+
+    <string name="title_activity_main">Brewski</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_brewery_list">Breweries</string>
+    <string name="title_activity_beer_list">Beers</string>
+    <string name="title_activity_category_list">Categories</string>
+
+    <string name="dashboard_button_profile">Profile</string>
+    <string name="dashboard_button_categories">Categories</string>
+    <string name="dashboard_button_beers">Beers</string>
+    <string name="dashboard_button_breweries">Breweries</string>
+
+    <string name="title_activity_loading_screen">Loading&#8230;</string>
+    <string name="title_activity_category_detail">CategoryDetailActivity</string>
+    <string name="title_activity_beer_detail">BeerDetailActivity</string>
+    <string name="title_activity_brewery">BreweryActivity</string>
+    <string name="title_activity_brewery_detail">BreweryDetailActivity</string>
 </resources>

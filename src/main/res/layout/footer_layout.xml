@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/FooterBar" >
-    <TextView android:text="Brewski"
+    <TextView android:text="@string/app_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="#606060"
+        android:textColor="@color/footer_text"
         android:gravity="center"
-        android:paddingTop="10dip"/>
+        android:paddingTop="10dp"/>
 </LinearLayout>

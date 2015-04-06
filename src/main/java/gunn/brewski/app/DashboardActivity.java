@@ -21,29 +21,23 @@ public class DashboardActivity extends Activity {
          * Creating all buttons instances
          * */
         // Dashboard News feed button
-        Button btn_newsfeed = (Button) findViewById(R.id.btn_news_feed);
+        Button btn_profile = (Button) findViewById(R.id.btn_profile);
 
         // Dashboard Friends button
-        Button btn_friends = (Button) findViewById(R.id.btn_friends);
+        Button btn_categoriess = (Button) findViewById(R.id.btn_categories);
 
         // Dashboard Messages button
-        Button btn_messages = (Button) findViewById(R.id.btn_messages);
+        Button btn_beers = (Button) findViewById(R.id.btn_beers);
 
         // Dashboard Places button
-        Button btn_places = (Button) findViewById(R.id.btn_places);
-
-        // Dashboard Events button
-        Button btn_events = (Button) findViewById(R.id.btn_events);
-
-        // Dashboard Photos button
-        Button btn_photos = (Button) findViewById(R.id.btn_photos);
+        Button btn_breweries = (Button) findViewById(R.id.btn_breweries);
 
         /**
          * Handling all button click events
          * */
 
         // Listening to News Feed button click
-        btn_newsfeed.setOnClickListener(new View.OnClickListener() {
+        btn_profile.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -54,7 +48,7 @@ public class DashboardActivity extends Activity {
         });
 
         // Listening Friends button click
-        btn_friends.setOnClickListener(new View.OnClickListener() {
+        btn_categoriess.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -65,7 +59,7 @@ public class DashboardActivity extends Activity {
         });
 
         // Listening Messages button click
-        btn_messages.setOnClickListener(new View.OnClickListener() {
+        btn_beers.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -75,8 +69,8 @@ public class DashboardActivity extends Activity {
             }
         });
 
-        // Listening to Places button click
-        btn_places.setOnClickListener(new View.OnClickListener() {
+        // Listening Messages button click
+        btn_breweries.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -85,5 +79,16 @@ public class DashboardActivity extends Activity {
                 startActivity(i);
             }
         });
+
+        // Listening to Places button click
+//        btn_breweries.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                // Launching News Feed Screen
+//                Intent i = new Intent(getApplicationContext(), BreweryListActivity.class);
+//                startActivity(i);
+//            }
+//        });
     }
 }

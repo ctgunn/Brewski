@@ -5,13 +5,78 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import gunn.brewski.app.sync.BrewskiSyncAdapter;
+
 
 public class MainActivity extends ActionBarActivity {
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String CATEGORY_DETAILFRAGMENT_TAG = "CATDFTAG";
+    private static final String BEER_DETAILFRAGMENT_TAG = "BEERDFTAG";
+    private static final String BREWERY_DETAILFRAGMENT_TAG = "BREWDFTAG";
+
+    private boolean mTwoPane;
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        mLocation = Utility.getPreferredLocation(this);
+
+        setContentView(R.layout.activity_dashboard);
+
+        if (findViewById(R.id.category_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.category_detail_container, new CategoryDetailActivity.CategoryDetailFragment(), CATEGORY_DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }
+        else if (findViewById(R.id.beer_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.beer_detail_container, new BeerDetailActivity.BeerDetailFragment(), BEER_DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }
+        else if (findViewById(R.id.brewery_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.brewery_detail_container, new BreweryDetailActivity.BreweryDetailFragment(), BREWERY_DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }
+        else {
+            mTwoPane = false;
+            getSupportActionBar().setElevation(0f);
+        }
+
+//        ForecastFragment forecastFragment =  ((ForecastFragment)getSupportFragmentManager()
+//                .findFragmentById(R.id.fragment_forecast));
+//        forecastFragment.setUseTodayLayout(!mTwoPane);
+
+        BrewskiSyncAdapter.initializeSyncAdapter(this);
     }
 
 

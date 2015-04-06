@@ -22,8 +22,8 @@
         </activity>
 
         <provider
-            android:name=".data.BrewskiContentProvider"
-            android:authorities="http://api.brewerydb.com/v2/"
+            android:name="data.BrewskiContentProvider"
+            android:authorities="gunn.brewski.app.data.BrewskiContentProvider"
             android:enabled="true"
             android:exported="true" >
         </provider>
@@ -47,6 +47,26 @@
         <activity
             android:name=".CategoryListActivity"
             android:label="@string/title_activity_category_list" >
+        </activity>
+        <activity
+            android:name=".LoadingScreenActivity"
+            android:label="@string/title_activity_loading_screen" >
+        </activity>
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:label="@string/title_activity_category_detail" >
+        </activity>
+        <activity
+            android:name=".BeerDetailActivity"
+            android:label="@string/title_activity_beer_detail" >
+        </activity>
+        <activity
+            android:name=".BreweryActivity"
+            android:label="@string/title_activity_brewery" >
+        </activity>
+        <activity
+            android:name=".BreweryDetailActivity"
+            android:label="@string/title_activity_brewery_detail" >
         </activity>
     </application>
 

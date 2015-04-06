@@ -4,45 +4,31 @@
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:background="#f8f9fe" >
-    <!--  News Feed Button -->
+    <!--  Profile Button -->
     <Button
-        android:id="@+id/btn_news_feed"
+        android:id="@+id/btn_profile"
         style="@style/DashboardButton"
-        android:text="News Feed" />
+        android:text="@string/dashboard_button_profile" />
         <!--android:drawableTop="@drawable/btn_newsfeed"-->
 
-    <!--  Friends Button -->
+    <!--  Categories Button -->
     <Button
-        android:id="@+id/btn_friends"
+        android:id="@+id/btn_categories"
         style="@style/DashboardButton"
-        android:text="Friends" />
+        android:text="@string/dashboard_button_categories" />
         <!--android:drawableTop="@drawable/btn_friends"-->
 
-    <!--  Messages Button -->
+    <!--  Beers Button -->
     <Button
-        android:id="@+id/btn_messages"
+        android:id="@+id/btn_beers"
         style="@style/DashboardButton"
-        android:text="Messages" />
+        android:text="@string/dashboard_button_beers" />
         <!--android:drawableTop="@drawable/btn_messages"-->
 
-    <!--  Places Button -->
+    <!--  Breweries Button -->
     <Button
-        android:id="@+id/btn_places"
+        android:id="@+id/btn_breweries"
         style="@style/DashboardButton"
-        android:text="Places" />
+        android:text="@string/dashboard_button_breweries" />
         <!--android:drawableTop="@drawable/btn_places"-->
-
-    <!--  Events Button -->
-    <Button
-        android:id="@+id/btn_events"
-        style="@style/DashboardButton"
-        android:text="Events" />
-        <!--android:drawableTop="@drawable/btn_events"-->
-
-    <!--  Photos Button -->
-    <Button
-        android:id="@+id/btn_photos"
-        style="@style/DashboardButton"
-        android:text="Photos" />
-        <!--android:drawableTop="@drawable/btn_photos"-->
 </gunn.brewski.app.DashboardLayout>
