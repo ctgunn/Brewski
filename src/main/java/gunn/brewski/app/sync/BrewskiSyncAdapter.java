@@ -40,6 +40,7 @@ import java.net.URL;
 import java.util.Vector;
 
 import gunn.brewski.app.MainActivity;
+import gunn.brewski.app.R;
 import gunn.brewski.app.Utility;
 import gunn.brewski.app.data.BrewskiContract;
 
