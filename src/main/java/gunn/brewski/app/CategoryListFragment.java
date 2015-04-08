@@ -1,8 +1,11 @@
 package gunn.brewski.app;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +27,7 @@ import gunn.brewski.app.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class CategoryListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class CategoryListFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor> {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -132,6 +135,21 @@ public class CategoryListFragment extends Fragment implements AbsListView.OnItem
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     /**

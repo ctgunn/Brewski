@@ -4,8 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import gunn.brewski.app.data.BrewskiContract.LocationEntry;
-import gunn.brewski.app.data.BrewskiContract.WeatherEntry;
+import gunn.brewski.app.data.BrewskiContract.ProfileEntry;
+import gunn.brewski.app.data.BrewskiContract.CategoryEntry;
+import gunn.brewski.app.data.BrewskiContract.BeerEntry;
+import gunn.brewski.app.data.BrewskiContract.BreweryEntry;
+import gunn.brewski.app.data.BrewskiContract.StyleEntry;
+import gunn.brewski.app.data.BrewskiContract.XAnalysisEntry;
 
 /**
  * Created by SESA300553 on 4/2/2015.
@@ -25,47 +29,68 @@ public class BrewskiDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create a table to hold locations.  A location consists of the string supplied in the
         // location setting, the city name, and the latitude and longitude
-        final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
-                LocationEntry._ID + " INTEGER PRIMARY KEY," +
-                LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
-                LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
-                LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
-                LocationEntry.COLUMN_COORD_LONG + " REAL NOT NULL " +
+        final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
+                ProfileEntry._ID + " INTEGER PRIMARY KEY," +
+                ProfileEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_ADDRESS_LINE_1 + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_ADDRESS_LINE_2 + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_ADDRESS_CITY + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_ADDRESS_STATE + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_ADDRESS_POSTAL_CODE + " TEXT NOT NULL, " +
                 " );";
 
-        final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
-                // Why AutoIncrement here, and not above?
-                // Unique keys will be auto-generated in either case.  But for weather
-                // forecasting, it's reasonable to assume the user will want information
-                // for a certain date and all dates *following*, so the forecast data
-                // should be sorted accordingly.
-                WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CategoryEntry.TABLE_NAME + " (" +
+                CategoryEntry._ID + " INTEGER PRIMARY KEY," +
+                CategoryEntry.COLUMN_CATEGORY_ID + " TEXT NOT NULL, " +
+                CategoryEntry.COLUMN_CATEGORY_NAME + " TEXT NOT NULL, " +
+                " );";
 
-                // the ID of the location entry associated with this weather data
-                WeatherEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
-                WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
-                WeatherEntry.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
-                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL," +
+        final String SQL_CREATE_BEER_TABLE = "CREATE TABLE " + BeerEntry.TABLE_NAME + " (" +
+                BeerEntry._ID + " INTEGER PRIMARY KEY," +
+                BeerEntry.COLUMN_BEER_ID + " TEXT NOT NULL, " +
+                BeerEntry.COLUMN_BEER_NAME + " TEXT NOT NULL, " +
+                BeerEntry.COLUMN_BEER_DESCRIPTION + " TEXT NOT NULL, " +
+                BeerEntry.COLUMN_STYLE_ID + " TEXT NOT NULL, " +
+                BeerEntry.COLUMN_LABEL_LARGE + " TEXT NOT NULL, " +
+                BeerEntry.COLUMN_LABEL_MEDIUM + " TEXT NOT NULL, " +
+                BeerEntry.COLUMN_LABEL_ICON + " TEXT NOT NULL, " +
+                " );";
 
-                WeatherEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
-                WeatherEntry.COLUMN_MAX_TEMP + " REAL NOT NULL, " +
+        final String SQL_CREATE_BREWERY_TABLE = "CREATE TABLE " + BreweryEntry.TABLE_NAME + " (" +
+                BreweryEntry._ID + " INTEGER PRIMARY KEY," +
+                BreweryEntry.COLUMN_BREWERY_ID + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_BREWERY_NAME + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_BREWERY_DESCRIPTION + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_ESTABLISHED + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_IMAGE_LARGE + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_IMAGE_MEDIUM + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_IMAGE_ICON + " TEXT NOT NULL, " +
+                " );";
 
-                WeatherEntry.COLUMN_HUMIDITY + " REAL NOT NULL, " +
-                WeatherEntry.COLUMN_PRESSURE + " REAL NOT NULL, " +
-                WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, " +
-                WeatherEntry.COLUMN_DEGREES + " REAL NOT NULL, " +
+        final String SQL_CREATE_STYLE_TABLE = "CREATE TABLE " + StyleEntry.TABLE_NAME + " (" +
+                StyleEntry._ID + " INTEGER PRIMARY KEY," +
+                StyleEntry.COLUMN_STYLE_ID + " TEXT NOT NULL, " +
+                StyleEntry.COLUMN_STYLE_NAME + " TEXT NOT NULL, " +
+                StyleEntry.COLUMN_STYLE_DESCRIPTION + " TEXT NOT NULL, " +
+                StyleEntry.COLUMN_CATEGORY_ID + " TEXT NOT NULL, " +
+                " );";
 
-                // Set up the location column as a foreign key to location table.
-                " FOREIGN KEY (" + WeatherEntry.COLUMN_LOC_KEY + ") REFERENCES " +
-                LocationEntry.TABLE_NAME + " (" + LocationEntry._ID + "), " +
+        final String SQL_CREATE_X_ANALYSIS_TABLE = "CREATE TABLE " + XAnalysisEntry.TABLE_NAME + " (" +
+                XAnalysisEntry._ID + " INTEGER PRIMARY KEY," +
+                XAnalysisEntry.COLUMN_USER_ID + " TEXT NOT NULL, " +
+                XAnalysisEntry.COLUMN_CATEGORY_ID + " TEXT NOT NULL, " +
+                XAnalysisEntry.COLUMN_BEER_ID + " TEXT NOT NULL, " +
+                XAnalysisEntry.COLUMN_BREWERY_ID + " TEXT NOT NULL, " +
+                XAnalysisEntry.COLUMN_STYLE_ID + " TEXT NOT NULL, " +
+                " );";
 
-                // To assure the application have just one weather entry per day
-                // per location, it's created a UNIQUE constraint with REPLACE strategy
-                " UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
-                WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
-
-        sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_CATEGORY_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_BEER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_BREWERY_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_STYLE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_X_ANALYSIS_TABLE);
     }
 
     @Override
@@ -76,8 +101,12 @@ public class BrewskiDbHelper extends SQLiteOpenHelper {
         // It does NOT depend on the version number for your application.
         // If you want to update the schema without wiping data, commenting out the next 2 lines
         // should be your top priority before modifying this method.
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LocationEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WeatherEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ProfileEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CategoryEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + BeerEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + BreweryEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + StyleEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + XAnalysisEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }
