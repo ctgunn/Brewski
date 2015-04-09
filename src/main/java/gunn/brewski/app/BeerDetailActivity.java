@@ -19,7 +19,7 @@ public class BeerDetailActivity extends ActionBarActivity {
             // using a fragment transaction.
 
             Bundle arguments = new Bundle();
-            arguments.putParcelable(BeerDetailFragment.DETAIL_URI, getIntent().getData());
+            arguments.putParcelable(BeerDetailFragment.BEER_DETAIL_URI, getIntent().getData());
 
             BeerDetailFragment beerDetailFragment = new BeerDetailFragment();
             beerDetailFragment.setArguments(arguments);

@@ -18,7 +18,7 @@ public class CategoryDetailActivity extends ActionBarActivity {
             // using a fragment transaction.
 
             Bundle arguments = new Bundle();
-            arguments.putParcelable(CategoryDetailFragment.DETAIL_URI, getIntent().getData());
+            arguments.putParcelable(CategoryDetailFragment.CATEGORY_DETAIL_URI, getIntent().getData());
 
             CategoryDetailFragment categoryDetailFragment = new CategoryDetailFragment();
             categoryDetailFragment.setArguments(arguments);
