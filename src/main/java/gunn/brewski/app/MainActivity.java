@@ -1,5 +1,6 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -35,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.category_detail_container, new CategoryDetailActivity.CategoryDetailFragment(), CATEGORY_DETAILFRAGMENT_TAG)
+                        .replace(R.id.category_detail_container, new CategoryDetailFragment(), CATEGORY_DETAILFRAGMENT_TAG)
                         .commit();
             }
         }
@@ -49,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.beer_detail_container, new BeerDetailActivity.BeerDetailFragment(), BEER_DETAILFRAGMENT_TAG)
+                        .replace(R.id.beer_detail_container, new BeerDetailFragment(), BEER_DETAILFRAGMENT_TAG)
                         .commit();
             }
         }
@@ -63,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.brewery_detail_container, new BreweryDetailActivity.BreweryDetailFragment(), BREWERY_DETAILFRAGMENT_TAG)
+                        .replace(R.id.brewery_detail_container, new BreweryDetailFragment(), BREWERY_DETAILFRAGMENT_TAG)
                         .commit();
             }
         }
@@ -71,6 +72,9 @@ public class MainActivity extends ActionBarActivity {
             mTwoPane = false;
             getSupportActionBar().setElevation(0f);
         }
+
+        Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
+        startActivity(i);
 
 //        ForecastFragment forecastFragment =  ((ForecastFragment)getSupportFragmentManager()
 //                .findFragmentById(R.id.fragment_forecast));
@@ -84,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 

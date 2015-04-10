@@ -10,12 +10,11 @@ import android.text.format.Time;
  * Created by SESA300553 on 4/2/2015.
  */
 public class BrewskiContract {
-
     // The "Content authority" is a name for the entire content provider, similar to the
     // relationship between a domain name and its website.  A convenient string to use for the
     // content authority is the package name for the app, which is guaranteed to be unique on the
     // device.
-    public static final String CONTENT_AUTHORITY = "com.example.android.sunshine.app";
+    public static final String CONTENT_AUTHORITY = "gunn.brewski.app";
 
     // Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
     // the content provider.
@@ -26,15 +25,6 @@ public class BrewskiContract {
     // looking at weather data. content://com.example.android.sunshine.app/givemeroot/ will fail,
     // as the ContentProvider hasn't been given any information on what to do with "givemeroot".
     // At least, let's hope not.  Don't be that dev, reader.  Don't be that dev.
-
-//    ================================================================================
-//    ================================================================================
-
-//    public static final String PATH_WEATHER = "weather";
-//    public static final String PATH_LOCATION = "location";
-
-//    ================================================================================
-//    ================================================================================
 
     public static final String PATH_PROFILE = "profile";
     public static final String PATH_CATEGORY = "category";
@@ -55,12 +45,12 @@ public class BrewskiContract {
 
     public static final class ProfileEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI =
+        public static final Uri PROFILE_CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PROFILE).build();
 
-        public static final String CONTENT_TYPE =
+        public static final String PROFILE_CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PROFILE;
-        public static final String CONTENT_ITEM_TYPE =
+        public static final String PROFILE_CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PROFILE;
 
         // Table name
@@ -78,18 +68,22 @@ public class BrewskiContract {
         public static final String COLUMN_ADDRESS_POSTAL_CODE = "address_postal_code";
 
         public static Uri buildProfileUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            return ContentUris.withAppendedId(PROFILE_CONTENT_URI, id);
+        }
+
+        public static Uri buildProfile(String user_id) {
+            return PROFILE_CONTENT_URI.buildUpon().appendPath(user_id).build();
         }
     }
 
     public static final class CategoryEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI =
+        public static final Uri CATEGORY_CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
 
-        public static final String CONTENT_TYPE =
+        public static final String CATEGORY_CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
-        public static final String CONTENT_ITEM_TYPE =
+        public static final String CATEGORY_CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
 
         // Table name
@@ -101,18 +95,22 @@ public class BrewskiContract {
         public static final String COLUMN_CATEGORY_NAME = "category_name";
 
         public static Uri buildCategoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            return ContentUris.withAppendedId(CATEGORY_CONTENT_URI, id);
+        }
+
+        public static Uri buildCategoryList(String category_id) {
+            return CATEGORY_CONTENT_URI.buildUpon().appendPath(category_id).build();
         }
     }
 
     public static final class BeerEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI =
+        public static final Uri BEER_CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_BEER).build();
 
-        public static final String CONTENT_TYPE =
+        public static final String BEER_CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BEER;
-        public static final String CONTENT_ITEM_TYPE =
+        public static final String BEER_CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BEER;
 
         // Table name
@@ -136,21 +134,23 @@ public class BrewskiContract {
         // which is received from BreweryDB.
         public static final String COLUMN_LABEL_ICON = "label_icon";
 
-
-
         public static Uri buildBeerUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            return ContentUris.withAppendedId(BEER_CONTENT_URI, id);
+        }
+
+        public static Uri buildBeerList(String beer_id) {
+            return BEER_CONTENT_URI.buildUpon().appendPath(beer_id).build();
         }
     }
 
     public static final class BreweryEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI =
+        public static final Uri BREWERY_CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_BREWERY).build();
 
-        public static final String CONTENT_TYPE =
+        public static final String BREWERY_CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BREWERY;
-        public static final String CONTENT_ITEM_TYPE =
+        public static final String BREWERY_CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BREWERY;
 
         // Table name
@@ -175,18 +175,21 @@ public class BrewskiContract {
         public static final String COLUMN_IMAGE_ICON = "image_icon";
 
         public static Uri buildBreweryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            return ContentUris.withAppendedId(BREWERY_CONTENT_URI, id);
+        }
+
+        public static Uri buildBreweryList(String brewery_id) {
+            return BREWERY_CONTENT_URI.buildUpon().appendPath(brewery_id).build();
         }
     }
 
     public static final class StyleEntry implements BaseColumns {
-
-        public static final Uri CONTENT_URI =
+        public static final Uri STYLE_CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE).build();
 
-        public static final String CONTENT_TYPE =
+        public static final String STYLE_CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_STYLE;
-        public static final String CONTENT_ITEM_TYPE =
+        public static final String STYLE_CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_STYLE;
 
         // Table name
@@ -203,18 +206,22 @@ public class BrewskiContract {
         public static final String COLUMN_CATEGORY_ID = "category_id";
 
         public static Uri buildStyleUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            return ContentUris.withAppendedId(STYLE_CONTENT_URI, id);
+        }
+
+        public static Uri buildStyleList(String style_id) {
+            return STYLE_CONTENT_URI.buildUpon().appendPath(style_id).build();
         }
     }
 
     public static final class XAnalysisEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI =
+        public static final Uri X_ANALYSIS_CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_X_ANALYSIS).build();
 
-        public static final String CONTENT_TYPE =
+        public static final String X_ANALYSIS_CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_X_ANALYSIS;
-        public static final String CONTENT_ITEM_TYPE =
+        public static final String X_ANALYSIS_CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_X_ANALYSIS;
 
         // Table name
@@ -231,124 +238,12 @@ public class BrewskiContract {
         // Foreign Style ID that is received from BreweryDB.
         public static final String COLUMN_STYLE_ID = "style_id";
 
-
         public static Uri buildXAnalysisUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            return ContentUris.withAppendedId(X_ANALYSIS_CONTENT_URI, id);
+        }
+
+        public static Uri buildXAnalysis(String user_id) {
+            return X_ANALYSIS_CONTENT_URI.buildUpon().appendPath(user_id).build();
         }
     }
-
-//    ================================================================================
-//    ================================================================================
-
-//    /* Inner class that defines the table contents of the location table */
-//    public static final class LocationEntry implements BaseColumns {
-//
-//        public static final Uri CONTENT_URI =
-//                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LOCATION).build();
-//
-//        public static final String CONTENT_TYPE =
-//                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-//        public static final String CONTENT_ITEM_TYPE =
-//                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-//
-//        // Table name
-//        public static final String TABLE_NAME = "location";
-//
-//        // The location setting string is what will be sent to openweathermap
-//        // as the location query.
-//        public static final String COLUMN_LOCATION_SETTING = "location_setting";
-//
-//        // Human readable location string, provided by the API.  Because for styling,
-//        // "Mountain View" is more recognizable than 94043.
-//        public static final String COLUMN_CITY_NAME = "city_name";
-//
-//        // In order to uniquely pinpoint the location on the map when we launch the
-//        // map intent, we store the latitude and longitude as returned by openweathermap.
-//        public static final String COLUMN_COORD_LAT = "coord_lat";
-//        public static final String COLUMN_COORD_LONG = "coord_long";
-//
-//        public static Uri buildLocationUri(long id) {
-//            return ContentUris.withAppendedId(CONTENT_URI, id);
-//        }
-//    }
-//
-//    /* Inner class that defines the table contents of the weather table */
-//    public static final class WeatherEntry implements BaseColumns {
-//
-//        public static final Uri CONTENT_URI =
-//                BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();
-//
-//        public static final String CONTENT_TYPE =
-//                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
-//        public static final String CONTENT_ITEM_TYPE =
-//                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
-//
-//        public static final String TABLE_NAME = "weather";
-//
-//        // Column with the foreign key into the location table.
-//        public static final String COLUMN_LOC_KEY = "location_id";
-//        // Date, stored as long in milliseconds since the epoch
-//        public static final String COLUMN_DATE = "date";
-//        // Weather id as returned by API, to identify the icon to be used
-//        public static final String COLUMN_WEATHER_ID = "weather_id";
-//
-//        // Short description and long description of the weather, as provided by API.
-//        // e.g "clear" vs "sky is clear".
-//        public static final String COLUMN_SHORT_DESC = "short_desc";
-//
-//        // Min and max temperatures for the day (stored as floats)
-//        public static final String COLUMN_MIN_TEMP = "min";
-//        public static final String COLUMN_MAX_TEMP = "max";
-//
-//        // Humidity is stored as a float representing percentage
-//        public static final String COLUMN_HUMIDITY = "humidity";
-//
-//        // Humidity is stored as a float representing percentage
-//        public static final String COLUMN_PRESSURE = "pressure";
-//
-//        // Windspeed is stored as a float representing windspeed  mph
-//        public static final String COLUMN_WIND_SPEED = "wind";
-//
-//        // Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
-//        public static final String COLUMN_DEGREES = "degrees";
-//
-//        public static Uri buildWeatherUri(long id) {
-//            return ContentUris.withAppendedId(CONTENT_URI, id);
-//        }
-//
-//        /*
-//            Student: This is the buildWeatherLocation function you filled in.
-//         */
-//        public static Uri buildWeatherLocation(String locationSetting) {
-//            return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
-//        }
-//
-//        public static Uri buildWeatherLocationWithStartDate(
-//                String locationSetting, long startDate) {
-//            long normalizedDate = normalizeDate(startDate);
-//            return CONTENT_URI.buildUpon().appendPath(locationSetting)
-//                    .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
-//        }
-//
-//        public static Uri buildWeatherLocationWithDate(String locationSetting, long date) {
-//            return CONTENT_URI.buildUpon().appendPath(locationSetting)
-//                    .appendPath(Long.toString(normalizeDate(date))).build();
-//        }
-//
-//        public static String getLocationSettingFromUri(Uri uri) {
-//            return uri.getPathSegments().get(1);
-//        }
-//
-//        public static long getDateFromUri(Uri uri) {
-//            return Long.parseLong(uri.getPathSegments().get(2));
-//        }
-//
-//        public static long getStartDateFromUri(Uri uri) {
-//            String dateString = uri.getQueryParameter(COLUMN_DATE);
-//            if (null != dateString && dateString.length() > 0)
-//                return Long.parseLong(dateString);
-//            else
-//                return 0;
-//        }
-//    }
 }

@@ -30,4 +30,19 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:background">#dedede</item>
     </style>
+
+    <style name="BeerListStyle">
+        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
+        for two-pane layout -->
+    </style>
+
+    <style name="BreweryListStyle">
+        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
+        for two-pane layout -->
+    </style>
+
+    <style name="CategoryListStyle">
+        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
+        for two-pane layout -->
+    </style>
 </resources>

@@ -1,22 +1,32 @@
 package gunn.brewski.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
+import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.dummy.DummyContent;
+import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -24,147 +34,235 @@ import gunn.brewski.app.dummy.DummyContent;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {link OnFragmentInteractionListener}
  * interface.
  */
-public class BreweryListFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BreweryListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String LOG_TAG = BreweryListFragment.class.getSimpleName();
+    private BeerListAdapter mBreweryListAdapter;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private ListView mBreweryListView;
+    private int mPosition = ListView.INVALID_POSITION;
+    private boolean mUseTodayLayout;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String SELECTED_KEY = "selected_position";
 
-    private OnFragmentInteractionListener mListener;
+    private static final int BREWERY_LIST_LOADER = 1;
+    // For the forecast view we're showing only a small subset of the stored data.
+    // Specify the columns we need.
+    private static final String[] BREWERY_COLUMNS = {
+            // In this case the id needs to be fully qualified with a table name, since
+            // the content provider joins the location & weather tables in the background
+            // (both have an _id column)
+            // On the one hand, that's annoying.  On the other, you can search the weather table
+            // using the location set by the user, which is only in the Location table.
+            // So the convenience is worth it.
+            BrewskiContract.BreweryEntry.TABLE_NAME + "." + BrewskiContract.BreweryEntry._ID,
+            BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID,
+            BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME,
+            BrewskiContract.BreweryEntry.COLUMN_BREWERY_DESCRIPTION,
+            BrewskiContract.BreweryEntry.COLUMN_ESTABLISHED,
+            BrewskiContract.BreweryEntry.COLUMN_IMAGE_LARGE,
+            BrewskiContract.BreweryEntry.COLUMN_IMAGE_MEDIUM,
+            BrewskiContract.BreweryEntry.COLUMN_IMAGE_ICON
+    };
+
+    // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
+    // must change.
+    static final int COL_WEATHER_ID = 0;
+    static final int COL_WEATHER_DATE = 1;
+    static final int COL_WEATHER_DESC = 2;
+    static final int COL_WEATHER_MAX_TEMP = 3;
+    static final int COL_WEATHER_MIN_TEMP = 4;
+    static final int COL_LOCATION_SETTING = 5;
+    static final int COL_WEATHER_CONDITION_ID = 6;
+    static final int COL_COORD_LAT = 7;
+    static final int COL_COORD_LONG = 8;
 
     /**
-     * The fragment's ListView/GridView.
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
      */
-    private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
-
-    // TODO: Rename and change types of parameters
-    public static BreweryListFragment newInstance(String param1, String param2) {
-        BreweryListFragment fragment = new BreweryListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public BreweryListFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Add this line in order for this fragment to handle menu events.
+        setHasOptionsMenu(true);
+    }
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_beer_list, menu);
+    }
 
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+//        if (id == R.id.action_refresh) {
+//            updateWeather();
+//            return true;
+//        }
+//        if (id == R.id.action_map) {
+//            openPreferredLocationInMap();
+//            return true;
+//        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_brewery, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        // The ForecastAdapter will take data from a source and
+        // use it to populate the ListView it's attached to.
+        mBreweryListAdapter = new BeerListAdapter(getActivity(), null, 0);
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        View rootView = inflater.inflate(R.layout.fragment_beer_list, container, false);
 
-        return view;
+        // Get a reference to the ListView, and attach this adapter to it.
+        mBreweryListView = (ListView) rootView.findViewById(R.id.listview_beer);
+        mBreweryListView.setAdapter(mBreweryListAdapter);
+        // We'll call our MainActivity
+        mBreweryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (cursor != null) {
+                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    ((Callback) getActivity()).onItemSelected(BrewskiContract.BeerEntry.buildBeerList("0"));
+                }
+
+                mPosition = position;
+            }
+        });
+
+        // If there's instance state, mine it for useful information.
+        // The end-goal here is that the user never knows that turning their device sideways
+        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
+        // or magically appeared to take advantage of room, but data or place in the app was never
+        // actually *lost*.
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            // The listview probably hasn't even been populated yet.  Actually perform the
+            // swapout in onLoadFinished.
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+
+        mBreweryListAdapter.setUseTodayLayout(mUseTodayLayout);
+
+        return rootView;
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(BREWERY_LIST_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    // since we read the location when we create the loader, all we need to do is restart things
+    void onLocationChanged( ) {
+        updateWeather();
+        getLoaderManager().restartLoader(BREWERY_LIST_LOADER, null, this);
+    }
+
+    private void updateWeather() {
+        BrewskiSyncAdapter.syncImmediately(getActivity());
+    }
+
+    private void openPreferredLocationInMap() {
+        // Using the URI scheme for showing a location found on a map.  This super-handy
+        // intent can is detailed in the "Common Intents" page of Android's developer site:
+        // http://developer.android.com/guide/components/intents-common.html#Maps
+        if ( null != mBreweryListAdapter ) {
+            Cursor c = mBreweryListAdapter.getCursor();
+            if ( null != c ) {
+                c.moveToPosition(0);
+                String posLat = c.getString(COL_COORD_LAT);
+                String posLong = c.getString(COL_COORD_LONG);
+                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(geoLocation);
+
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+                }
+            }
+
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+    public void onSaveInstanceState(Bundle outState) {
+        // When tablets rotate, the currently selected list item needs to be saved.
+        // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
+        // so check for that before storing.
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
         }
-    }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // This is called when a new Loader needs to be created.  This
+        // fragment only uses one loader, so we don't care about checking the id.
+
+        // To only show current and future dates, filter the query to return weather only for
+        // dates after or including today.
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
+
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+        Uri weatherForLocationUri = BrewskiContract.BeerEntry.buildBeerList("0");
+
+        return new CursorLoader(getActivity(),
+                weatherForLocationUri,
+                BREWERY_COLUMNS,
+                null,
+                null,
+                sortOrder);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        mBreweryListAdapter.swapCursor(data);
+        if (mPosition != ListView.INVALID_POSITION) {
+            // If we don't need to restart the loader, and there's a desired position to restore
+            // to, do so now.
+            mBreweryListView.smoothScrollToPosition(mPosition);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mBreweryListAdapter.swapCursor(null);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mBreweryListAdapter != null) {
+            mBreweryListAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
     }
-
 }
