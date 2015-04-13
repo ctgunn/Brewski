@@ -15,43 +15,62 @@ public class BrewskiContentProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private BrewskiDbHelper mOpenHelper;
 
-    static final int WEATHER = 100;
-    static final int WEATHER_WITH_LOCATION = 101;
-    static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
-    static final int LOCATION = 300;
+//    static final int WEATHER = 100;
+//    static final int WEATHER_WITH_LOCATION = 101;
+//    static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
+//    static final int LOCATION = 300;
 
-    private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
+    static final int BEER = 100;
+    static final int INDIVIDUAL_BEER = 101;
+    static final int BREWERY_OF_BEER = 102;
+    static final int CATEGORY_OF_BEER = 103;
+    static final int STYLE_OF_BEER = 104;
+    static final int INGREDIENTS_OF_BEER = 105;
+    static final int BREWERY = 200;
+    static final int INDIVIDUAL_BREWERY = 201;
+    static final int BEERS_OF_BREWERY = 202;
+    static final int LOCATIONS_OF_BREWERY = 203;
+    static final int CATEGORY = 300;
+    static final int INDIVIDUAL_CATEGORY = 301;
+    static final int STYLES_OF_CATEGORY = 302;
+    static final int BEERS_OF_CATEGORY = 303;
+    static final int STYLE = 400;
+    static final int INDIVIDUAL_STYLE = 401;
+    static final int CATEGORY_OF_STYLE = 402;
+    static final int BEERS_OF_STYLE = 403;
 
-    static{
-        sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
+//    private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
 
-        //This is an inner join which looks like
-        //weather INNER JOIN location ON weather.location_id = location._id
-        sWeatherByLocationSettingQueryBuilder.setTables(
-                BrewskiContract.WeatherEntry.TABLE_NAME + " INNER JOIN " +
-                        BrewskiContract.LocationEntry.TABLE_NAME +
-                        " ON " + BrewskiContract.WeatherEntry.TABLE_NAME +
-                        "." + BrewskiContract.WeatherEntry.COLUMN_LOC_KEY +
-                        " = " + BrewskiContract.LocationEntry.TABLE_NAME +
-                        "." + BrewskiContract.LocationEntry._ID);
-    }
-
-    //location.location_setting = ?
-    private static final String sLocationSettingSelection =
-            BrewskiContract.LocationEntry.TABLE_NAME+
-                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
-
-    //location.location_setting = ? AND date >= ?
-    private static final String sLocationSettingWithStartDateSelection =
-            BrewskiContract.LocationEntry.TABLE_NAME+
-                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    BrewskiContract.WeatherEntry.COLUMN_DATE + " >= ? ";
-
-    //location.location_setting = ? AND date = ?
-    private static final String sLocationSettingAndDaySelection =
-            BrewskiContract.LocationEntry.TABLE_NAME +
-                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    BrewskiContract.WeatherEntry.COLUMN_DATE + " = ? ";
+//    static{
+//        sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
+//
+//        //This is an inner join which looks like
+//        //weather INNER JOIN location ON weather.location_id = location._id
+//        sWeatherByLocationSettingQueryBuilder.setTables(
+//                BrewskiContract.WeatherEntry.TABLE_NAME + " INNER JOIN " +
+//                        BrewskiContract.LocationEntry.TABLE_NAME +
+//                        " ON " + BrewskiContract.WeatherEntry.TABLE_NAME +
+//                        "." + BrewskiContract.WeatherEntry.COLUMN_LOC_KEY +
+//                        " = " + BrewskiContract.LocationEntry.TABLE_NAME +
+//                        "." + BrewskiContract.LocationEntry._ID);
+//    }
+//
+//    //location.location_setting = ?
+//    private static final String sLocationSettingSelection =
+//            BrewskiContract.LocationEntry.TABLE_NAME+
+//                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
+//
+//    //location.location_setting = ? AND date >= ?
+//    private static final String sLocationSettingWithStartDateSelection =
+//            BrewskiContract.LocationEntry.TABLE_NAME+
+//                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+//                    BrewskiContract.WeatherEntry.COLUMN_DATE + " >= ? ";
+//
+//    //location.location_setting = ? AND date = ?
+//    private static final String sLocationSettingAndDaySelection =
+//            BrewskiContract.LocationEntry.TABLE_NAME +
+//                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+//                    BrewskiContract.WeatherEntry.COLUMN_DATE + " = ? ";
 
     private Cursor getWeatherByLocationSetting(Uri uri, String[] projection, String sortOrder) {
         String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
@@ -141,14 +160,42 @@ public class BrewskiContentProvider extends ContentProvider {
 
         switch (match) {
             // Student: Uncomment and fill out these two cases
-            case WEATHER_WITH_LOCATION_AND_DATE:
-                return BrewskiContract.WeatherEntry.CONTENT_ITEM_TYPE;
-            case WEATHER_WITH_LOCATION:
-                return BrewskiContract.WeatherEntry.CONTENT_TYPE;
-            case WEATHER:
-                return BrewskiContract.WeatherEntry.CONTENT_TYPE;
-            case LOCATION:
-                return BrewskiContract.LocationEntry.CONTENT_TYPE;
+            case BEER:
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+            case INDIVIDUAL_BEER:
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+            case BREWERY_OF_BEER:
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+            case CATEGORY_OF_BEER:
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+            case STYLE_OF_BEER:
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+            case INGREDIENTS_OF_BEER:
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+            case BREWERY:
+                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
+            case INDIVIDUAL_BREWERY:
+                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
+            case BEERS_OF_BREWERY:
+                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
+            case LOCATIONS_OF_BREWERY:
+                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
+            case CATEGORY:
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+            case INDIVIDUAL_CATEGORY:
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+            case STYLES_OF_CATEGORY:
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+            case BEERS_OF_CATEGORY:
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+            case STYLE:
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
+            case INDIVIDUAL_STYLE:
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
+            case CATEGORY_OF_STYLE:
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
+            case BEERS_OF_STYLE:
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -216,19 +263,35 @@ public class BrewskiContentProvider extends ContentProvider {
         Uri returnUri;
 
         switch (match) {
-            case WEATHER: {
+            case BEER: {
                 normalizeDate(values);
-                long _id = db.insert(BrewskiContract.WeatherEntry.TABLE_NAME, null, values);
+                long _id = db.insert(BrewskiContract.BeerEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = BrewskiContract.WeatherEntry.buildWeatherUri(_id);
+                    returnUri = BrewskiContract.BeerEntry.buildBeerUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            case LOCATION: {
-                long _id = db.insert(BrewskiContract.LocationEntry.TABLE_NAME, null, values);
+            case BREWERY: {
+                long _id = db.insert(BrewskiContract.BreweryEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = BrewskiContract.LocationEntry.buildLocationUri(_id);
+                    returnUri = BrewskiContract.BreweryEntry.buildBreweryUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case CATEGORY: {
+                long _id = db.insert(BrewskiContract.CategoryEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = BrewskiContract.CategoryEntry.buildCategoryUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case STYLE: {
+                long _id = db.insert(BrewskiContract.StyleEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = BrewskiContract.StyleEntry.buildStyleUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -248,13 +311,21 @@ public class BrewskiContentProvider extends ContentProvider {
         // this makes delete all rows return the number of rows deleted
         if ( null == selection ) selection = "1";
         switch (match) {
-            case WEATHER:
+            case BEER:
                 rowsDeleted = db.delete(
-                        BrewskiContract.WeatherEntry.TABLE_NAME, selection, selectionArgs);
+                        BrewskiContract.BeerEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case LOCATION:
+            case BREWERY:
                 rowsDeleted = db.delete(
-                        BrewskiContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
+                        BrewskiContract.BreweryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case CATEGORY:
+                rowsDeleted = db.delete(
+                        BrewskiContract.CategoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case STYLE:
+                rowsDeleted = db.delete(
+                        BrewskiContract.StyleEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -266,14 +337,6 @@ public class BrewskiContentProvider extends ContentProvider {
         return rowsDeleted;
     }
 
-    private void normalizeDate(ContentValues values) {
-        // normalize the date value
-        if (values.containsKey(BrewskiContract.WeatherEntry.COLUMN_DATE)) {
-            long dateValue = values.getAsLong(BrewskiContract.WeatherEntry.COLUMN_DATE);
-            values.put(BrewskiContract.WeatherEntry.COLUMN_DATE, BrewskiContract.normalizeDate(dateValue));
-        }
-    }
-
     @Override
     public int update(
             Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -282,13 +345,20 @@ public class BrewskiContentProvider extends ContentProvider {
         int rowsUpdated;
 
         switch (match) {
-            case WEATHER:
-                normalizeDate(values);
-                rowsUpdated = db.update(BrewskiContract.WeatherEntry.TABLE_NAME, values, selection,
+            case BEER:
+                rowsUpdated = db.update(BrewskiContract.BeerEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
-            case LOCATION:
-                rowsUpdated = db.update(BrewskiContract.LocationEntry.TABLE_NAME, values, selection,
+            case BREWERY:
+                rowsUpdated = db.update(BrewskiContract.BreweryEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case CATEGORY:
+                rowsUpdated = db.update(BrewskiContract.CategoryEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case STYLE:
+                rowsUpdated = db.update(BrewskiContract.StyleEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:

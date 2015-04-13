@@ -76,9 +76,8 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
         startActivity(i);
 
-//        ForecastFragment forecastFragment =  ((ForecastFragment)getSupportFragmentManager()
-//                .findFragmentById(R.id.fragment_forecast));
-//        forecastFragment.setUseTodayLayout(!mTwoPane);
+        Intent loadingScreenIntent = new Intent(this, LoadingScreenActivity.class);
+        startActivity(loadingScreenIntent);
 
         BrewskiSyncAdapter.initializeSyncAdapter(this);
     }

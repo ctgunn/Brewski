@@ -40,7 +40,7 @@ public class CategoryListAdapter extends android.support.v4.widget.CursorAdapter
         }
     }
 
-    public BreweryListAdapter(Context context, Cursor c, int flags) {
+    public CategoryListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 
@@ -48,14 +48,15 @@ public class CategoryListAdapter extends android.support.v4.widget.CursorAdapter
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         // Choose the layout type
         int viewType = getItemViewType(cursor.getPosition());
-        int layoutId = -1;
+        int layoutId = 0;
+
         switch (viewType) {
             case VIEW_TYPE_TODAY: {
-                layoutId = R.layout.list_item_forecast_today;
+                layoutId = R.layout.list_item_category_selected;
                 break;
             }
             case VIEW_TYPE_FUTURE_DAY: {
-                layoutId = R.layout.list_item_forecast;
+                layoutId = R.layout.list_item_category;
                 break;
             }
         }

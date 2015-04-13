@@ -26,7 +26,7 @@ public class LoadingScreenActivity extends Activity {
         protected void onPreExecute() {
             //Create a new progress dialog
             progressDialog = ProgressDialog.show(LoadingScreenActivity.this,"Loading...",
-                    "Loading application View, please wait...", false, false);
+                    "Loading app, please wait...", false, false);
         }
 
         //The code to be executed in a background thread.
