@@ -72,45 +72,45 @@ public class BrewskiContentProvider extends ContentProvider {
 //                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
 //                    BrewskiContract.WeatherEntry.COLUMN_DATE + " = ? ";
 
-    private Cursor getWeatherByLocationSetting(Uri uri, String[] projection, String sortOrder) {
-        String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
-        long startDate = BrewskiContract.WeatherEntry.getStartDateFromUri(uri);
-
-        String[] selectionArgs;
-        String selection;
-
-        if (startDate == 0) {
-            selection = sLocationSettingSelection;
-            selectionArgs = new String[]{locationSetting};
-        } else {
-            selectionArgs = new String[]{locationSetting, Long.toString(startDate)};
-            selection = sLocationSettingWithStartDateSelection;
-        }
-
-        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder
-        );
-    }
-
-    private Cursor getWeatherByLocationSettingAndDate(
-            Uri uri, String[] projection, String sortOrder) {
-        String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
-        long date = BrewskiContract.WeatherEntry.getDateFromUri(uri);
-
-        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
-                projection,
-                sLocationSettingAndDaySelection,
-                new String[]{locationSetting, Long.toString(date)},
-                null,
-                null,
-                sortOrder
-        );
-    }
+//    private Cursor getWeatherByLocationSetting(Uri uri, String[] projection, String sortOrder) {
+//        String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
+//        long startDate = BrewskiContract.WeatherEntry.getStartDateFromUri(uri);
+//
+//        String[] selectionArgs;
+//        String selection;
+//
+//        if (startDate == 0) {
+//            selection = sLocationSettingSelection;
+//            selectionArgs = new String[]{locationSetting};
+//        } else {
+//            selectionArgs = new String[]{locationSetting, Long.toString(startDate)};
+//            selection = sLocationSettingWithStartDateSelection;
+//        }
+//
+//        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+//                projection,
+//                selection,
+//                selectionArgs,
+//                null,
+//                null,
+//                sortOrder
+//        );
+//    }
+//
+//    private Cursor getWeatherByLocationSettingAndDate(
+//            Uri uri, String[] projection, String sortOrder) {
+//        String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
+//        long date = BrewskiContract.WeatherEntry.getDateFromUri(uri);
+//
+//        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+//                projection,
+//                sLocationSettingAndDaySelection,
+//                new String[]{locationSetting, Long.toString(date)},
+//                null,
+//                null,
+//                sortOrder
+//        );
+//    }
 
     /*
         Students: Here is where you need to create the UriMatcher. This UriMatcher will
@@ -129,11 +129,28 @@ public class BrewskiContentProvider extends ContentProvider {
         final String authority = BrewskiContract.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
-        matcher.addURI(authority, BrewskiContract.PATH_WEATHER, WEATHER);
-        matcher.addURI(authority, BrewskiContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
-        matcher.addURI(authority, BrewskiContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER, BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INDIVIDUAL_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", BREWERY_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", CATEGORY_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", STYLE_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INGREDIENTS_OF_BEER);
 
-        matcher.addURI(authority, BrewskiContract.PATH_LOCATION, LOCATION);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY, BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", INDIVIDUAL_BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", BEERS_OF_BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", LOCATIONS_OF_BREWERY);
+
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY, CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", INDIVIDUAL_CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", STYLES_OF_CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", BEERS_OF_CATEGORY);
+
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE, STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", INDIVIDUAL_STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", CATEGORY_OF_STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", BEERS_OF_STYLE);
+
         return matcher;
     }
 
@@ -209,20 +226,20 @@ public class BrewskiContentProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             // "weather/*/*"
-            case WEATHER_WITH_LOCATION_AND_DATE:
-            {
-                retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
-                break;
-            }
-            // "weather/*"
-            case WEATHER_WITH_LOCATION: {
-                retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
-                break;
-            }
-            // "weather"
-            case WEATHER: {
+//            case WEATHER_WITH_LOCATION_AND_DATE:
+//            {
+//                retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
+//                break;
+//            }
+//            // "weather/*"
+//            case WEATHER_WITH_LOCATION: {
+//                retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
+//                break;
+//            }
+            // "beer"
+            case BEER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        BrewskiContract.WeatherEntry.TABLE_NAME,
+                        BrewskiContract.BeerEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -232,10 +249,34 @@ public class BrewskiContentProvider extends ContentProvider {
                 );
                 break;
             }
-            // "location"
-            case LOCATION: {
+            // "brewery"
+            case BREWERY: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        BrewskiContract.LocationEntry.TABLE_NAME,
+                        BrewskiContract.BreweryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }// "category"
+            case CATEGORY: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BrewskiContract.CategoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }// "style"
+            case STYLE: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BrewskiContract.StyleEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -264,7 +305,7 @@ public class BrewskiContentProvider extends ContentProvider {
 
         switch (match) {
             case BEER: {
-                normalizeDate(values);
+//                normalizeDate(values);
                 long _id = db.insert(BrewskiContract.BeerEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
                     returnUri = BrewskiContract.BeerEntry.buildBeerUri(_id);
@@ -374,23 +415,88 @@ public class BrewskiContentProvider extends ContentProvider {
     public int bulkInsert(Uri uri, ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        int returnCount = 0;
+
         switch (match) {
-            case WEATHER:
+            case BEER:
                 db.beginTransaction();
-                int returnCount = 0;
+
                 try {
                     for (ContentValues value : values) {
-                        normalizeDate(value);
-                        long _id = db.insert(BrewskiContract.WeatherEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(BrewskiContract.BeerEntry.TABLE_NAME, null, value);
+
                         if (_id != -1) {
                             returnCount++;
                         }
                     }
+
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
                 }
+
                 getContext().getContentResolver().notifyChange(uri, null);
+
+                return returnCount;
+            case BREWERY:
+                db.beginTransaction();
+
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(BrewskiContract.BreweryEntry.TABLE_NAME, null, value);
+
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                return returnCount;
+            case CATEGORY:
+                db.beginTransaction();
+
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(BrewskiContract.CategoryEntry.TABLE_NAME, null, value);
+
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                return returnCount;
+            case STYLE:
+                db.beginTransaction();
+
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(BrewskiContract.StyleEntry.TABLE_NAME, null, value);
+
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                getContext().getContentResolver().notifyChange(uri, null);
+
                 return returnCount;
             default:
                 return super.bulkInsert(uri, values);
