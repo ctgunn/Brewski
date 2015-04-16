@@ -1,0 +1,34 @@
+<gunn.brewski.app.DashboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:background="#f8f9fe" >
+    <!--  Profile Button -->
+    <Button
+        android:id="@+id/btn_profile"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_profile" />
+        <!--android:drawableTop="@drawable/btn_newsfeed"-->
+
+    <!--  Categories Button -->
+    <Button
+        android:id="@+id/btn_categories"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_categories" />
+        <!--android:drawableTop="@drawable/btn_friends"-->
+
+    <!--  Beers Button -->
+    <Button
+        android:id="@+id/btn_beers"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_beers" />
+        <!--android:drawableTop="@drawable/btn_messages"-->
+
+    <!--  Breweries Button -->
+    <Button
+        android:id="@+id/btn_breweries"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_breweries" />
+        <!--android:drawableTop="@drawable/btn_places"-->
+</gunn.brewski.app.DashboardLayout>
