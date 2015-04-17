@@ -53,7 +53,7 @@ public class LoadingScreenActivity extends Activity {
 
                         //Set the current progress.
                         //This value is going to be passed to the onProgressUpdate() method.
-                        publishProgress(counter*25);
+                        publishProgress(counter * 25);
                     }
                 }
             }
@@ -75,6 +75,7 @@ public class LoadingScreenActivity extends Activity {
         protected void onPostExecute(Void result) {
             //close the progress dialog
             progressDialog.dismiss();
+
             //initialize the View
             setContentView(R.layout.activity_profile);
         }

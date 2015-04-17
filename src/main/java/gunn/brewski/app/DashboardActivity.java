@@ -9,28 +9,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-
-public class DashboardActivity extends Activity {
-
+public class DashboardActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dashboard_layout);
+
+        setContentView(R.layout.activity_dashboard);
 
         /**
          * Creating all buttons instances
          * */
         // Dashboard News feed button
-        Button btn_profile = (Button) findViewById(R.id.btn_profile);
+        final Button btn_profile = (Button) findViewById(R.id.btn_profile);
 
         // Dashboard Friends button
-        Button btn_categoriess = (Button) findViewById(R.id.btn_categories);
+        final Button btn_categories = (Button) findViewById(R.id.btn_categories);
 
         // Dashboard Messages button
-        Button btn_beers = (Button) findViewById(R.id.btn_beers);
+        final Button btn_beers = (Button) findViewById(R.id.btn_beers);
 
         // Dashboard Places button
-        Button btn_breweries = (Button) findViewById(R.id.btn_breweries);
+        final Button btn_breweries = (Button) findViewById(R.id.btn_breweries);
 
         /**
          * Handling all button click events
@@ -38,57 +37,44 @@ public class DashboardActivity extends Activity {
 
         // Listening to News Feed button click
         btn_profile.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(i);
+                showLoadingScreen(btn_profile.getText().toString());
             }
         });
 
         // Listening Friends button click
-        btn_categoriess.setOnClickListener(new View.OnClickListener() {
-
+        btn_categories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                Intent i = new Intent(getApplicationContext(), CategoryListActivity.class);
-                startActivity(i);
+                showLoadingScreen(btn_categories.getText().toString());
             }
         });
 
         // Listening Messages button click
         btn_beers.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                Intent i = new Intent(getApplicationContext(), BeerListActivity.class);
-                startActivity(i);
+                showLoadingScreen(btn_beers.getText().toString());
             }
         });
 
         // Listening Messages button click
         btn_breweries.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                Intent i = new Intent(getApplicationContext(), BreweryListActivity.class);
-                startActivity(i);
+                showLoadingScreen(btn_breweries.getText().toString());
             }
         });
+    }
 
-        // Listening to Places button click
-//        btn_breweries.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                // Launching News Feed Screen
-//                Intent i = new Intent(getApplicationContext(), BreweryListActivity.class);
-//                startActivity(i);
-//            }
-//        });
+    public void showLoadingScreen(String buttonText) {
+        Intent loadingScreenIntent = new Intent(getApplicationContext(), LoadingScreenActivity.class);
+        loadingScreenIntent.putExtra("buttonPressed", buttonText);
+        startActivity(loadingScreenIntent);
     }
 }
