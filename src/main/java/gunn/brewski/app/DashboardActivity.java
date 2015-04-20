@@ -1,11 +1,8 @@
 package gunn.brewski.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -40,7 +37,7 @@ public class DashboardActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                showLoadingScreen(btn_profile.getText().toString());
+                showLoadingScreen(btn_profile.getText().toString().toLowerCase());
             }
         });
 
@@ -49,7 +46,7 @@ public class DashboardActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                showLoadingScreen(btn_categories.getText().toString());
+                showLoadingScreen(btn_categories.getText().toString().toLowerCase());
             }
         });
 
@@ -58,7 +55,7 @@ public class DashboardActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                showLoadingScreen(btn_beers.getText().toString());
+                showLoadingScreen(btn_beers.getText().toString().toLowerCase());
             }
         });
 
@@ -67,14 +64,20 @@ public class DashboardActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 // Launching News Feed Screen
-                showLoadingScreen(btn_breweries.getText().toString());
+                showLoadingScreen(btn_breweries.getText().toString().toLowerCase());
             }
         });
     }
 
     public void showLoadingScreen(String buttonText) {
         Intent loadingScreenIntent = new Intent(getApplicationContext(), LoadingScreenActivity.class);
-        loadingScreenIntent.putExtra("buttonPressed", buttonText);
+        loadingScreenIntent.putExtra("screenLoading", buttonText);
         startActivity(loadingScreenIntent);
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
 }

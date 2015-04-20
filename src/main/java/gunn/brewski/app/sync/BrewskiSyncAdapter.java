@@ -51,9 +51,9 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
     public final String LOG_TAG = BrewskiSyncAdapter.class.getSimpleName();
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 180;
+    public static final int SYNC_INTERVAL = 1000 * 60 * 60 * 24;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
-    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+    private static final long DAY_IN_MILLIS = SYNC_INTERVAL;
     private static final int BEER_NOTIFICATION_ID = 3004;
     private static final int BREWERY_NOTIFICATION_ID = 4004;
 
@@ -430,7 +430,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // we can enable inexact timers in our periodic sync
             SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).
@@ -488,9 +488,9 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
              * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
              * here.
              */
-
             onAccountCreated(newAccount, context);
         }
+
         return newAccount;
     }
 

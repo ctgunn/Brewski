@@ -123,6 +123,8 @@ public class BrewskiContract {
         public static final String COLUMN_BEER_NAME = "beer_name";
         // Beer description that is received from BreweryDB.
         public static final String COLUMN_BEER_DESCRIPTION = "beer_description";
+        // Beer's Brewery ID that is received from BreweryDB.
+        public static final String COLUMN_BREWERY_ID = "brewery_id";
         // Style ID that is received from BreweryDB.
         public static final String COLUMN_STYLE_ID = "style_id";
         // URL that links to the large label image for the corresponding beer,

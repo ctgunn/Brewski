@@ -1,11 +1,33 @@
 package gunn.brewski.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
-public class LoadingScreenActivity extends Activity {
+import gunn.brewski.app.sync.BrewskiSyncAdapter;
+
+public class LoadingScreenActivity extends FragmentActivity {
+    private final String LOG_TAG = LoadingScreenActivity.class.getSimpleName();
+
+    public static final String DASHBOARD = "dashboard";
+    public static final String PROFILE = "profile";
+    public static final String CATEGORIES = "categories";
+    public static final String BEERS = "beers";
+    public static final String BREWERIES = "breweries";
+    public static final String SCREEN_LOADING = "screenLoading";
+    public static final String NO_SCREEN = "noScreen";
+
+    private String screenLoading;
+
     //A ProgressDialog object
     private ProgressDialog progressDialog;
 
@@ -13,6 +35,8 @@ public class LoadingScreenActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        screenLoading = getIntent().getStringExtra(SCREEN_LOADING);
 
         //Initialize a LoadViewTask object and call the execute() method
         new LoadViewTask().execute();
@@ -38,6 +62,26 @@ public class LoadingScreenActivity extends Activity {
              * thread must be placed.
              */
             try {
+
+                if(DASHBOARD.equals(screenLoading)) {
+                    BrewskiSyncAdapter.initializeSyncAdapter(MainActivity.applicationContext);
+                }
+                else if(PROFILE.equals(screenLoading)) {
+                    //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.
+                }
+                else if(CATEGORIES.equals(screenLoading)) {
+                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE CATEGORIES SCREEN.
+                }
+                else if(BEERS.equals(screenLoading)) {
+                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BEERS SCREEN.
+                }
+                else if(BREWERIES.equals(screenLoading)) {
+                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BREWERIES SCREEN.
+                }
+                else {
+                    Log.d(LOG_TAG, "User is trying to access a screen that doesn't exist.");
+                }
+
                 //Get the current thread's token
                 synchronized (this) {
                     //Initialize an integer (that will act as a counter) to zero
@@ -57,7 +101,7 @@ public class LoadingScreenActivity extends Activity {
                     }
                 }
             }
-            catch (InterruptedException e) {
+            catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
@@ -76,8 +120,53 @@ public class LoadingScreenActivity extends Activity {
             //close the progress dialog
             progressDialog.dismiss();
 
-            //initialize the View
-            setContentView(R.layout.activity_profile);
+            Context applicationContext = MainActivity.applicationContext;
+
+            if(DASHBOARD.equals(screenLoading)) {
+                Intent dashboardIntent = new Intent(applicationContext, DashboardActivity.class);
+                startActivity(dashboardIntent);
+            }
+            else if(PROFILE.equals(screenLoading)) {
+                Intent profileIntent = new Intent(applicationContext, ProfileActivity.class);
+                startActivity(profileIntent);
+            }
+            else if(CATEGORIES.equals(screenLoading)) {
+                Intent categoryIntent = new Intent(applicationContext, CategoryListActivity.class);
+                startActivity(categoryIntent);
+            }
+            else if(BEERS.equals(screenLoading)) {
+                Intent beerIntent = new Intent(applicationContext, BeerListActivity.class);
+                startActivity(beerIntent);
+            }
+            else if(BREWERIES.equals(screenLoading)) {
+                Intent breweryIntent = new Intent(applicationContext, BreweryListActivity.class);
+                startActivity(breweryIntent);
+            }
+            else {
+                DialogFragment noScreenDialog = new ScreenDoesNotExistDialogFragment();
+                noScreenDialog.show(getSupportFragmentManager(), NO_SCREEN);
+            }
+        }
+    }
+
+    public static class ScreenDoesNotExistDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("The screen you are attempting to access does not exist.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
         }
     }
 }

@@ -1,5 +1,6 @@
 package gunn.brewski.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    static Context applicationContext;
+
     private static final String CATEGORY_DETAILFRAGMENT_TAG = "CATDFTAG";
     private static final String BEER_DETAILFRAGMENT_TAG = "BEERDFTAG";
     private static final String BREWERY_DETAILFRAGMENT_TAG = "BREWDFTAG";
@@ -22,9 +26,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        applicationContext = getApplicationContext();
         mLocation = Utility.getPreferredLocation(this);
 
-        setContentView(R.layout.activity_dashboard);
+//        setContentView(R.layout.activity_dashboard);
 
 //        if (findViewById(R.id.category_detail_container) != null) {
 //            // The detail container view will be present only in the large-screen layouts
@@ -72,14 +77,10 @@ public class MainActivity extends ActionBarActivity {
 //            mTwoPane = false;
 //            getSupportActionBar().setElevation(0f);
 //        }
-
-        Intent dashboardIntent = new Intent(this, DashboardActivity.class);
-        startActivity(dashboardIntent);
-
-//        Intent loadingScreenIntent = new Intent(this, LoadingScreenActivity.class);
-//        startActivity(loadingScreenIntent);
-
-//        BrewskiSyncAdapter.initializeSyncAdapter(this);
+//
+        Intent loadingScreenIntent = new Intent(this, LoadingScreenActivity.class);
+        loadingScreenIntent.putExtra("screenLoading", "dashboard");
+        startActivity(loadingScreenIntent);
     }
 
 
@@ -104,10 +105,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        return;
     }
 }

@@ -39,6 +39,140 @@ public class BrewskiContentProvider extends ContentProvider {
     static final int CATEGORY_OF_STYLE = 402;
     static final int BEERS_OF_STYLE = 403;
 
+    private static final SQLiteQueryBuilder sBrewskiQueryBuilder;
+
+    static {
+        sBrewskiQueryBuilder = new SQLiteQueryBuilder();
+
+
+    }
+
+    private static final String sBeer =
+            BrewskiContract.BeerEntry.TABLE_NAME;
+
+    private static final String sIndividualBeer =
+            BrewskiContract.BeerEntry.TABLE_NAME +
+                " WHERE " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BEER_ID + "= ? ";
+
+    private static final String sBreweryOfBeer =
+            BrewskiContract.BreweryEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.BeerEntry.TABLE_NAME +
+                " ON " + BrewskiContract.BreweryEntry.TABLE_NAME + "." +
+                BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " = " +
+                BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BREWERY_ID +
+                " WHERE " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BEER_ID + " = ?";
+
+    private static final String sCategoryOfBeer =
+            BrewskiContract.CategoryEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.StyleEntry.TABLE_NAME +
+                " ON " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = " +
+                BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID + " INNER JOIN " +
+                BrewskiContract.BeerEntry.TABLE_NAME +
+                " ON " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = " +
+                BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_STYLE_ID +
+                " WHERE " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BEER_ID + " = ?";
+
+    private static final String sStyleOfBeer =
+            BrewskiContract.StyleEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.BeerEntry.TABLE_NAME +
+                " ON " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = " +
+                BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_STYLE_ID +
+                " WHERE " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BEER_ID + " = ?";
+
+    //TODO: CREATE BEER INGREDIENTS QUERY.
+
+    private static final String sBrewery =
+            BrewskiContract.BreweryEntry.TABLE_NAME;
+
+    private static final String sIndividualBrewery =
+            BrewskiContract.BreweryEntry.TABLE_NAME +
+                " WHERE " + BrewskiContract.BreweryEntry.TABLE_NAME + "." +
+                BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " + ?";
+
+    private static final String sBeersOfBrewery =
+            BrewskiContract.BeerEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.BreweryEntry.TABLE_NAME +
+                " ON " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BREWERY_ID + " = " +
+                BrewskiContract.BreweryEntry.TABLE_NAME + "." +
+                BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID +
+                " WHERE " + BrewskiContract.BreweryEntry.TABLE_NAME + "." +
+                BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " = ?";
+
+    // TODO: CREATE BREWERY LOCATIONS QUERY.
+
+    private static final String sCategory =
+            BrewskiContract.CategoryEntry.TABLE_NAME;
+
+    private static final String sIndividualCategory =
+            BrewskiContract.CategoryEntry.TABLE_NAME +
+                " WHERE " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = ?";
+
+    private static final String sStylesOfCategory =
+            BrewskiContract.StyleEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.CategoryEntry.TABLE_NAME +
+                " ON " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID + " = " +
+                BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID +
+                " WHERE " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = ?";
+
+    private static final String sBeersOfCategory =
+            BrewskiContract.BeerEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.StyleEntry.TABLE_NAME +
+                " ON " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_STYLE_ID + " = " +
+                BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " INNER JOIN " +
+                BrewskiContract.CategoryEntry.TABLE_NAME +
+                " ON " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID + " = " +
+                BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID +
+                " WHERE " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = ?";
+
+    private static final String sStyle =
+            BrewskiContract.StyleEntry.TABLE_NAME;
+
+    private static final String sIndividualStyle =
+            BrewskiContract.StyleEntry.TABLE_NAME +
+                " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = ?";
+
+    private static final String sCategoryOfStyle =
+            BrewskiContract.CategoryEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.StyleEntry.TABLE_NAME +
+                " ON " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+                BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = " +
+                BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID +
+                " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID;
+
+    private static final String sBeersOfStyle =
+            BrewskiContract.BeerEntry.TABLE_NAME + " INNER JOIN " +
+                BrewskiContract.StyleEntry.TABLE_NAME +
+                " ON " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_STYLE_ID + " = " +
+                BrewskiContract.StyleEntry.TABLE_NAME + " = " +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID +
+                " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = ?";
+
 //    private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
 
 //    static{
