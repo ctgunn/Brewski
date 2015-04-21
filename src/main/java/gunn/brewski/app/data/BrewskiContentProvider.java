@@ -469,39 +469,39 @@ public class BrewskiContentProvider extends ContentProvider {
             case BEER:
                 return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
             case INDIVIDUAL_BEER:
-                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+                return BrewskiContract.BeerEntry.BEER_CONTENT_ITEM_TYPE;
             case BREWERY_OF_BEER:
-                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_ITEM_TYPE;
             case CATEGORY_OF_BEER:
-                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_ITEM_TYPE;
             case STYLE_OF_BEER:
-                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
-            case INGREDIENTS_OF_BEER:
-                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_ITEM_TYPE;
+//            case INGREDIENTS_OF_BEER:
+//                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
             case BREWERY:
                 return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
             case INDIVIDUAL_BREWERY:
-                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
+                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_ITEM_TYPE;
             case BEERS_OF_BREWERY:
-                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
-            case LOCATIONS_OF_BREWERY:
-                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
+//            case LOCATIONS_OF_BREWERY:
+//                return BrewskiContract.BreweryEntry.BREWERY_CONTENT_TYPE;
             case CATEGORY:
                 return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
             case INDIVIDUAL_CATEGORY:
-                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_ITEM_TYPE;
             case STYLES_OF_CATEGORY:
-                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
             case BEERS_OF_CATEGORY:
-                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_TYPE;
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
             case STYLE:
                 return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
             case INDIVIDUAL_STYLE:
-                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
+                return BrewskiContract.StyleEntry.STYLE_CONTENT_ITEM_TYPE;
             case CATEGORY_OF_STYLE:
-                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
+                return BrewskiContract.CategoryEntry.CATEGORY_CONTENT_ITEM_TYPE;
             case BEERS_OF_STYLE:
-                return BrewskiContract.StyleEntry.STYLE_CONTENT_TYPE;
+                return BrewskiContract.BeerEntry.BEER_CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -645,7 +645,6 @@ public class BrewskiContentProvider extends ContentProvider {
 
         switch (match) {
             case BEER: {
-//                normalizeDate(values);
                 long _id = db.insert(BrewskiContract.BeerEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
                     returnUri = BrewskiContract.BeerEntry.buildBeerUri(_id);
@@ -847,7 +846,7 @@ public class BrewskiContentProvider extends ContentProvider {
     // framework in running smoothly. You can read more at:
     // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
     @Override
-    @TargetApi(11)
+    @TargetApi(16)
     public void shutdown() {
         mOpenHelper.close();
         super.shutdown();
