@@ -1,5 +1,6 @@
 package gunn.brewski.app;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -13,7 +14,8 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    static Context applicationContext;
+    public static Context applicationContext;
+    public static Application application;
 
     private static final String CATEGORY_DETAILFRAGMENT_TAG = "CATDFTAG";
     private static final String BEER_DETAILFRAGMENT_TAG = "BEERDFTAG";
@@ -27,6 +29,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         applicationContext = getApplicationContext();
+        application = getApplication();
         mLocation = Utility.getPreferredLocation(this);
 
 //        setContentView(R.layout.activity_dashboard);

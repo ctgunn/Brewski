@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import gunn.brewski.app.BrewskiApplication;
+import gunn.brewski.app.MainActivity;
+
 public class BrewskiContentProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
@@ -39,16 +42,22 @@ public class BrewskiContentProvider extends ContentProvider {
     static final int CATEGORY_OF_STYLE = 402;
     static final int BEERS_OF_STYLE = 403;
 
-    private static final SQLiteQueryBuilder sBrewskiQueryBuilder;
+    private static final SQLiteQueryBuilder sBrewskiBeerQueryBuilder;
+    private static final SQLiteQueryBuilder sBrewskiBreweryQueryBuilder;
+    private static final SQLiteQueryBuilder sBrewskiCategoryQueryBuilder;
+    private static final SQLiteQueryBuilder sBrewskiStyleQueryBuilder;
 
     static {
-        sBrewskiQueryBuilder = new SQLiteQueryBuilder();
+        sBrewskiBeerQueryBuilder = new SQLiteQueryBuilder();
+        sBrewskiBreweryQueryBuilder = new SQLiteQueryBuilder();
+        sBrewskiCategoryQueryBuilder = new SQLiteQueryBuilder();
+        sBrewskiStyleQueryBuilder = new SQLiteQueryBuilder();
 
-
+        sBrewskiBeerQueryBuilder.setTables(BrewskiContract.BeerEntry.TABLE_NAME);
+        sBrewskiBreweryQueryBuilder.setTables(BrewskiContract.BreweryEntry.TABLE_NAME);
+        sBrewskiCategoryQueryBuilder.setTables(BrewskiContract.CategoryEntry.TABLE_NAME);
+        sBrewskiStyleQueryBuilder.setTables(BrewskiContract.StyleEntry.TABLE_NAME);
     }
-
-    private static final String sBeer =
-            BrewskiContract.BeerEntry.TABLE_NAME;
 
     private static final String sIndividualBeer =
             BrewskiContract.BeerEntry.TABLE_NAME +
@@ -92,9 +101,6 @@ public class BrewskiContentProvider extends ContentProvider {
 
     //TODO: CREATE BEER INGREDIENTS QUERY.
 
-    private static final String sBrewery =
-            BrewskiContract.BreweryEntry.TABLE_NAME;
-
     private static final String sIndividualBrewery =
             BrewskiContract.BreweryEntry.TABLE_NAME +
                 " WHERE " + BrewskiContract.BreweryEntry.TABLE_NAME + "." +
@@ -111,9 +117,6 @@ public class BrewskiContentProvider extends ContentProvider {
                 BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " = ?";
 
     // TODO: CREATE BREWERY LOCATIONS QUERY.
-
-    private static final String sCategory =
-            BrewskiContract.CategoryEntry.TABLE_NAME;
 
     private static final String sIndividualCategory =
             BrewskiContract.CategoryEntry.TABLE_NAME +
@@ -145,9 +148,6 @@ public class BrewskiContentProvider extends ContentProvider {
                 " WHERE " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
                 BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = ?";
 
-    private static final String sStyle =
-            BrewskiContract.StyleEntry.TABLE_NAME;
-
     private static final String sIndividualStyle =
             BrewskiContract.StyleEntry.TABLE_NAME +
                 " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
@@ -173,78 +173,233 @@ public class BrewskiContentProvider extends ContentProvider {
                 " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
                 BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = ?";
 
-//    private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
+    private Cursor getIndividualBeer(Uri uri, String[] projection, String sortOrder) {
+        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
 
-//    static{
-//        sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
-//
-//        //This is an inner join which looks like
-//        //weather INNER JOIN location ON weather.location_id = location._id
-//        sWeatherByLocationSettingQueryBuilder.setTables(
-//                BrewskiContract.WeatherEntry.TABLE_NAME + " INNER JOIN " +
-//                        BrewskiContract.LocationEntry.TABLE_NAME +
-//                        " ON " + BrewskiContract.WeatherEntry.TABLE_NAME +
-//                        "." + BrewskiContract.WeatherEntry.COLUMN_LOC_KEY +
-//                        " = " + BrewskiContract.LocationEntry.TABLE_NAME +
-//                        "." + BrewskiContract.LocationEntry._ID);
-//    }
-//
-//    //location.location_setting = ?
-//    private static final String sLocationSettingSelection =
-//            BrewskiContract.LocationEntry.TABLE_NAME+
-//                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
-//
-//    //location.location_setting = ? AND date >= ?
-//    private static final String sLocationSettingWithStartDateSelection =
-//            BrewskiContract.LocationEntry.TABLE_NAME+
-//                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-//                    BrewskiContract.WeatherEntry.COLUMN_DATE + " >= ? ";
-//
-//    //location.location_setting = ? AND date = ?
-//    private static final String sLocationSettingAndDaySelection =
-//            BrewskiContract.LocationEntry.TABLE_NAME +
-//                    "." + BrewskiContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-//                    BrewskiContract.WeatherEntry.COLUMN_DATE + " = ? ";
+        String[] selectionArgs;
+        String selection;
 
-//    private Cursor getWeatherByLocationSetting(Uri uri, String[] projection, String sortOrder) {
-//        String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
-//        long startDate = BrewskiContract.WeatherEntry.getStartDateFromUri(uri);
-//
-//        String[] selectionArgs;
-//        String selection;
-//
-//        if (startDate == 0) {
-//            selection = sLocationSettingSelection;
-//            selectionArgs = new String[]{locationSetting};
-//        } else {
-//            selectionArgs = new String[]{locationSetting, Long.toString(startDate)};
-//            selection = sLocationSettingWithStartDateSelection;
-//        }
-//
-//        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
-//                projection,
-//                selection,
-//                selectionArgs,
-//                null,
-//                null,
-//                sortOrder
-//        );
-//    }
-//
-//    private Cursor getWeatherByLocationSettingAndDate(
-//            Uri uri, String[] projection, String sortOrder) {
-//        String locationSetting = BrewskiContract.WeatherEntry.getLocationSettingFromUri(uri);
-//        long date = BrewskiContract.WeatherEntry.getDateFromUri(uri);
-//
-//        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
-//                projection,
-//                sLocationSettingAndDaySelection,
-//                new String[]{locationSetting, Long.toString(date)},
-//                null,
-//                null,
-//                sortOrder
-//        );
-//    }
+        selectionArgs = new String[]{beerId};
+        selection = sIndividualBeer;
+
+        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getBreweryByBeer(Uri uri, String[] projection, String sortOrder) {
+        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{beerId};
+        selection = sBreweryOfBeer;
+
+        return sBrewskiBreweryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getStyleByBeer(Uri uri, String[] projection, String sortOrder) {
+        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{beerId};
+        selection = sStyleOfBeer;
+
+        return sBrewskiStyleQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getCategoryByBeer(Uri uri, String[] projection, String sortOrder) {
+        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{beerId};
+        selection = sCategoryOfBeer;
+
+        return sBrewskiCategoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getIndividualBrewery(Uri uri, String[] projection, String sortOrder) {
+        String breweryId = ((BrewskiApplication) MainActivity.application).getCurrentBreweryId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{breweryId};
+        selection = sIndividualBrewery;
+
+        return sBrewskiBreweryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getBeersByBrewery(Uri uri, String[] projection, String sortOrder) {
+        String breweryId = ((BrewskiApplication) MainActivity.application).getCurrentBreweryId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{breweryId};
+        selection = sBeersOfBrewery;
+
+        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getIndividualCategory(Uri uri, String[] projection, String sortOrder) {
+        String categoryId = ((BrewskiApplication) MainActivity.application).getCurrentCategoryId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{categoryId};
+        selection = sIndividualCategory;
+
+        return sBrewskiCategoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getStylesByCategory(Uri uri, String[] projection, String sortOrder) {
+        String categoryId = ((BrewskiApplication) MainActivity.application).getCurrentCategoryId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{categoryId};
+        selection = sStylesOfCategory;
+
+        return sBrewskiStyleQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getBeersByCategory(Uri uri, String[] projection, String sortOrder) {
+        String categoryId = ((BrewskiApplication) MainActivity.application).getCurrentCategoryId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{categoryId};
+        selection = sBeersOfCategory;
+
+        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getIndividualStyle(Uri uri, String[] projection, String sortOrder) {
+        String styleId = ((BrewskiApplication) MainActivity.application).getCurrentStyleId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{styleId};
+        selection = sIndividualStyle;
+
+        return sBrewskiStyleQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getCategoryByStyle(Uri uri, String[] projection, String sortOrder) {
+        String styleId = ((BrewskiApplication) MainActivity.application).getCurrentStyleId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{styleId};
+        selection = sCategoryOfStyle;
+
+        return sBrewskiCategoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getBeersByStyle(Uri uri, String[] projection, String sortOrder) {
+        String styleId = ((BrewskiApplication) MainActivity.application).getCurrentStyleId();
+
+        String[] selectionArgs;
+        String selection;
+
+        selectionArgs = new String[]{styleId};
+        selection = sBeersOfStyle;
+
+        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
 
     /*
         Students: Here is where you need to create the UriMatcher. This UriMatcher will
@@ -359,17 +514,6 @@ public class BrewskiContentProvider extends ContentProvider {
         // and query the database accordingly.
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            // "weather/*/*"
-//            case WEATHER_WITH_LOCATION_AND_DATE:
-//            {
-//                retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
-//                break;
-//            }
-//            // "weather/*"
-//            case WEATHER_WITH_LOCATION: {
-//                retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
-//                break;
-//            }
             // "beer"
             case BEER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
@@ -381,6 +525,26 @@ public class BrewskiContentProvider extends ContentProvider {
                         null,
                         sortOrder
                 );
+                break;
+            }
+            // "weather/*/*"
+            case INDIVIDUAL_BEER: {
+                retCursor = getIndividualBeer(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case BREWERY_OF_BEER: {
+                retCursor = getCategoryByBeer(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case CATEGORY_OF_BEER: {
+                retCursor = getCategoryByBeer(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case STYLE_OF_BEER: {
+                retCursor = getStyleByBeer(uri, projection, sortOrder);
                 break;
             }
             // "brewery"
@@ -395,7 +559,18 @@ public class BrewskiContentProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
-            }// "category"
+            }
+            // "weather/*"
+            case INDIVIDUAL_BREWERY: {
+                retCursor = getIndividualBrewery(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case BEERS_OF_BREWERY: {
+                retCursor = getBeersByBrewery(uri, projection, sortOrder);
+                break;
+            }
+            // "category"
             case CATEGORY: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BrewskiContract.CategoryEntry.TABLE_NAME,
@@ -407,7 +582,23 @@ public class BrewskiContentProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
-            }// "style"
+            }
+            // "weather/*"
+            case INDIVIDUAL_CATEGORY: {
+                retCursor = getIndividualCategory(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case STYLES_OF_CATEGORY: {
+                retCursor = getStylesByCategory(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case BEERS_OF_CATEGORY: {
+                retCursor = getBeersByCategory(uri, projection, sortOrder);
+                break;
+            }
+            // "style"
             case STYLE: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BrewskiContract.StyleEntry.TABLE_NAME,
@@ -418,6 +609,21 @@ public class BrewskiContentProvider extends ContentProvider {
                         null,
                         sortOrder
                 );
+                break;
+            }
+            // "weather/*"
+            case INDIVIDUAL_STYLE: {
+                retCursor = getIndividualStyle(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case CATEGORY_OF_STYLE: {
+                retCursor = getCategoryByStyle(uri, projection, sortOrder);
+                break;
+            }
+            // "weather/*"
+            case BEERS_OF_STYLE: {
+                retCursor = getBeersByStyle(uri, projection, sortOrder);
                 break;
             }
 
