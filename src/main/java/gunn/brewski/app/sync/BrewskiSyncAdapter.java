@@ -156,6 +156,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
+            e.printStackTrace();
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
         }
@@ -172,6 +173,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                     beerReader.close();
                 } catch (final IOException e) {
                     Log.e(LOG_TAG, "Error closing stream", e);
+                    e.printStackTrace();
                 }
             }
         }
@@ -480,20 +482,23 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = beerJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray beerArray = beerJson.getJSONArray(BDB_DATA);
 
-            ((BrewskiApplication) MainActivity.application).setCurrentBeerPage(Integer.parseInt(currentPage));
+            ((BrewskiApplication) MainActivity.application).setCurrentBeerPage(Integer.parseInt(currentPage) + 1);
             ((BrewskiApplication) MainActivity.application).setNumberOfBeerPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> beerContentValuesVector = new Vector<ContentValues>(beerArray.length());
+            Vector<ContentValues> breweryContentValuesVector = new Vector<ContentValues>(beerArray.length());
+            Vector<ContentValues> categoryContentValuesVector = new Vector<ContentValues>(beerArray.length());
+            Vector<ContentValues> styleContentValuesVector = new Vector<ContentValues>(beerArray.length());
 
-            Time dayTime = new Time();
-            dayTime.setToNow();
+//            Time dayTime = new Time();
+//            dayTime.setToNow();
 
             // we start at the day returned by local time. Otherwise this is a mess.
-            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
+//            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
 
             // now we work exclusively in UTC
-            dayTime = new Time();
+//            dayTime = new Time();
 
             for(int i = 0; i < beerArray.length(); i++) {
                 // These are the values that will be collected.
@@ -515,6 +520,15 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 String breweryImageMedium;
                 String breweryImageIcon;
 
+                String categoryId;
+                String categoryName;
+
+                String styleId;
+                String styleName;
+                String styleShortName;
+                String styleDescription;
+                String styleCategoryId;
+
                 // Get the JSON object representing the day
                 JSONObject beerInfo = beerArray.getJSONObject(i);
 
@@ -523,29 +537,77 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 beerId = beerInfo.getString(BDB_BEER_ID);
                 beerName = beerInfo.getString(BDB_BEER_NAME);
                 beerDescription = beerInfo.getString(BDB_BEER_DESCRIPTION);
-                beerStyleId = beerInfo.getString(BDB_BEER_STYLE);
 
                 JSONObject beerLabels = beerInfo.getJSONObject(BDB_BEER_LABELS);
                 beerLabelIcon = beerLabels.getString(BDB_BEER_LABEL_ICON);
                 beerLabelMedium = beerLabels.getString(BDB_BEER_LABEL_MEDIUM);
                 beerLabelLarge = beerLabels.getString(BDB_BEER_LABEL_LARGE);
 
+                JSONObject styleInfo = beerInfo.getJSONObject(BDB_BEER_STYLE);
+                beerStyleId = styleInfo.getString(BDB_STYLE_ID);
+                styleId = styleInfo.getString(BDB_STYLE_ID);
+                styleName = styleInfo.getString(BDB_STYLE_NAME);
+                styleShortName = styleInfo.getString(BDB_STYLE_SHORT_NAME);
+                styleDescription = styleInfo.getString(BDB_STYLE_DESCRIPTION);
+
+                JSONObject categoryInfo = styleInfo.getJSONObject(BDB_STYLE_CATEGORY);
+                beerCategoryId = categoryInfo.getString(BDB_CATEGORY_ID);
+                styleCategoryId = categoryInfo.getString(BDB_CATEGORY_ID);
+                categoryId = categoryInfo.getString(BDB_CATEGORY_ID);
+                categoryName = categoryInfo.getString(BDB_CATEGORY_NAME);
+
+                JSONObject breweryInfo = beerInfo.getJSONObject(BDB_BEER_BREWERIES);
+                beerBreweryId = breweryInfo.getString(BDB_BREWERY_ID);
+                breweryId = breweryInfo.getString(BDB_BREWERY_ID);
+                breweryName = breweryInfo.getString(BDB_BREWERY_NAME);
+                breweryDescription = breweryInfo.getString(BDB_BREWERY_DESCRIPTION);
+                breweryEstablished = breweryInfo.getString(BDB_BREWERY_ESTABLISHED);
+
+                JSONObject breweryImages = breweryInfo.getJSONObject(BDB_BREWERY_IMAGES);
+                breweryImageLarge = breweryImages.getString(BDB_BREWERY_IMAGE_LARGE);
+                breweryImageMedium = breweryImages.getString(BDB_BREWERY_IMAGE_MEDIUM);
+                breweryImageIcon = breweryImages.getString(BDB_BREWERY_IMAGE_ICON);
+
                 ContentValues beerValues = new ContentValues();
+                ContentValues breweryValues = new ContentValues();
+                ContentValues categoryValues = new ContentValues();
+                ContentValues styleValues = new ContentValues();
 
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_ID, beerId);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_NAME, beerName);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_DESCRIPTION, beerDescription);
+                beerValues.put(BrewskiContract.BeerEntry.COLUMN_BREWERY_ID, beerBreweryId);
+                beerValues.put(BrewskiContract.BeerEntry.COLUMN_CATEGORY_ID, beerCategoryId);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_STYLE_ID, beerStyleId);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_ICON, beerLabelIcon);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_MEDIUM, beerLabelMedium);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_LARGE, beerLabelLarge);
 
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID, breweryId);
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME, breweryName);
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_BREWERY_DESCRIPTION, breweryDescription);
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_ESTABLISHED, breweryEstablished);
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_IMAGE_LARGE, breweryImageLarge);
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_IMAGE_MEDIUM, breweryImageMedium);
+                breweryValues.put(BrewskiContract.BreweryEntry.COLUMN_IMAGE_ICON, breweryImageIcon);
+
+                styleValues.put(BrewskiContract.StyleEntry.COLUMN_STYLE_ID, styleId);
+                styleValues.put(BrewskiContract.StyleEntry.COLUMN_STYLE_NAME, styleName);
+                styleValues.put(BrewskiContract.StyleEntry.COLUMN_STYLE_SHORT_NAME, styleShortName);
+                styleValues.put(BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION, styleDescription);
+                styleValues.put(BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID, styleCategoryId);
+
+                categoryValues.put(BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID, categoryId);
+                categoryValues.put(BrewskiContract.CategoryEntry.COLUMN_CATEGORY_NAME, categoryName);
+
                 beerContentValuesVector.add(beerValues);
+                breweryContentValuesVector.add(breweryValues);
+                categoryContentValuesVector.add(categoryValues);
+                styleContentValuesVector.add(styleValues);
             }
 
-            int inserted = 0;
             // add to database
-            if ( beerContentValuesVector.size() > 0 ) {
+            if (beerContentValuesVector.size() > 0) {
                 ContentValues[] beerContentValuesArray = new ContentValues[beerContentValuesVector.size()];
                 beerContentValuesVector.toArray(beerContentValuesArray);
                 getContext().getContentResolver().bulkInsert(BrewskiContract.BeerEntry.BEER_CONTENT_URI, beerContentValuesArray);
@@ -555,10 +617,34 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 //                        BrewskiContract.BeerEntry.COLUMN_DATE + " <= ?",
 //                        new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1))});
 
-                notifyBeerOfTheDay();
+//                notifyBeerOfTheDay();
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + beerContentValuesVector.size() + " Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + beerContentValuesVector.size() + "Beers Inserted");
+
+            if (breweryContentValuesVector.size() > 0) {
+                ContentValues[] breweryContentValuesArray = new ContentValues[breweryContentValuesVector.size()];
+                breweryContentValuesVector.toArray(breweryContentValuesArray);
+                getContext().getContentResolver().bulkInsert(BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI, breweryContentValuesArray);
+            }
+
+            Log.d(LOG_TAG, "Sync Complete. " + breweryContentValuesVector.size() + "Breweries Inserted");
+
+            if (categoryContentValuesVector.size() > 0) {
+                ContentValues[] categoryContentValuesArray = new ContentValues[categoryContentValuesVector.size()];
+                categoryContentValuesVector.toArray(categoryContentValuesArray);
+                getContext().getContentResolver().bulkInsert(BrewskiContract.CategoryEntry.CATEGORY_CONTENT_URI, categoryContentValuesArray);
+            }
+
+            Log.d(LOG_TAG, "Sync Complete. " + categoryContentValuesVector.size() + "Categories Inserted");
+
+            if (styleContentValuesVector.size() > 0) {
+                ContentValues[] styleContentValuesArray = new ContentValues[styleContentValuesVector.size()];
+                styleContentValuesVector.toArray(styleContentValuesArray);
+                getContext().getContentResolver().bulkInsert(BrewskiContract.StyleEntry.STYLE_CONTENT_URI, styleContentValuesArray);
+            }
+
+            Log.d(LOG_TAG, "Sync Complete. " + styleContentValuesVector.size() + "Styles Inserted");
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
