@@ -81,9 +81,9 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(LOG_TAG, "Starting sync");
 
         performBeerSync();
-        performBrewerySync();
-        performCategorySync();
-        performStyleSync();
+//        performBrewerySync();
+//        performCategorySync();
+//        performStyleSync();
 
         return;
     }
@@ -100,6 +100,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         String format = "json";
         String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
         String endpoint = "beers";
+        String page = ((BrewskiApplication) MainActivity.application).getCurrentBeerPage().toString();
+        String withBreweries = "Y";
 
         try {
             // Construct the URL for the OpenWeatherMap query
@@ -109,8 +111,12 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                     "http://api.brewerydb.com/v2/" + endpoint + "?";
             final String FORMAT_PARAM = "format";
             final String KEY_PARAM = "key";
+            final String PAGE_PARAM = "p";
+            final String WITH_BREWERIES = "withBreweries";
 
             Uri builtBeerUri = Uri.parse(BREWERY_DB_BASE_URL).buildUpon()
+                    .appendQueryParameter(PAGE_PARAM, page)
+                    .appendQueryParameter(WITH_BREWERIES, withBreweries)
                     .appendQueryParameter(KEY_PARAM, api_key)
                     .appendQueryParameter(FORMAT_PARAM, format)
                     .build();
@@ -183,7 +189,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         String format = "json";
         String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
         String endpoint = "beers";
-        String page = ((BrewskiApplication) MainActivity.application).getCurrentBeerPage().toString();
+        String page = ((BrewskiApplication) MainActivity.application).getCurrentBreweryPage().toString();
 
         try {
             // Construct the URL for the OpenWeatherMap query
@@ -438,6 +444,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // These are the names of the JSON objects that need to be extracted.
         // Beer Information
+        final String BDB_CURRENT_PAGE = "currentPage";
+        final String BDB_NUMBER_OF_PAGES = "numberOfPages";
         final String BDB_BEER_ID = "id";
         final String BDB_BEER_NAME = "name";
         final String BDB_BEER_DESCRIPTION = "description";
@@ -468,7 +476,12 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
         try {
             JSONObject beerJson = new JSONObject(beerJsonStr);
+            String currentPage = beerJson.getString(BDB_CURRENT_PAGE);
+            String numberOfPages = beerJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray beerArray = beerJson.getJSONArray(BDB_DATA);
+
+            ((BrewskiApplication) MainActivity.application).setCurrentBeerPage(Integer.parseInt(currentPage));
+            ((BrewskiApplication) MainActivity.application).setNumberOfBeerPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> beerContentValuesVector = new Vector<ContentValues>(beerArray.length());
@@ -487,10 +500,20 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 String beerId;
                 String beerName;
                 String beerDescription;
-                String beerStyle;
+                String beerBreweryId;
+                String beerCategoryId;
+                String beerStyleId;
                 String beerLabelIcon;
                 String beerLabelMedium;
                 String beerLabelLarge;
+
+                String breweryId;
+                String breweryName;
+                String breweryDescription;
+                String breweryEstablished;
+                String breweryImageLarge;
+                String breweryImageMedium;
+                String breweryImageIcon;
 
                 // Get the JSON object representing the day
                 JSONObject beerInfo = beerArray.getJSONObject(i);
@@ -500,7 +523,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 beerId = beerInfo.getString(BDB_BEER_ID);
                 beerName = beerInfo.getString(BDB_BEER_NAME);
                 beerDescription = beerInfo.getString(BDB_BEER_DESCRIPTION);
-                beerStyle = beerInfo.getString(BDB_BEER_STYLE);
+                beerStyleId = beerInfo.getString(BDB_BEER_STYLE);
 
                 JSONObject beerLabels = beerInfo.getJSONObject(BDB_BEER_LABELS);
                 beerLabelIcon = beerLabels.getString(BDB_BEER_LABEL_ICON);
@@ -512,7 +535,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_ID, beerId);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_NAME, beerName);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_DESCRIPTION, beerDescription);
-                beerValues.put(BrewskiContract.BeerEntry.COLUMN_STYLE_ID, beerStyle);
+                beerValues.put(BrewskiContract.BeerEntry.COLUMN_STYLE_ID, beerStyleId);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_ICON, beerLabelIcon);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_MEDIUM, beerLabelMedium);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_LARGE, beerLabelLarge);
