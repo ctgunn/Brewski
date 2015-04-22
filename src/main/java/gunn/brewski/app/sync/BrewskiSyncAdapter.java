@@ -38,6 +38,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
+import gunn.brewski.app.BrewskiApplication;
 import gunn.brewski.app.MainActivity;
 import gunn.brewski.app.R;
 import gunn.brewski.app.Utility;
@@ -78,8 +79,16 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
-//        String locationQuery = Utility.getPreferredLocation(getContext());
 
+        performBeerSync();
+        performBrewerySync();
+        performCategorySync();
+        performStyleSync();
+
+        return;
+    }
+
+    private void performBeerSync() {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection beerUrlConnection = null;
@@ -138,14 +147,17 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             beerJsonStr = beerBuffer.toString();
 
             getBeerDataFromJson(beerJsonStr);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             if (beerUrlConnection != null) {
                 beerUrlConnection.disconnect();
             }
@@ -157,7 +169,258 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         }
-        return;
+    }
+
+    private void performBrewerySync() {
+        // These two need to be declared outside the try/catch
+        // so that they can be closed in the finally block.
+        HttpURLConnection beerUrlConnection = null;
+        BufferedReader beerReader = null;
+
+        // Will contain the raw JSON response as a string.
+        String beerJsonStr = null;
+
+        String format = "json";
+        String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
+        String endpoint = "beers";
+        String page = ((BrewskiApplication) MainActivity.application).getCurrentBeerPage().toString();
+
+        try {
+            // Construct the URL for the OpenWeatherMap query
+            // Possible parameters are avaiable at OWM's forecast API page, at
+            // http://openweathermap.org/API#forecast
+            final String BREWERY_DB_BASE_URL =
+                    "http://api.brewerydb.com/v2/" + endpoint + "?";
+            final String FORMAT_PARAM = "format";
+            final String KEY_PARAM = "key";
+            final String PAGE_PARAM = "p";
+
+            Uri builtBeerUri = Uri.parse(BREWERY_DB_BASE_URL).buildUpon()
+                    .appendQueryParameter(PAGE_PARAM, page)
+                    .appendQueryParameter(KEY_PARAM, api_key)
+                    .appendQueryParameter(FORMAT_PARAM, format)
+                    .build();
+
+            URL beerUrl = new URL(builtBeerUri.toString());
+
+            // Create the request to OpenWeatherMap, and open the connection
+            beerUrlConnection = (HttpURLConnection) beerUrl.openConnection();
+            beerUrlConnection.setRequestMethod("GET");
+            beerUrlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream beerInputStream = beerUrlConnection.getInputStream();
+            StringBuffer beerBuffer = new StringBuffer();
+            if (beerInputStream == null) {
+                // Nothing to do.
+                return;
+            }
+            beerReader = new BufferedReader(new InputStreamReader(beerInputStream));
+
+            String line;
+            while ((line = beerReader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                beerBuffer.append(line + "\n");
+            }
+
+            if (beerBuffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return;
+            }
+
+            beerJsonStr = beerBuffer.toString();
+
+            getBeerDataFromJson(beerJsonStr);
+        }
+        catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attempting
+            // to parse it.
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        finally {
+            if (beerUrlConnection != null) {
+                beerUrlConnection.disconnect();
+            }
+            if (beerReader != null) {
+                try {
+                    beerReader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
+        }
+    }
+
+    private void performCategorySync() {
+        // These two need to be declared outside the try/catch
+        // so that they can be closed in the finally block.
+        HttpURLConnection beerUrlConnection = null;
+        BufferedReader beerReader = null;
+
+        // Will contain the raw JSON response as a string.
+        String beerJsonStr = null;
+
+        String format = "json";
+        String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
+        String endpoint = "beers";
+
+        try {
+            // Construct the URL for the OpenWeatherMap query
+            // Possible parameters are avaiable at OWM's forecast API page, at
+            // http://openweathermap.org/API#forecast
+            final String BREWERY_DB_BASE_URL =
+                    "http://api.brewerydb.com/v2/" + endpoint + "?";
+            final String FORMAT_PARAM = "format";
+            final String KEY_PARAM = "key";
+
+            Uri builtBeerUri = Uri.parse(BREWERY_DB_BASE_URL).buildUpon()
+                    .appendQueryParameter(KEY_PARAM, api_key)
+                    .appendQueryParameter(FORMAT_PARAM, format)
+                    .build();
+
+            URL beerUrl = new URL(builtBeerUri.toString());
+
+            // Create the request to OpenWeatherMap, and open the connection
+            beerUrlConnection = (HttpURLConnection) beerUrl.openConnection();
+            beerUrlConnection.setRequestMethod("GET");
+            beerUrlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream beerInputStream = beerUrlConnection.getInputStream();
+            StringBuffer beerBuffer = new StringBuffer();
+            if (beerInputStream == null) {
+                // Nothing to do.
+                return;
+            }
+            beerReader = new BufferedReader(new InputStreamReader(beerInputStream));
+
+            String line;
+            while ((line = beerReader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                beerBuffer.append(line + "\n");
+            }
+
+            if (beerBuffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return;
+            }
+
+            beerJsonStr = beerBuffer.toString();
+
+            getBeerDataFromJson(beerJsonStr);
+        }
+        catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attempting
+            // to parse it.
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        finally {
+            if (beerUrlConnection != null) {
+                beerUrlConnection.disconnect();
+            }
+            if (beerReader != null) {
+                try {
+                    beerReader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
+        }
+    }
+
+    private void performStyleSync() {
+        // These two need to be declared outside the try/catch
+        // so that they can be closed in the finally block.
+        HttpURLConnection beerUrlConnection = null;
+        BufferedReader beerReader = null;
+
+        // Will contain the raw JSON response as a string.
+        String beerJsonStr = null;
+
+        String format = "json";
+        String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
+        String endpoint = "beers";
+
+        try {
+            // Construct the URL for the OpenWeatherMap query
+            // Possible parameters are avaiable at OWM's forecast API page, at
+            // http://openweathermap.org/API#forecast
+            final String BREWERY_DB_BASE_URL =
+                    "http://api.brewerydb.com/v2/" + endpoint + "?";
+            final String FORMAT_PARAM = "format";
+            final String KEY_PARAM = "key";
+
+            Uri builtBeerUri = Uri.parse(BREWERY_DB_BASE_URL).buildUpon()
+                    .appendQueryParameter(KEY_PARAM, api_key)
+                    .appendQueryParameter(FORMAT_PARAM, format)
+                    .build();
+
+            URL beerUrl = new URL(builtBeerUri.toString());
+
+            // Create the request to OpenWeatherMap, and open the connection
+            beerUrlConnection = (HttpURLConnection) beerUrl.openConnection();
+            beerUrlConnection.setRequestMethod("GET");
+            beerUrlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream beerInputStream = beerUrlConnection.getInputStream();
+            StringBuffer beerBuffer = new StringBuffer();
+            if (beerInputStream == null) {
+                // Nothing to do.
+                return;
+            }
+            beerReader = new BufferedReader(new InputStreamReader(beerInputStream));
+
+            String line;
+            while ((line = beerReader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                beerBuffer.append(line + "\n");
+            }
+
+            if (beerBuffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return;
+            }
+
+            beerJsonStr = beerBuffer.toString();
+
+            getBeerDataFromJson(beerJsonStr);
+        }
+        catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attempting
+            // to parse it.
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        finally {
+            if (beerUrlConnection != null) {
+                beerUrlConnection.disconnect();
+            }
+            if (beerReader != null) {
+                try {
+                    beerReader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
+        }
     }
 
     /**
@@ -185,14 +448,14 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         final String BDB_BEER_LABEL_LARGE = "large";
 
         // Beer information.  Each beer's info is an element of the "list" array.
-        final String BDB_LIST = "list";
+        final String BDB_DATA = "data";
 
         try {
             JSONObject beerJson = new JSONObject(beerJsonStr);
-            JSONArray beerArray = beerJson.getJSONArray(BDB_LIST);
+            JSONArray beerArray = beerJson.getJSONArray(BDB_DATA);
 
             // Insert the new beer information into the database
-            Vector<ContentValues> cVVector = new Vector<ContentValues>(beerArray.length());
+            Vector<ContentValues> beerContentValuesVector = new Vector<ContentValues>(beerArray.length());
 
             Time dayTime = new Time();
             dayTime.setToNow();
@@ -205,7 +468,6 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
             for(int i = 0; i < beerArray.length(); i++) {
                 // These are the values that will be collected.
-                long dateTime;
                 String beerId;
                 String beerName;
                 String beerDescription;
@@ -215,24 +477,22 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 String beerLabelLarge;
 
                 // Get the JSON object representing the day
-                JSONObject dayForecast = beerArray.getJSONObject(i);
+                JSONObject beerInfo = beerArray.getJSONObject(i);
 
                 // Cheating to convert this to UTC time, which is what we want anyhow
-                dateTime = dayTime.setJulianDay(julianStartDay+i);
 
-                beerId = beerJson.getString(BDB_BEER_ID);
-                beerName = beerJson.getString(BDB_BEER_NAME);
-                beerDescription = beerJson.getString(BDB_BEER_DESCRIPTION);
-                beerStyle = beerJson.getString(BDB_BEER_STYLE);
+                beerId = beerInfo.getString(BDB_BEER_ID);
+                beerName = beerInfo.getString(BDB_BEER_NAME);
+                beerDescription = beerInfo.getString(BDB_BEER_DESCRIPTION);
+                beerStyle = beerInfo.getString(BDB_BEER_STYLE);
 
-                JSONObject beerLabels = beerJson.getJSONObject(BDB_BEER_LABELS);
+                JSONObject beerLabels = beerInfo.getJSONObject(BDB_BEER_LABELS);
                 beerLabelIcon = beerLabels.getString(BDB_BEER_LABEL_ICON);
                 beerLabelMedium = beerLabels.getString(BDB_BEER_LABEL_MEDIUM);
                 beerLabelLarge = beerLabels.getString(BDB_BEER_LABEL_LARGE);
 
                 ContentValues beerValues = new ContentValues();
 
-                beerValues.put(BrewskiContract.BeerEntry.COLUMN_DATE, dateTime);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_ID, beerId);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_NAME, beerName);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_BEER_DESCRIPTION, beerDescription);
@@ -241,25 +501,25 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_MEDIUM, beerLabelMedium);
                 beerValues.put(BrewskiContract.BeerEntry.COLUMN_LABEL_LARGE, beerLabelLarge);
 
-                cVVector.add(beerValues);
+                beerContentValuesVector.add(beerValues);
             }
 
             int inserted = 0;
             // add to database
-            if ( cVVector.size() > 0 ) {
-                ContentValues[] cvArray = new ContentValues[cVVector.size()];
-                cVVector.toArray(cvArray);
-                getContext().getContentResolver().bulkInsert(BrewskiContract.BeerEntry.BEER_CONTENT_URI, cvArray);
+            if ( beerContentValuesVector.size() > 0 ) {
+                ContentValues[] beerContentValuesArray = new ContentValues[beerContentValuesVector.size()];
+                beerContentValuesVector.toArray(beerContentValuesArray);
+                getContext().getContentResolver().bulkInsert(BrewskiContract.BeerEntry.BEER_CONTENT_URI, beerContentValuesArray);
 
-                // delete old data so we don't build up an endless history
-                getContext().getContentResolver().delete(BrewskiContract.BeerEntry.BEER_CONTENT_URI,
-                        BrewskiContract.BeerEntry.COLUMN_DATE + " <= ?",
-                        new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1))});
+//                // delete old data so we don't build up an endless history
+//                getContext().getContentResolver().delete(BrewskiContract.BeerEntry.BEER_CONTENT_URI,
+//                        BrewskiContract.BeerEntry.COLUMN_DATE + " <= ?",
+//                        new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1))});
 
                 notifyBeerOfTheDay();
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + beerContentValuesVector.size() + " Inserted");
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -451,8 +711,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(getSyncAccount(context),
-                context.getString(R.string.content_authority), bundle);
+
+        ContentResolver.requestSync(getSyncAccount(context), context.getString(R.string.content_authority), bundle);
     }
 
     /**

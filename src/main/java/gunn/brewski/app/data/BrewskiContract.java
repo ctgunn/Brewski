@@ -116,7 +116,6 @@ public class BrewskiContract {
         // Table name
         public static final String TABLE_NAME = "beer";
 
-        public static final String COLUMN_DATE = "date";
         // Foreign Beer ID that is received from BreweryDB.
         public static final String COLUMN_BEER_ID = "beer_id";
         // Beer name that is received from BreweryDB.
@@ -125,8 +124,18 @@ public class BrewskiContract {
         public static final String COLUMN_BEER_DESCRIPTION = "beer_description";
         // Beer's Brewery ID that is received from BreweryDB.
         public static final String COLUMN_BREWERY_ID = "brewery_id";
+        // Beer's Brewery ID that is received from BreweryDB.
+        public static final String COLUMN_BREWERY_NAME = "brewery_name";
+        // Beer's Brewery ID that is received from BreweryDB.
+        public static final String COLUMN_CATEGORY_ID = "category_id";
+        // Beer's Brewery ID that is received from BreweryDB.
+        public static final String COLUMN_CATEGORY_NAME = "category_name";
         // Style ID that is received from BreweryDB.
         public static final String COLUMN_STYLE_ID = "style_id";
+        // Style ID that is received from BreweryDB.
+        public static final String COLUMN_STYLE_NAME = "style_name";
+        // Style ID that is received from BreweryDB.
+        public static final String COLUMN_STYLE_SHORT_NAME = "style_short_name";
         // URL that links to the large label image for the corresponding beer,
         // which is received from BreweryDB.
         public static final String COLUMN_LABEL_LARGE = "label_large";
@@ -202,6 +211,8 @@ public class BrewskiContract {
         public static final String COLUMN_STYLE_ID = "style_id";
         // Style name that is received from BreweryDB.
         public static final String COLUMN_STYLE_NAME = "style_name";
+        // Style name that is received from BreweryDB.
+        public static final String COLUMN_STYLE_SHORT_NAME = "style_short_name";
         // Style description that is received from BreweryDB.
         public static final String COLUMN_STYLE_DESCRIPTION = "style_description";
         // Foreign Category ID that is received from BreweryDB, and that they
