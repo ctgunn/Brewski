@@ -56,6 +56,8 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
             BrewskiContract.BeerEntry.COLUMN_BEER_ID,
             BrewskiContract.BeerEntry.COLUMN_BEER_NAME,
             BrewskiContract.BeerEntry.COLUMN_BEER_DESCRIPTION,
+            BrewskiContract.BeerEntry.COLUMN_BREWERY_ID,
+            BrewskiContract.BeerEntry.COLUMN_CATEGORY_ID,
             BrewskiContract.BeerEntry.COLUMN_STYLE_ID,
             BrewskiContract.BeerEntry.COLUMN_LABEL_LARGE,
             BrewskiContract.BeerEntry.COLUMN_LABEL_MEDIUM,
@@ -64,15 +66,15 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_WEATHER_ID = 0;
-    static final int COL_WEATHER_DATE = 1;
-    static final int COL_WEATHER_DESC = 2;
-    static final int COL_WEATHER_MAX_TEMP = 3;
-    static final int COL_WEATHER_MIN_TEMP = 4;
-    static final int COL_LOCATION_SETTING = 5;
-    static final int COL_WEATHER_CONDITION_ID = 6;
-    static final int COL_COORD_LAT = 7;
-    static final int COL_COORD_LONG = 8;
+    static final int COL_BEER_ID = 0;
+    static final int COL_BEER_NAME = 1;
+    static final int COL_BEER_DESCRIPTION = 2;
+    static final int COL_BREWERY_ID = 3;
+    static final int COL_CATEGORY_ID = 4;
+    static final int COL_STYLE_ID = 5;
+    static final int COL_LABEL_LARGE = 6;
+    static final int COL_LABEL_MEDIUM = 7;
+    static final int COL_LABEL_ICON = 8;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -111,10 +113,10 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 //            updateWeather();
 //            return true;
 //        }
-//        if (id == R.id.action_map) {
+        if (id == R.id.action_beer_list) {
 //            openPreferredLocationInMap();
-//            return true;
-//        }
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -141,8 +143,9 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    String locationSetting = Utility.getPreferredLocation(getActivity());
-                    ((Callback) getActivity()).onItemSelected(BrewskiContract.BeerEntry.buildBeerList("0"));
+                    ((Callback) getActivity()).onItemSelected(
+                        BrewskiContract.BeerEntry.buildBeerList(cursor.getString(COL_BEER_ID))
+                    );
                 }
 
                 mPosition = position;
@@ -181,30 +184,30 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
-    private void openPreferredLocationInMap() {
-        // Using the URI scheme for showing a location found on a map.  This super-handy
-        // intent can is detailed in the "Common Intents" page of Android's developer site:
-        // http://developer.android.com/guide/components/intents-common.html#Maps
-        if ( null != mBeerListAdapter ) {
-            Cursor c = mBeerListAdapter.getCursor();
-            if ( null != c ) {
-                c.moveToPosition(0);
-                String posLat = c.getString(COL_COORD_LAT);
-                String posLong = c.getString(COL_COORD_LONG);
-                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
-
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(geoLocation);
-
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
-                }
-            }
-
-        }
-    }
+//    private void openPreferredLocationInMap() {
+//        // Using the URI scheme for showing a location found on a map.  This super-handy
+//        // intent can is detailed in the "Common Intents" page of Android's developer site:
+//        // http://developer.android.com/guide/components/intents-common.html#Maps
+//        if ( null != mBeerListAdapter ) {
+//            Cursor c = mBeerListAdapter.getCursor();
+//            if ( null != c ) {
+//                c.moveToPosition(0);
+//                String posLat = c.getString(COL_COORD_LAT);
+//                String posLong = c.getString(COL_COORD_LONG);
+//                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+//
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(geoLocation);
+//
+//                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                    startActivity(intent);
+//                } else {
+//                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+//                }
+//            }
+//
+//        }
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -228,15 +231,14 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         // Sort order:  Ascending, by date.
         String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
 
-        String locationSetting = Utility.getPreferredLocation(getActivity());
-        Uri weatherForLocationUri = BrewskiContract.BeerEntry.buildBeerList("0");
+        Uri beerUri = BrewskiContract.BeerEntry.buildBeerList(String.valueOf(System.currentTimeMillis()));
 
         return new CursorLoader(getActivity(),
-                weatherForLocationUri,
-                BEER_COLUMNS,
-                null,
-                null,
-                sortOrder);
+            beerUri,
+            BEER_COLUMNS,
+            null,
+            null,
+            sortOrder);
     }
 
     @Override
