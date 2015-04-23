@@ -166,6 +166,8 @@ public class BrewskiContract {
         public static final String COLUMN_BREWERY_NAME = "brewery_name";
         // Brewery description that is received from BreweryDB.
         public static final String COLUMN_BREWERY_DESCRIPTION = "brewery_description";
+        // Brewery description that is received from BreweryDB.
+        public static final String COLUMN_BREWERY_WEBSITE = "brewery_website";
         // The year that the brewery was established according to BreweryDB.
         public static final String COLUMN_ESTABLISHED = "established";
         // URL that links to the large image for the corresponding brewery,

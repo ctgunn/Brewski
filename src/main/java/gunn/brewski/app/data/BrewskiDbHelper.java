@@ -64,6 +64,7 @@ public class BrewskiDbHelper extends SQLiteOpenHelper {
                 BreweryEntry.COLUMN_BREWERY_ID + " TEXT NOT NULL, " +
                 BreweryEntry.COLUMN_BREWERY_NAME + " TEXT NOT NULL, " +
                 BreweryEntry.COLUMN_BREWERY_DESCRIPTION + " TEXT NOT NULL, " +
+                BreweryEntry.COLUMN_BREWERY_WEBSITE + " TEXT NOT NULL, " +
                 BreweryEntry.COLUMN_ESTABLISHED + " TEXT NOT NULL, " +
                 BreweryEntry.COLUMN_IMAGE_LARGE + " TEXT NOT NULL, " +
                 BreweryEntry.COLUMN_IMAGE_MEDIUM + " TEXT NOT NULL, " +
