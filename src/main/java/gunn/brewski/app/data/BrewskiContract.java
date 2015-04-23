@@ -222,6 +222,10 @@ public class BrewskiContract {
         }
     }
 
+    // TODO: CREATE INGREDIENTS TABLE
+
+    // TODO: CREATE LOCATIONS TABLE
+
     public static final class XAnalysisEntry implements BaseColumns {
 
         public static final Uri X_ANALYSIS_CONTENT_URI =

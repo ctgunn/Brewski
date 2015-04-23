@@ -478,6 +478,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         final String BDB_STYLE_CATEGORY = "category";
         final String BDB_CATEGORY_ID = "id";
         final String BDB_CATEGORY_NAME = "name";
+        // TODO: INGREDIENTS_ID
         final String BDB_BEER_LABELS = "labels";
         final String BDB_BEER_LABEL_ICON = "icon";
         final String BDB_BEER_LABEL_MEDIUM = "medium";
@@ -518,6 +519,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 String beerBreweryId;
                 String beerCategoryId;
                 String beerStyleId;
+                // TODO: INGREDIENTS_ID
                 String beerLabelIcon;
                 String beerLabelMedium;
                 String beerLabelLarge;
@@ -527,6 +529,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 String breweryDescription;
                 String breweryWebsite;
                 String breweryEstablished;
+                // TODO: LOCATION_ID
                 String breweryImageLarge;
                 String breweryImageMedium;
                 String breweryImageIcon;
@@ -574,11 +577,18 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 breweryDescription = breweryInfo.getString(BDB_BREWERY_DESCRIPTION);
                 breweryWebsite = breweryInfo.getString(BDB_BREWERY_WEBSITE);
                 breweryEstablished = breweryInfo.getString(BDB_BREWERY_ESTABLISHED);
+                // TODO: LOCATION_ID
 
                 JSONObject breweryImages = breweryInfo.getJSONObject(BDB_BREWERY_IMAGES);
                 breweryImageLarge = breweryImages.getString(BDB_BREWERY_IMAGE_LARGE);
                 breweryImageMedium = breweryImages.getString(BDB_BREWERY_IMAGE_MEDIUM);
                 breweryImageIcon = breweryImages.getString(BDB_BREWERY_IMAGE_ICON);
+
+                // TODO: PULL LOCATION INFO AND PUT INTO THE LOCATION TABLE
+
+                // TODO: INGREDIENTS_ID
+
+                // TODO: PULL INGREDIENTS INFO AND PUT INTO THE INGREDIENTS TABLE
 
                 ContentValues beerValues = new ContentValues();
                 ContentValues breweryValues = new ContentValues();
@@ -674,6 +684,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         final String BDB_BREWERY_DESCRIPTION = "description";
         final String BDB_BREWERY_WEBSITE = "website";
         final String BDB_BREWERY_ESTABLISHED = "established";
+        // TODO: LOCATION_ID
         final String BDB_BREWERY_IMAGES = "images";
         final String BDB_BREWERY_IMAGE_ICON = "icon";
         final String BDB_BREWERY_IMAGE_MEDIUM = "medium";
@@ -701,9 +712,12 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 String breweryDescription;
                 String breweryWebsite;
                 String breweryEstablished;
+                // TODO: LOCATION_ID
                 String breweryImageLarge;
                 String breweryImageMedium;
                 String breweryImageIcon;
+
+                // TODO: PULL LOCATION INFO AND PUT INTO THE LOCATION TABLE
 
                 // Get the JSON object representing the day
                 JSONObject breweryInfo = breweryArray.getJSONObject(i);

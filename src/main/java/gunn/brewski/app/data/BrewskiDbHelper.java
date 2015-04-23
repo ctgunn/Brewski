@@ -79,6 +79,9 @@ public class BrewskiDbHelper extends SQLiteOpenHelper {
                 StyleEntry.COLUMN_STYLE_DESCRIPTION + " TEXT NOT NULL, " +
                 StyleEntry.COLUMN_CATEGORY_ID + " TEXT NOT NULL, " +
                 " );";
+        // TODO: CREATE INGREDIENTS TABLE
+
+        // TODO: CREATE LOCATIONS TABLE
 
         final String SQL_CREATE_X_ANALYSIS_TABLE = "CREATE TABLE " + XAnalysisEntry.TABLE_NAME + " (" +
                 XAnalysisEntry._ID + " INTEGER PRIMARY KEY," +
