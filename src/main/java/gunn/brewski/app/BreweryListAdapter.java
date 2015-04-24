@@ -15,8 +15,8 @@ import android.widget.TextView;
 public class BreweryListAdapter extends android.support.v4.widget.CursorAdapter {
 
     private static final int VIEW_TYPE_COUNT = 2;
-    private static final int VIEW_TYPE_TODAY = 0;
-    private static final int VIEW_TYPE_FUTURE_DAY = 1;
+    private static final int VIEW_TYPE_BREWERY = 0;
+    private static final int VIEW_TYPE_SELECTED_BREWERY = 1;
 
     // Flag to determine if we want to use a separate view for "today".
     private boolean mUseTodayLayout = true;
@@ -25,18 +25,18 @@ public class BreweryListAdapter extends android.support.v4.widget.CursorAdapter 
      * Cache of the children views for a forecast list item.
      */
     public static class ViewHolder {
-        public final ImageView iconView;
-        public final TextView dateView;
-        public final TextView descriptionView;
-        public final TextView highTempView;
-        public final TextView lowTempView;
+        public final ImageView largeImageView;
+        public final TextView breweryNameView;
+        public final TextView breweryDescriptionView;
+        public final TextView establishedView;
+        public final TextView websiteView;
 
         public ViewHolder(View view) {
-            iconView = (ImageView) view.findViewById(R.id.list_item_icon);
-            dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
-            descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-            highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
-            lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
+            breweryNameView = (TextView) view.findViewById(R.id.list_item_date_textview);
+            breweryDescriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
+            establishedView = (TextView) view.findViewById(R.id.list_item_high_textview);
+            websiteView = (TextView) view.findViewById(R.id.list_item_low_textview);
         }
     }
 
@@ -50,12 +50,12 @@ public class BreweryListAdapter extends android.support.v4.widget.CursorAdapter 
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
         switch (viewType) {
-            case VIEW_TYPE_TODAY: {
-                layoutId = R.layout.list_item_brewery_selected;
+            case VIEW_TYPE_BREWERY: {
+                layoutId = R.layout.list_item_brewery;
                 break;
             }
-            case VIEW_TYPE_FUTURE_DAY: {
-                layoutId = R.layout.list_item_brewery;
+            case VIEW_TYPE_SELECTED_BREWERY: {
+                layoutId = R.layout.list_item_brewery_selected;
                 break;
             }
         }
@@ -70,48 +70,44 @@ public class BreweryListAdapter extends android.support.v4.widget.CursorAdapter 
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         int viewType = getItemViewType(cursor.getPosition());
         switch (viewType) {
-            case VIEW_TYPE_TODAY: {
+            case VIEW_TYPE_BREWERY: {
                 // Get weather icon
-                viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(
-                        cursor.getInt(BeerListFragment.COL_WEATHER_CONDITION_ID)));
+                viewHolder.largeImageView.setImageResource(Utility.getArtResourceForWeatherCondition(
+                        cursor.getInt(BreweryListFragment.COL_IMAGE_LARGE)));
                 break;
             }
-            case VIEW_TYPE_FUTURE_DAY: {
+            case VIEW_TYPE_SELECTED_BREWERY: {
                 // Get weather icon
-                viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(
-                        cursor.getInt(BeerListFragment.COL_WEATHER_CONDITION_ID)));
+                viewHolder.largeImageView.setImageResource(Utility.getIconResourceForWeatherCondition(
+                        cursor.getInt(BreweryListFragment.COL_BREWERY_ID)));
                 break;
             }
         }
 
         // Read date from cursor
-        long dateInMillis = cursor.getLong(BeerListFragment.COL_WEATHER_DATE);
+        String breweryName = cursor.getString(BreweryListFragment.COL_BREWERY_NAME);
         // Find TextView and set formatted date on it
-        viewHolder.dateView.setText(Utility.getFriendlyDayString(context, dateInMillis));
+        viewHolder.breweryNameView.setText(breweryName);
 
         // Read weather forecast from cursor
-        String description = cursor.getString(BeerListFragment.COL_WEATHER_DESC);
+        String breweryDescription = cursor.getString(BreweryListFragment.COL_BREWERY_DESCRIPTION);
         // Find TextView and set weather forecast on it
-        viewHolder.descriptionView.setText(description);
+        viewHolder.breweryDescriptionView.setText(breweryDescription);
 
         // For accessibility, add a content description to the icon field
-        viewHolder.iconView.setContentDescription(description);
-
-        // Read user preference for metric or imperial temperature units
-        boolean isMetric = Utility.isMetric(context);
+        viewHolder.largeImageView.setContentDescription(breweryDescription);
 
         // Read high temperature from cursor
-        double high = cursor.getDouble(BeerListFragment.COL_WEATHER_MAX_TEMP);
-        viewHolder.highTempView.setText(Utility.formatTemperature(context, high));
+        String established = cursor.getString(BreweryListFragment.COL_ESTABLISHED);
+        viewHolder.establishedView.setText(established);
 
         // Read low temperature from cursor
-        double low = cursor.getDouble(BeerListFragment.COL_WEATHER_MIN_TEMP);
-        viewHolder.lowTempView.setText(Utility.formatTemperature(context, low));
+        String website = cursor.getString(BreweryListFragment.COL_BREWERY_WEBSITE);
+        viewHolder.websiteView.setText(website);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
@@ -120,7 +116,7 @@ public class BreweryListAdapter extends android.support.v4.widget.CursorAdapter 
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0 && mUseTodayLayout) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
+        return (position == 0 && mUseTodayLayout) ? VIEW_TYPE_BREWERY : VIEW_TYPE_SELECTED_BREWERY;
     }
 
     @Override

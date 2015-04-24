@@ -1,6 +1,5 @@
 package gunn.brewski.app;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,7 +31,7 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
  */
 public class BreweryListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = BreweryListFragment.class.getSimpleName();
-    private BeerListAdapter mBreweryListAdapter;
+    private BreweryListAdapter mBreweryListAdapter;
 
     private ListView mBreweryListView;
     private int mPosition = ListView.INVALID_POSITION;
@@ -55,6 +53,7 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
             BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID,
             BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME,
             BrewskiContract.BreweryEntry.COLUMN_BREWERY_DESCRIPTION,
+            BrewskiContract.BreweryEntry.COLUMN_BREWERY_WEBSITE,
             BrewskiContract.BreweryEntry.COLUMN_ESTABLISHED,
             BrewskiContract.BreweryEntry.COLUMN_IMAGE_LARGE,
             BrewskiContract.BreweryEntry.COLUMN_IMAGE_MEDIUM,
@@ -63,15 +62,14 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_WEATHER_ID = 0;
-    static final int COL_WEATHER_DATE = 1;
-    static final int COL_WEATHER_DESC = 2;
-    static final int COL_WEATHER_MAX_TEMP = 3;
-    static final int COL_WEATHER_MIN_TEMP = 4;
-    static final int COL_LOCATION_SETTING = 5;
-    static final int COL_WEATHER_CONDITION_ID = 6;
-    static final int COL_COORD_LAT = 7;
-    static final int COL_COORD_LONG = 8;
+    static final int COL_BREWERY_ID = 0;
+    static final int COL_BREWERY_NAME = 1;
+    static final int COL_BREWERY_DESCRIPTION = 2;
+    static final int COL_BREWERY_WEBSITE = 3;
+    static final int COL_ESTABLISHED = 4;
+    static final int COL_IMAGE_LARGE = 5;
+    static final int COL_IMAGE_MEDIUM = 6;
+    static final int COL_IMAGE_ICON = 7;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -97,7 +95,7 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_beer_list, menu);
+        inflater.inflate(R.menu.menu_brewery_list, menu);
     }
 
     @Override
@@ -110,10 +108,10 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 //            updateWeather();
 //            return true;
 //        }
-//        if (id == R.id.action_map) {
+        if (id == R.id.action_brewery_list) {
 //            openPreferredLocationInMap();
-//            return true;
-//        }
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -124,12 +122,12 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
         // The ForecastAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
-        mBreweryListAdapter = new BeerListAdapter(getActivity(), null, 0);
+        mBreweryListAdapter = new BreweryListAdapter(getActivity(), null, 0);
 
-        View rootView = inflater.inflate(R.layout.fragment_beer_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_brewery_list, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        mBreweryListView = (ListView) rootView.findViewById(R.id.listview_beer);
+        mBreweryListView = (ListView) rootView.findViewById(R.id.listview_brewery);
         mBreweryListView.setAdapter(mBreweryListAdapter);
         // We'll call our MainActivity
         mBreweryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,8 +138,7 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    String locationSetting = Utility.getPreferredLocation(getActivity());
-                    ((Callback) getActivity()).onItemSelected(BrewskiContract.BeerEntry.buildBeerList("0"));
+                    ((Callback) getActivity()).onItemSelected(BrewskiContract.BreweryEntry.buildBreweryList(cursor.getString(COL_BREWERY_ID)));
                 }
 
                 mPosition = position;
@@ -180,30 +177,30 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
-    private void openPreferredLocationInMap() {
-        // Using the URI scheme for showing a location found on a map.  This super-handy
-        // intent can is detailed in the "Common Intents" page of Android's developer site:
-        // http://developer.android.com/guide/components/intents-common.html#Maps
-        if ( null != mBreweryListAdapter ) {
-            Cursor c = mBreweryListAdapter.getCursor();
-            if ( null != c ) {
-                c.moveToPosition(0);
-                String posLat = c.getString(COL_COORD_LAT);
-                String posLong = c.getString(COL_COORD_LONG);
-                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
-
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(geoLocation);
-
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
-                }
-            }
-
-        }
-    }
+//    private void openPreferredLocationInMap() {
+//        // Using the URI scheme for showing a location found on a map.  This super-handy
+//        // intent can is detailed in the "Common Intents" page of Android's developer site:
+//        // http://developer.android.com/guide/components/intents-common.html#Maps
+//        if ( null != mBreweryListAdapter ) {
+//            Cursor c = mBreweryListAdapter.getCursor();
+//            if ( null != c ) {
+//                c.moveToPosition(0);
+//                String posLat = c.getString(COL_COORD_LAT);
+//                String posLong = c.getString(COL_COORD_LONG);
+//                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+//
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(geoLocation);
+//
+//                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                    startActivity(intent);
+//                } else {
+//                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+//                }
+//            }
+//
+//        }
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -225,10 +222,10 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         // dates after or including today.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
+        String sortOrder = BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME + " ASC";
 
         String locationSetting = Utility.getPreferredLocation(getActivity());
-        Uri weatherForLocationUri = BrewskiContract.BeerEntry.buildBeerList("0");
+        Uri weatherForLocationUri = BrewskiContract.BreweryEntry.buildBreweryList(String.valueOf(System.currentTimeMillis()));
 
         return new CursorLoader(getActivity(),
                 weatherForLocationUri,

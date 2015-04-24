@@ -37,9 +37,9 @@ public class BeerListActivity extends ActionBarActivity {
             getSupportActionBar().setElevation(0f);
         }
 
-        BeerListFragment forecastFragment =  ((BeerListFragment)getSupportFragmentManager()
+        BeerListFragment beerListFragment =  ((BeerListFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_beer_list));
-        forecastFragment.setUseTodayLayout(!mTwoPane);
+        beerListFragment.setUseTodayLayout(!mTwoPane);
     }
 
 

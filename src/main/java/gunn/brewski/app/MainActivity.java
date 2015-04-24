@@ -18,9 +18,7 @@ public class MainActivity extends ActionBarActivity {
     public static Application application;
 
     private static final String CATEGORY_DETAILFRAGMENT_TAG = "CATDFTAG";
-    private static final String BREWERY_DETAILFRAGMENT_TAG = "BREWDFTAG";
 
-    private boolean mTwoPane;
     private String mLocation;
 
     @Override
