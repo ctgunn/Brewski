@@ -66,9 +66,9 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
     private ImageView mBeerLabelIconView;
     private TextView mBeerNameView;
     private TextView mBeerDescriptionView;
-    private TextView mBreweryName;
-    private TextView mCategoryName;
-    private TextView mStyleName;
+    private TextView mBreweryNameView;
+    private TextView mCategoryNameView;
+    private TextView mStyleNameView;
 
     public BeerDetailFragment() {
         setHasOptionsMenu(true);
@@ -85,11 +85,11 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
 
         View rootView = inflater.inflate(R.layout.fragment_beer_detail, container, false);
         mBeerLabelIconView = (ImageView) rootView.findViewById(R.id.detail_beer_icon);
-        mBeerNameView = (TextView) rootView.findViewById(R.id.detail_beer_name);
-        mBeerDescriptionView = (TextView) rootView.findViewById(R.id.detail_beer_description);
-        mBreweryName = (TextView) rootView.findViewById(R.id.detail_brewery_name);
-        mCategoryName = (TextView) rootView.findViewById(R.id.detail_category_name);
-        mStyleName = (TextView) rootView.findViewById(R.id.detail_style_name);
+        mBeerNameView = (TextView) rootView.findViewById(R.id.detail_beer_name_textview);
+        mBeerDescriptionView = (TextView) rootView.findViewById(R.id.detail_beer_description_textview);
+        mBreweryNameView = (TextView) rootView.findViewById(R.id.detail_brewery_name_textview);
+        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_category_name_textview);
+        mStyleNameView = (TextView) rootView.findViewById(R.id.detail_style_name_textview);
         return rootView;
     }
 
@@ -174,37 +174,21 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             // For accessibility, add a content description to the icon field
             mBeerLabelIconView.setContentDescription(beerDescription);
 
-            // Read high temperature from cursor and update view
-            boolean isMetric = Utility.isMetric(getActivity());
+            // Read description from cursor and update view
+            String breweryName = data.getString(COL_BREWERY_ID);
+            mBreweryNameView.setText(breweryName);
 
-            double high = data.getDouble(COL_WEATHER_MAX_TEMP);
-            String highString = Utility.formatTemperature(getActivity(), high);
-            mHighTempView.setText(highString);
+            // Read description from cursor and update view
+            String categoryName = data.getString(COL_CATEGORY_ID);
+            mCategoryNameView.setText(categoryName);
 
-            // Read low temperature from cursor and update view
-            double low = data.getDouble(COL_WEATHER_MIN_TEMP);
-            String lowString = Utility.formatTemperature(getActivity(), low);
-            mLowTempView.setText(lowString);
-
-            // Read humidity from cursor and update view
-            float humidity = data.getFloat(COL_WEATHER_HUMIDITY);
-            mHumidityView.setText(getActivity().getString(R.string.format_humidity, humidity));
-
-            // Read wind speed and direction from cursor and update view
-            float windSpeedStr = data.getFloat(COL_WEATHER_WIND_SPEED);
-            float windDirStr = data.getFloat(COL_WEATHER_DEGREES);
-            mWindView.setText(Utility.getFormattedWind(getActivity(), windSpeedStr, windDirStr));
-
-            // Read pressure from cursor and update view
-            float pressure = data.getFloat(COL_WEATHER_PRESSURE);
-            mPressureView.setText(getActivity().getString(R.string.format_pressure, pressure));
-
-            // We still need this for the share intent
-            mForecast = String.format("%s - %s - %s/%s", dateText, description, high, low);
+            // Read description from cursor and update view
+            String styleName = data.getString(COL_STYLE_ID);
+            mStyleNameView.setText(styleName);
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mBeerShareActionProvider != null) {
-                mShareActionProvider.setShareIntent(createShareForecastIntent());
+                mBeerShareActionProvider.setShareIntent(createShareBeerIntent());
             }
         }
     }
