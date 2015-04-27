@@ -20,7 +20,6 @@ import android.widget.ListView;
 
 
 import gunn.brewski.app.data.BrewskiContract;
-import gunn.brewski.app.dummy.DummyContent;
 import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
 /**
