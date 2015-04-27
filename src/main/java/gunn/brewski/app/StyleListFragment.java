@@ -1,6 +1,5 @@
 package gunn.brewski.app;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +18,6 @@ import android.widget.ListView;
 
 
 import gunn.brewski.app.data.BrewskiContract;
-import gunn.brewski.app.dummy.DummyContent;
 import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
 /**
@@ -29,38 +26,44 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
-// * Activities containing this fragment MUST implement the {link OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {link OnFragmentInteractionListener}
  * interface.
  */
-public class CategoryListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String LOG_TAG = CategoryListFragment.class.getSimpleName();
-    private CategoryListAdapter mCategoryListAdapter;
+public class StyleListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String LOG_TAG = StyleListFragment.class.getSimpleName();
+    private StyleListAdapter mStyleListAdapter;
 
-    private ListView mCategoryListView;
+    private ListView mStyleListView;
     private int mPosition = ListView.INVALID_POSITION;
     private boolean mUseTodayLayout;
 
     private static final String SELECTED_KEY = "selected_position";
 
-    private static final int CATEGORY_LIST_LOADER = 2;
+    private static final int STYLE_LIST_LOADER = 1;
     // For the forecast view we're showing only a small subset of the stored data.
     // Specify the columns we need.
-    private static final String[] CATEGORY_COLUMNS = {
-            // In this case the id needs to be fully qualified with a table name, since
-            // the content provider joins the location & weather tables in the background
-            // (both have an _id column)
-            // On the one hand, that's annoying.  On the other, you can search the weather table
-            // using the location set by the user, which is only in the Location table.
-            // So the convenience is worth it.
-            BrewskiContract.CategoryEntry.TABLE_NAME + "." + BrewskiContract.CategoryEntry._ID,
-            BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID,
-            BrewskiContract.CategoryEntry.COLUMN_CATEGORY_NAME
+    private static final String[] STYLE_COLUMNS = {
+        // In this case the id needs to be fully qualified with a table name, since
+        // the content provider joins the location & weather tables in the background
+        // (both have an _id column)
+        // On the one hand, that's annoying.  On the other, you can search the weather table
+        // using the location set by the user, which is only in the Location table.
+        // So the convenience is worth it.
+        BrewskiContract.StyleEntry.TABLE_NAME + "." + BrewskiContract.StyleEntry._ID,
+        BrewskiContract.StyleEntry.COLUMN_STYLE_ID,
+        BrewskiContract.StyleEntry.COLUMN_STYLE_NAME,
+        BrewskiContract.StyleEntry.COLUMN_STYLE_SHORT_NAME,
+        BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION,
+        BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID
     };
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_CATEGORY_ID = 0;
-    static final int COL_CATEGORY_NAME = 1;
+    static final int COL_STYLE_ID = 0;
+    static final int COL_STYLE_NAME = 1;
+    static final int COL_STYLE_SHORT_NAME = 2;
+    static final int COL_STYLE_DESCRIPTION = 3;
+    static final int COL_CATEGORY_ID = 4;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -74,7 +77,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
         public void onItemSelected(Uri dateUri);
     }
 
-    public CategoryListFragment() {
+    public StyleListFragment() {
     }
 
     @Override
@@ -86,7 +89,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_category_list, menu);
+        inflater.inflate(R.menu.menu_style_list, menu);
     }
 
     @Override
@@ -99,7 +102,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 //            updateWeather();
 //            return true;
 //        }
-        if (id == R.id.action_category_list) {
+        if (id == R.id.action_style_list) {
 //            openPreferredLocationInMap();
             return true;
         }
@@ -113,15 +116,15 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 
         // The ForecastAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
-        mCategoryListAdapter = new CategoryListAdapter(getActivity(), null, 0);
+        mStyleListAdapter = new StyleListAdapter(getActivity(), null, 0);
 
-        View rootView = inflater.inflate(R.layout.fragment_category_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_brewery_list, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        mCategoryListView = (ListView) rootView.findViewById(R.id.listview_category);
-        mCategoryListView.setAdapter(mCategoryListAdapter);
+        mStyleListView = (ListView) rootView.findViewById(R.id.listview_brewery);
+        mStyleListView.setAdapter(mStyleListAdapter);
         // We'll call our MainActivity
-        mCategoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mStyleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -129,7 +132,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(BrewskiContract.CategoryEntry.buildCategoryList(cursor.getString(COL_CATEGORY_ID)));
+                    ((Callback) getActivity()).onItemSelected(BrewskiContract.StyleEntry.buildStyleList(cursor.getString(COL_STYLE_ID)));
                 }
 
                 mPosition = position;
@@ -147,21 +150,21 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        mCategoryListAdapter.setUseTodayLayout(mUseTodayLayout);
+        mStyleListAdapter.setUseTodayLayout(mUseTodayLayout);
 
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(CATEGORY_LIST_LOADER, null, this);
+        getLoaderManager().initLoader(STYLE_LIST_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged() {
+    void onLocationChanged( ) {
         updateWeather();
-        getLoaderManager().restartLoader(CATEGORY_LIST_LOADER, null, this);
+        getLoaderManager().restartLoader(STYLE_LIST_LOADER, null, this);
     }
 
     private void updateWeather() {
@@ -172,9 +175,9 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 //        // Using the URI scheme for showing a location found on a map.  This super-handy
 //        // intent can is detailed in the "Common Intents" page of Android's developer site:
 //        // http://developer.android.com/guide/components/intents-common.html#Maps
-//        if (null != mCategoryListAdapter) {
-//            Cursor c = mCategoryListAdapter.getCursor();
-//            if (null != c) {
+//        if ( null != mBreweryListAdapter ) {
+//            Cursor c = mBreweryListAdapter.getCursor();
+//            if ( null != c ) {
 //                c.moveToPosition(0);
 //                String posLat = c.getString(COL_COORD_LAT);
 //                String posLong = c.getString(COL_COORD_LONG);
@@ -213,13 +216,13 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
         // dates after or including today.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = BrewskiContract.CategoryEntry.COLUMN_CATEGORY_NAME + " ASC";
+        String sortOrder = BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " ASC";
 
-        Uri categoryListUri = BrewskiContract.CategoryEntry.buildCategoryList(String.valueOf(System.currentTimeMillis()));
+        Uri styleListUri = BrewskiContract.StyleEntry.buildStyleList(String.valueOf(System.currentTimeMillis()));
 
         return new CursorLoader(getActivity(),
-                categoryListUri,
-                CATEGORY_COLUMNS,
+                styleListUri,
+                STYLE_COLUMNS,
                 null,
                 null,
                 sortOrder);
@@ -227,24 +230,23 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCategoryListAdapter.swapCursor(data);
+        mStyleListAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
-            mCategoryListView.smoothScrollToPosition(mPosition);
+            mStyleListView.smoothScrollToPosition(mPosition);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCategoryListAdapter.swapCursor(null);
+        mStyleListAdapter.swapCursor(null);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
         mUseTodayLayout = useTodayLayout;
-        if (mCategoryListAdapter != null) {
-            mCategoryListAdapter.setUseTodayLayout(mUseTodayLayout);
+        if (mStyleListAdapter != null) {
+            mStyleListAdapter.setUseTodayLayout(mUseTodayLayout);
         }
     }
 }
-

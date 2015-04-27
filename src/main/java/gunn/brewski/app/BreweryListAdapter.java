@@ -12,7 +12,7 @@ import android.widget.TextView;
 /**
  * Created by SESA300553 on 4/2/2015.
  */
-public class BreweryListAdapter extends android.support.v4.widget.CursorAdapter {
+public class BreweryListAdapter extends CursorAdapter {
 
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_BREWERY = 0;
