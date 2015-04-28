@@ -87,7 +87,7 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         mBeerLabelIconView = (ImageView) rootView.findViewById(R.id.detail_beer_icon);
         mBeerNameView = (TextView) rootView.findViewById(R.id.detail_beer_name_textview);
         mBeerDescriptionView = (TextView) rootView.findViewById(R.id.detail_beer_description_textview);
-        mBreweryNameView = (TextView) rootView.findViewById(R.id.detail_brewery_name_textview);
+        mBreweryNameView = (TextView) rootView.findViewById(R.id.detail_brew_name_textview);
         mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_category_name_textview);
         mStyleNameView = (TextView) rootView.findViewById(R.id.detail_style_name_textview);
         return rootView;

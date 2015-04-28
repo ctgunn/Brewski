@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.data.BrewskiContract.BreweryEntry;
 
 /**
@@ -52,26 +51,20 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
     // must change.
-    public static final int COL_WEATHER_ID = 0;
-    public static final int COL_WEATHER_DATE = 1;
-    public static final int COL_WEATHER_DESC = 2;
-    public static final int COL_WEATHER_MAX_TEMP = 3;
-    public static final int COL_WEATHER_MIN_TEMP = 4;
-    public static final int COL_WEATHER_HUMIDITY = 5;
-    public static final int COL_WEATHER_PRESSURE = 6;
-    public static final int COL_WEATHER_WIND_SPEED = 7;
-    public static final int COL_WEATHER_DEGREES = 8;
-    public static final int COL_WEATHER_CONDITION_ID = 9;
+    public static final int COL_BREWERY_ID = 0;
+    public static final int COL_BREWERY_NAME = 1;
+    public static final int COL_BREWERY_DESCRIPTION = 2;
+    public static final int COL_BREWERY_WEBSITE = 3;
+    public static final int COL_ESTABLISHED = 4;
+    public static final int COL_IMAGE_LARGE = 5;
+    public static final int COL_IMAGE_MEDIUM = 6;
+    public static final int COL_IMAGE_ICON = 7;
 
-    private ImageView mIconView;
-    private TextView mFriendlyDateView;
-    private TextView mDateView;
-    private TextView mDescriptionView;
-    private TextView mHighTempView;
-    private TextView mLowTempView;
-    private TextView mHumidityView;
-    private TextView mWindView;
-    private TextView mPressureView;
+    private ImageView mBreweryIconView;
+    private TextView mBreweryNameView;
+    private TextView mBreweryDescriptionView;
+    private TextView mBreweryWebsiteView;
+    private TextView mEstablishedView;
 
     public BreweryDetailFragment() {
         setHasOptionsMenu(true);
@@ -86,16 +79,13 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
             mBreweryUri = arguments.getParcelable(BreweryDetailFragment.BREWERY_DETAIL_URI);
         }
 
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        mIconView = (ImageView) rootView.findViewById(R.id.detail_icon);
-        mDateView = (TextView) rootView.findViewById(R.id.detail_date_textview);
-        mFriendlyDateView = (TextView) rootView.findViewById(R.id.detail_day_textview);
-        mDescriptionView = (TextView) rootView.findViewById(R.id.detail_forecast_textview);
-        mHighTempView = (TextView) rootView.findViewById(R.id.detail_high_textview);
-        mLowTempView = (TextView) rootView.findViewById(R.id.detail_low_textview);
-        mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
-        mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
-        mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
+        View rootView = inflater.inflate(R.layout.fragment_brewery_detail, container, false);
+        mBreweryIconView = (ImageView) rootView.findViewById(R.id.detail_brewery_icon);
+        mBreweryNameView = (TextView) rootView.findViewById(R.id.detail_brewery_name_textview);
+        mBreweryDescriptionView = (TextView) rootView.findViewById(R.id.detail_brewery_description_textview);
+        mBreweryWebsiteView = (TextView) rootView.findViewById(R.id.detail_brewery_website_textview);
+        mEstablishedView = (TextView) rootView.findViewById(R.id.detail_established_textview);
+
         return rootView;
     }
 
@@ -105,7 +95,7 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
         inflater.inflate(R.menu.menu_brewery_detail, menu);
 
         // Retrieve the share menu item
-        MenuItem menuItem = menu.findItem(R.id.action_share);
+        MenuItem menuItem = menu.findItem(R.id.action_brewery_share);
 
         // Get the provider and hold onto it to set/change the share intent.
         mBreweryShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
@@ -162,52 +152,29 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
             // Read weather condition ID from cursor
-            int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
+            int breweryId = data.getInt(COL_BREWERY_ID);
 
             // Use weather art image
-            mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
+            mBreweryIconView.setImageResource(data.getInt(COL_IMAGE_ICON));
 
             // Read date from cursor and update views for day of week and date
-            long date = data.getLong(COL_WEATHER_DATE);
-            String friendlyDateText = Utility.getDayName(getActivity(), date);
-            String dateText = Utility.getFormattedMonthDay(getActivity(), date);
-            mFriendlyDateView.setText(friendlyDateText);
-            mDateView.setText(dateText);
+            String breweryName = data.getString(COL_BREWERY_NAME);
+            mBreweryNameView.setText(breweryName);
 
-            // Read description from cursor and update view
-            String description = data.getString(COL_WEATHER_DESC);
-            mDescriptionView.setText(description);
+            // Read date from cursor and update views for day of week and date
+            String breweryDescription = data.getString(COL_BREWERY_DESCRIPTION);
+            mBreweryDescriptionView.setText(breweryDescription);
 
             // For accessibility, add a content description to the icon field
-            mIconView.setContentDescription(description);
+            mBreweryIconView.setContentDescription(breweryDescription);
 
-            // Read high temperature from cursor and update view
-            boolean isMetric = Utility.isMetric(getActivity());
+            // Read date from cursor and update views for day of week and date
+            String breweryWebsite = data.getString(COL_BREWERY_WEBSITE);
+            mBreweryWebsiteView.setText(breweryWebsite);
 
-            double high = data.getDouble(COL_WEATHER_MAX_TEMP);
-            String highString = Utility.formatTemperature(getActivity(), high);
-            mHighTempView.setText(highString);
-
-            // Read low temperature from cursor and update view
-            double low = data.getDouble(COL_WEATHER_MIN_TEMP);
-            String lowString = Utility.formatTemperature(getActivity(), low);
-            mLowTempView.setText(lowString);
-
-            // Read humidity from cursor and update view
-            float humidity = data.getFloat(COL_WEATHER_HUMIDITY);
-            mHumidityView.setText(getActivity().getString(R.string.format_humidity, humidity));
-
-            // Read wind speed and direction from cursor and update view
-            float windSpeedStr = data.getFloat(COL_WEATHER_WIND_SPEED);
-            float windDirStr = data.getFloat(COL_WEATHER_DEGREES);
-            mWindView.setText(Utility.getFormattedWind(getActivity(), windSpeedStr, windDirStr));
-
-            // Read pressure from cursor and update view
-            float pressure = data.getFloat(COL_WEATHER_PRESSURE);
-            mPressureView.setText(getActivity().getString(R.string.format_pressure, pressure));
-
-            // We still need this for the share intent
-            mBrewery = String.format("%s - %s - %s/%s", dateText, description, high, low);
+            // Read date from cursor and update views for day of week and date
+            String established = data.getString(COL_ESTABLISHED);
+            mEstablishedView.setText(established);
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mBreweryShareActionProvider != null) {
