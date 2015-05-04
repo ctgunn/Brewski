@@ -182,7 +182,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{beerId};
         selection = sIndividualBeer;
 
-        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiBeerQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -201,7 +202,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{beerId};
         selection = sBreweryOfBeer;
 
-        return sBrewskiBreweryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiBreweryQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -220,7 +222,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{beerId};
         selection = sStyleOfBeer;
 
-        return sBrewskiStyleQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiStyleQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -239,7 +242,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{beerId};
         selection = sCategoryOfBeer;
 
-        return sBrewskiCategoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiCategoryQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -258,7 +262,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{breweryId};
         selection = sIndividualBrewery;
 
-        return sBrewskiBreweryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiBreweryQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -277,7 +282,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{breweryId};
         selection = sBeersOfBrewery;
 
-        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiBeerQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -296,7 +302,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{categoryId};
         selection = sIndividualCategory;
 
-        return sBrewskiCategoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiCategoryQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -315,7 +322,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{categoryId};
         selection = sStylesOfCategory;
 
-        return sBrewskiStyleQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiStyleQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -334,7 +342,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{categoryId};
         selection = sBeersOfCategory;
 
-        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiBeerQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -353,7 +362,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{styleId};
         selection = sIndividualStyle;
 
-        return sBrewskiStyleQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiStyleQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -372,7 +382,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{styleId};
         selection = sCategoryOfStyle;
 
-        return sBrewskiCategoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiCategoryQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -391,7 +402,8 @@ public class BrewskiContentProvider extends ContentProvider {
         selectionArgs = new String[]{styleId};
         selection = sBeersOfStyle;
 
-        return sBrewskiBeerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sBrewskiBeerQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -418,24 +430,24 @@ public class BrewskiContentProvider extends ContentProvider {
         final String authority = BrewskiContract.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
-        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER, BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INDIVIDUAL_BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", BREWERY_OF_BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", CATEGORY_OF_BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", STYLE_OF_BEER);
 //        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INGREDIENTS_OF_BEER);
 
-        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY, BREWERY);
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", INDIVIDUAL_BREWERY);
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", BEERS_OF_BREWERY);
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", LOCATIONS_OF_BREWERY);
 
-        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY, CATEGORY);
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", INDIVIDUAL_CATEGORY);
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", STYLES_OF_CATEGORY);
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", BEERS_OF_CATEGORY);
 
-        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE, STYLE);
         matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", INDIVIDUAL_STYLE);
         matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", CATEGORY_OF_STYLE);
         matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", BEERS_OF_STYLE);
@@ -513,7 +525,7 @@ public class BrewskiContentProvider extends ContentProvider {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
         Cursor retCursor;
-        switch (100) {
+        switch (sUriMatcher.match(uri)) {
             // "beer"
             case BEER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(

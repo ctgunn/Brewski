@@ -63,6 +63,7 @@ public class LoadingScreenActivity extends FragmentActivity {
              * thread must be placed.
              */
             try {
+                BrewskiSyncAdapter.syncImmediately(LoadingScreenActivity.this);
 
 //                if(DASHBOARD.equals(screenLoading)) {
 //

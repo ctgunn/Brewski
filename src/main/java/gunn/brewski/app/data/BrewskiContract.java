@@ -141,10 +141,6 @@ public class BrewskiContract {
         public static Uri buildBeerUri(long id) {
             return ContentUris.withAppendedId(BEER_CONTENT_URI, id);
         }
-
-        public static Uri buildBeerList(String beer_id) {
-            return BEER_CONTENT_URI.buildUpon().appendPath(beer_id).build();
-        }
     }
 
     public static final class BreweryEntry implements BaseColumns {

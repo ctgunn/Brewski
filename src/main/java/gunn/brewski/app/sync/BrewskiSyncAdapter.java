@@ -505,15 +505,6 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             Vector<ContentValues> categoryContentValuesVector = new Vector<ContentValues>(beerArray.length());
             Vector<ContentValues> styleContentValuesVector = new Vector<ContentValues>(beerArray.length());
 
-//            Time dayTime = new Time();
-//            dayTime.setToNow();
-
-            // we start at the day returned by local time. Otherwise this is a mess.
-//            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-
-            // now we work exclusively in UTC
-//            dayTime = new Time();
-
             for(int i = 0; i < beerArray.length(); i++) {
                 // These are the values that will be collected.
                 String beerId;
@@ -592,6 +583,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                     styleName = null;
                     styleShortName = null;
                     styleDescription = null;
+
                     beerCategoryId = null;
                     styleCategoryId = null;
                     categoryId = null;

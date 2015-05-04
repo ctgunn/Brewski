@@ -93,7 +93,7 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-        updateBrewski();
+//        updateBrewski();
     }
 
     @Override
@@ -142,7 +142,7 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
                     ((Callback) getActivity()).onItemSelected(
-                        BrewskiContract.BeerEntry.buildBeerList(cursor.getString(COL_BEER_ID))
+                        BrewskiContract.BeerEntry.BEER_CONTENT_URI
                     );
                 }
 
@@ -229,9 +229,10 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         // Sort order:  Ascending, by date.
         String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
 
-        Uri beerUri = BrewskiContract.BeerEntry.buildBeerList(String.valueOf(100));
+        Uri beerUri = BrewskiContract.BeerEntry.BEER_CONTENT_URI;
 
-        return new CursorLoader(getActivity(),
+        return new CursorLoader(
+            getActivity(),
             beerUri,
             BEER_COLUMNS,
             null,
