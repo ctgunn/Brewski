@@ -28,7 +28,7 @@ public class BrewskiContentProvider extends ContentProvider {
     static final int BREWERY_OF_BEER = 102;
     static final int CATEGORY_OF_BEER = 103;
     static final int STYLE_OF_BEER = 104;
-    static final int INGREDIENTS_OF_BEER = 105;
+//    static final int INGREDIENTS_OF_BEER = 105;
     static final int BREWERY = 200;
     static final int INDIVIDUAL_BREWERY = 201;
     static final int BEERS_OF_BREWERY = 202;
@@ -174,7 +174,7 @@ public class BrewskiContentProvider extends ContentProvider {
                 BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = ?";
 
     private Cursor getIndividualBeer(Uri uri, String[] projection, String sortOrder) {
-        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+        String beerId = BrewskiApplication.getCurrentBeerId();
 
         String[] selectionArgs;
         String selection;
@@ -193,7 +193,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getBreweryByBeer(Uri uri, String[] projection, String sortOrder) {
-        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+        String beerId = BrewskiApplication.getCurrentBeerId();
 
         String[] selectionArgs;
         String selection;
@@ -212,7 +212,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getStyleByBeer(Uri uri, String[] projection, String sortOrder) {
-        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+        String beerId = BrewskiApplication.getCurrentBeerId();
 
         String[] selectionArgs;
         String selection;
@@ -231,7 +231,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getCategoryByBeer(Uri uri, String[] projection, String sortOrder) {
-        String beerId = ((BrewskiApplication) MainActivity.application).getCurrentBeerId();
+        String beerId = BrewskiApplication.getCurrentBeerId();
 
         String[] selectionArgs;
         String selection;
@@ -250,7 +250,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getIndividualBrewery(Uri uri, String[] projection, String sortOrder) {
-        String breweryId = ((BrewskiApplication) MainActivity.application).getCurrentBreweryId();
+        String breweryId = BrewskiApplication.getCurrentBreweryId();
 
         String[] selectionArgs;
         String selection;
@@ -269,7 +269,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getBeersByBrewery(Uri uri, String[] projection, String sortOrder) {
-        String breweryId = ((BrewskiApplication) MainActivity.application).getCurrentBreweryId();
+        String breweryId = BrewskiApplication.getCurrentBreweryId();
 
         String[] selectionArgs;
         String selection;
@@ -288,7 +288,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getIndividualCategory(Uri uri, String[] projection, String sortOrder) {
-        String categoryId = ((BrewskiApplication) MainActivity.application).getCurrentCategoryId();
+        String categoryId = BrewskiApplication.getCurrentCategoryId();
 
         String[] selectionArgs;
         String selection;
@@ -307,7 +307,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getStylesByCategory(Uri uri, String[] projection, String sortOrder) {
-        String categoryId = ((BrewskiApplication) MainActivity.application).getCurrentCategoryId();
+        String categoryId = BrewskiApplication.getCurrentCategoryId();
 
         String[] selectionArgs;
         String selection;
@@ -326,7 +326,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getBeersByCategory(Uri uri, String[] projection, String sortOrder) {
-        String categoryId = ((BrewskiApplication) MainActivity.application).getCurrentCategoryId();
+        String categoryId = BrewskiApplication.getCurrentCategoryId();
 
         String[] selectionArgs;
         String selection;
@@ -345,7 +345,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getIndividualStyle(Uri uri, String[] projection, String sortOrder) {
-        String styleId = ((BrewskiApplication) MainActivity.application).getCurrentStyleId();
+        String styleId = BrewskiApplication.getCurrentStyleId();
 
         String[] selectionArgs;
         String selection;
@@ -364,7 +364,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getCategoryByStyle(Uri uri, String[] projection, String sortOrder) {
-        String styleId = ((BrewskiApplication) MainActivity.application).getCurrentStyleId();
+        String styleId = BrewskiApplication.getCurrentStyleId();
 
         String[] selectionArgs;
         String selection;
@@ -383,7 +383,7 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private Cursor getBeersByStyle(Uri uri, String[] projection, String sortOrder) {
-        String styleId = ((BrewskiApplication) MainActivity.application).getCurrentStyleId();
+        String styleId = BrewskiApplication.getCurrentStyleId();
 
         String[] selectionArgs;
         String selection;
@@ -418,24 +418,24 @@ public class BrewskiContentProvider extends ContentProvider {
         final String authority = BrewskiContract.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
-        matcher.addURI(authority, BrewskiContract.PATH_BEER, BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INDIVIDUAL_BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", BREWERY_OF_BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", CATEGORY_OF_BEER);
         matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", STYLE_OF_BEER);
-        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INGREDIENTS_OF_BEER);
+//        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INGREDIENTS_OF_BEER);
 
-        matcher.addURI(authority, BrewskiContract.PATH_BREWERY, BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", BREWERY);
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", INDIVIDUAL_BREWERY);
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", BEERS_OF_BREWERY);
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", LOCATIONS_OF_BREWERY);
 
-        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY, CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", CATEGORY);
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", INDIVIDUAL_CATEGORY);
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", STYLES_OF_CATEGORY);
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", BEERS_OF_CATEGORY);
 
-        matcher.addURI(authority, BrewskiContract.PATH_STYLE, STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", STYLE);
         matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", INDIVIDUAL_STYLE);
         matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", CATEGORY_OF_STYLE);
         matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", BEERS_OF_STYLE);
@@ -513,7 +513,7 @@ public class BrewskiContentProvider extends ContentProvider {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
         Cursor retCursor;
-        switch (sUriMatcher.match(uri)) {
+        switch (100) {
             // "beer"
             case BEER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(

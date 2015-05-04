@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 
 import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
@@ -63,43 +64,43 @@ public class LoadingScreenActivity extends FragmentActivity {
              */
             try {
 
-                if(DASHBOARD.equals(screenLoading)) {
-                    BrewskiSyncAdapter.initializeSyncAdapter(MainActivity.applicationContext);
-                }
-                else if(PROFILE.equals(screenLoading)) {
-                    //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.
-                }
-                else if(CATEGORIES.equals(screenLoading)) {
-                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE CATEGORIES SCREEN.
-                }
-                else if(BEERS.equals(screenLoading)) {
-                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BEERS SCREEN.
-                }
-                else if(BREWERIES.equals(screenLoading)) {
-                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BREWERIES SCREEN.
-                }
-                else {
-                    Log.d(LOG_TAG, "User is trying to access a screen that doesn't exist.");
-                }
+//                if(DASHBOARD.equals(screenLoading)) {
+//
+//                }
+//                else if(PROFILE.equals(screenLoading)) {
+//                    //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.
+//                }
+//                else if(CATEGORIES.equals(screenLoading)) {
+//                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE CATEGORIES SCREEN.
+//                }
+//                else if(BEERS.equals(screenLoading)) {
+//                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BEERS SCREEN.
+//                }
+//                else if(BREWERIES.equals(screenLoading)) {
+//                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BREWERIES SCREEN.
+//                }
+//                else {
+//                    Log.d(LOG_TAG, "User is trying to access a screen that doesn't exist.");
+//                }
 
-                //Get the current thread's token
-                synchronized (this) {
-                    //Initialize an integer (that will act as a counter) to zero
-                    int counter = 0;
-
-                    //While the counter is smaller than four
-                    while(counter <= 4) {
-                        //Wait 850 milliseconds
-                        this.wait(850);
-
-                        //Increment the counter
-                        counter++;
-
-                        //Set the current progress.
-                        //This value is going to be passed to the onProgressUpdate() method.
-                        publishProgress(counter * 25);
-                    }
-                }
+//                //Get the current thread's token
+//                synchronized (this) {
+//                    //Initialize an integer (that will act as a counter) to zero
+//                    int counter = 0;
+//
+//                    //While the counter is smaller than four
+//                    while(counter <= 4) {
+//                        //Wait 850 milliseconds
+//                        this.wait(850);
+//
+//                        //Increment the counter
+//                        counter++;
+//
+//                        //Set the current progress.
+//                        //This value is going to be passed to the onProgressUpdate() method.
+//                        publishProgress(counter * 15);
+//                    }
+//                }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -120,26 +121,26 @@ public class LoadingScreenActivity extends FragmentActivity {
             //close the progress dialog
             progressDialog.dismiss();
 
-            Context applicationContext = MainActivity.applicationContext;
+            Context applicationContext = BrewskiApplication.getContext();
 
             if(DASHBOARD.equals(screenLoading)) {
-                Intent dashboardIntent = new Intent(applicationContext, DashboardActivity.class);
+                Intent dashboardIntent = new Intent(LoadingScreenActivity.this, DashboardActivity.class);
                 startActivity(dashboardIntent);
             }
             else if(PROFILE.equals(screenLoading)) {
-                Intent profileIntent = new Intent(applicationContext, ProfileActivity.class);
+                Intent profileIntent = new Intent(LoadingScreenActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
             }
             else if(CATEGORIES.equals(screenLoading)) {
-                Intent categoryIntent = new Intent(applicationContext, CategoryListActivity.class);
+                Intent categoryIntent = new Intent(LoadingScreenActivity.this, CategoryListActivity.class);
                 startActivity(categoryIntent);
             }
             else if(BEERS.equals(screenLoading)) {
-                Intent beerIntent = new Intent(applicationContext, BeerListActivity.class);
+                Intent beerIntent = new Intent(LoadingScreenActivity.this, BeerListActivity.class);
                 startActivity(beerIntent);
             }
             else if(BREWERIES.equals(screenLoading)) {
-                Intent breweryIntent = new Intent(applicationContext, BreweryListActivity.class);
+                Intent breweryIntent = new Intent(LoadingScreenActivity.this, BreweryListActivity.class);
                 startActivity(breweryIntent);
             }
             else {

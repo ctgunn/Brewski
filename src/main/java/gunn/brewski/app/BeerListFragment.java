@@ -93,6 +93,7 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        updateBrewski();
     }
 
     @Override
@@ -173,11 +174,11 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 
     // since we read the location when we create the loader, all we need to do is restart things
     void onLocationChanged( ) {
-        updateWeather();
+        updateBrewski();
         getLoaderManager().restartLoader(BEER_LIST_LOADER, null, this);
     }
 
-    private void updateWeather() {
+    private void updateBrewski() {
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
@@ -228,7 +229,7 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         // Sort order:  Ascending, by date.
         String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
 
-        Uri beerUri = BrewskiContract.BeerEntry.buildBeerList(String.valueOf(System.currentTimeMillis()));
+        Uri beerUri = BrewskiContract.BeerEntry.buildBeerList(String.valueOf(100));
 
         return new CursorLoader(getActivity(),
             beerUri,

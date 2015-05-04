@@ -40,6 +40,7 @@ import java.util.Vector;
 
 import gunn.brewski.app.BrewskiApplication;
 import gunn.brewski.app.MainActivity;
+import gunn.brewski.app.ProfileActivity;
 import gunn.brewski.app.R;
 import gunn.brewski.app.Utility;
 import gunn.brewski.app.data.BrewskiContract;
@@ -100,7 +101,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         String format = "json";
         String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
         String endpoint = "beers";
-        String page = ((BrewskiApplication) MainActivity.application).getCurrentBeerPage().toString();
+//        String page = MainActivity.application.getCurrentBeerPage().toString();
+        String page = "1";
         String withBreweries = "Y";
 
         try {
@@ -191,7 +193,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         String format = "json";
         String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
         String endpoint = "breweries";
-        String page = ((BrewskiApplication) MainActivity.application).getCurrentBreweryPage().toString();
+        String page = BrewskiApplication.getCurrentBreweryPage().toString();
         String withGuilds = "Y";
         String withLocations = "Y";
         String withAlternateNames = "Y";
@@ -486,6 +488,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Beer information.  Each beer's info is an element of the "list" array.
         final String BDB_DATA = "data";
+        final String BDB_VALUE = "value";
 
         try {
             JSONObject beerJson = new JSONObject(beerJsonStr);
@@ -493,8 +496,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = beerJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray beerArray = beerJson.getJSONArray(BDB_DATA);
 
-            ((BrewskiApplication) MainActivity.application).setCurrentBeerPage(Integer.parseInt(currentPage) + 1);
-            ((BrewskiApplication) MainActivity.application).setNumberOfBeerPages(Integer.parseInt(numberOfPages));
+            BrewskiApplication.setCurrentBeerPage(Integer.parseInt(currentPage) + 1);
+            BrewskiApplication.setNumberOfBeerPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> beerContentValuesVector = new Vector<ContentValues>(beerArray.length());
@@ -550,39 +553,89 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 beerId = beerInfo.getString(BDB_BEER_ID);
                 beerName = beerInfo.getString(BDB_BEER_NAME);
-                beerDescription = beerInfo.getString(BDB_BEER_DESCRIPTION);
+                if(beerInfo.has(BDB_BEER_DESCRIPTION)) {
+                    beerDescription = beerInfo.getString(BDB_BEER_DESCRIPTION);
+                }
+                else {
+                    beerDescription = null;
+                }
 
-                JSONObject beerLabels = beerInfo.getJSONObject(BDB_BEER_LABELS);
-                beerLabelIcon = beerLabels.getString(BDB_BEER_LABEL_ICON);
-                beerLabelMedium = beerLabels.getString(BDB_BEER_LABEL_MEDIUM);
-                beerLabelLarge = beerLabels.getString(BDB_BEER_LABEL_LARGE);
+                if(beerInfo.has(BDB_BEER_LABELS)) {
+                    JSONObject beerLabels = beerInfo.getJSONObject(BDB_BEER_LABELS);
+                    beerLabelIcon = beerLabels.getString(BDB_BEER_LABEL_ICON);
+                    beerLabelMedium = beerLabels.getString(BDB_BEER_LABEL_MEDIUM);
+                    beerLabelLarge = beerLabels.getString(BDB_BEER_LABEL_LARGE);
+                }
+                else {
+                    beerLabelIcon = null;
+                    beerLabelMedium = null;
+                    beerLabelLarge = null;
+                }
 
-                JSONObject styleInfo = beerInfo.getJSONObject(BDB_BEER_STYLE);
-                beerStyleId = styleInfo.getString(BDB_STYLE_ID);
-                styleId = styleInfo.getString(BDB_STYLE_ID);
-                styleName = styleInfo.getString(BDB_STYLE_NAME);
-                styleShortName = styleInfo.getString(BDB_STYLE_SHORT_NAME);
-                styleDescription = styleInfo.getString(BDB_STYLE_DESCRIPTION);
+                if(beerInfo.has(BDB_BEER_STYLE)) {
+                    JSONObject styleInfo = beerInfo.getJSONObject(BDB_BEER_STYLE);
+                    beerStyleId = styleInfo.getString(BDB_STYLE_ID);
+                    styleId = styleInfo.getString(BDB_STYLE_ID);
+                    styleName = styleInfo.getString(BDB_STYLE_NAME);
+                    styleShortName = styleInfo.getString(BDB_STYLE_SHORT_NAME);
+                    styleDescription = styleInfo.getString(BDB_STYLE_DESCRIPTION);
 
-                JSONObject categoryInfo = styleInfo.getJSONObject(BDB_STYLE_CATEGORY);
-                beerCategoryId = categoryInfo.getString(BDB_CATEGORY_ID);
-                styleCategoryId = categoryInfo.getString(BDB_CATEGORY_ID);
-                categoryId = categoryInfo.getString(BDB_CATEGORY_ID);
-                categoryName = categoryInfo.getString(BDB_CATEGORY_NAME);
+                    JSONObject categoryInfo = styleInfo.getJSONObject(BDB_STYLE_CATEGORY);
+                    beerCategoryId = categoryInfo.getString(BDB_CATEGORY_ID);
+                    styleCategoryId = categoryInfo.getString(BDB_CATEGORY_ID);
+                    categoryId = categoryInfo.getString(BDB_CATEGORY_ID);
+                    categoryName = categoryInfo.getString(BDB_CATEGORY_NAME);
+                }
+                else {
+                    beerStyleId = null;
+                    styleId = null;
+                    styleName = null;
+                    styleShortName = null;
+                    styleDescription = null;
+                    beerCategoryId = null;
+                    styleCategoryId = null;
+                    categoryId = null;
+                    categoryName = null;
+                }
 
-                JSONObject breweryInfo = beerInfo.getJSONObject(BDB_BEER_BREWERIES);
+                JSONArray breweriesArray = beerInfo.getJSONArray(BDB_BEER_BREWERIES);
+                JSONObject breweryInfo = breweriesArray.getJSONObject(0);
                 beerBreweryId = breweryInfo.getString(BDB_BREWERY_ID);
                 breweryId = breweryInfo.getString(BDB_BREWERY_ID);
                 breweryName = breweryInfo.getString(BDB_BREWERY_NAME);
-                breweryDescription = breweryInfo.getString(BDB_BREWERY_DESCRIPTION);
-                breweryWebsite = breweryInfo.getString(BDB_BREWERY_WEBSITE);
-                breweryEstablished = breweryInfo.getString(BDB_BREWERY_ESTABLISHED);
+                if(breweryInfo.has(BDB_BREWERY_DESCRIPTION)) {
+                    breweryDescription = breweryInfo.getString(BDB_BREWERY_DESCRIPTION);
+                }
+                else {
+                    breweryDescription = null;
+                }
+
+                if(breweryInfo.has(BDB_BREWERY_WEBSITE)) {
+                    breweryWebsite = breweryInfo.getString(BDB_BREWERY_WEBSITE);
+                }
+                else {
+                    breweryWebsite = null;
+                }
+
+                if(breweryInfo.has(BDB_BREWERY_ESTABLISHED)) {
+                    breweryEstablished = breweryInfo.getString(BDB_BREWERY_ESTABLISHED);
+                }
+                else {
+                    breweryEstablished = null;
+                }
                 // TODO: LOCATION_ID
 
-                JSONObject breweryImages = breweryInfo.getJSONObject(BDB_BREWERY_IMAGES);
-                breweryImageLarge = breweryImages.getString(BDB_BREWERY_IMAGE_LARGE);
-                breweryImageMedium = breweryImages.getString(BDB_BREWERY_IMAGE_MEDIUM);
-                breweryImageIcon = breweryImages.getString(BDB_BREWERY_IMAGE_ICON);
+                if(breweryInfo.has(BDB_BREWERY_IMAGES)) {
+                    JSONObject breweryImages = breweryInfo.getJSONObject(BDB_BREWERY_IMAGES);
+                    breweryImageLarge = breweryImages.getString(BDB_BREWERY_IMAGE_LARGE);
+                    breweryImageMedium = breweryImages.getString(BDB_BREWERY_IMAGE_MEDIUM);
+                    breweryImageIcon = breweryImages.getString(BDB_BREWERY_IMAGE_ICON);
+                }
+                else {
+                    breweryImageIcon = null;
+                    breweryImageMedium = null;
+                    breweryImageLarge = null;
+                }
 
                 // TODO: PULL LOCATION INFO AND PUT INTO THE LOCATION TABLE
 
@@ -699,8 +752,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = breweryJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray breweryArray = breweryJson.getJSONArray(BDB_DATA);
 
-            ((BrewskiApplication) MainActivity.application).setCurrentBreweryPage(Integer.parseInt(currentPage) + 1);
-            ((BrewskiApplication) MainActivity.application).setNumberOfBreweryPages(Integer.parseInt(numberOfPages));
+            BrewskiApplication.setCurrentBreweryPage(Integer.parseInt(currentPage) + 1);
+            BrewskiApplication.setNumberOfBreweryPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> breweryContentValuesVector = new Vector<ContentValues>(breweryArray.length());
@@ -778,8 +831,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = categoryJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray categoryArray = categoryJson.getJSONArray(BDB_DATA);
 
-            ((BrewskiApplication) MainActivity.application).setCurrentCategoryPage(Integer.parseInt(currentPage) + 1);
-            ((BrewskiApplication) MainActivity.application).setNumberOfCategoryPages(Integer.parseInt(numberOfPages));
+            BrewskiApplication.setCurrentCategoryPage(Integer.parseInt(currentPage) + 1);
+            BrewskiApplication.setNumberOfCategoryPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> categoryContentValuesVector = new Vector<ContentValues>(categoryArray.length());
@@ -838,8 +891,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = styleJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray styleArray = styleJson.getJSONArray(BDB_DATA);
 
-            ((BrewskiApplication) MainActivity.application).setCurrentStylePage(Integer.parseInt(currentPage) + 1);
-            ((BrewskiApplication) MainActivity.application).setNumberOfStylePages(Integer.parseInt(numberOfPages));
+            BrewskiApplication.setCurrentStylePage(Integer.parseInt(currentPage) + 1);
+            BrewskiApplication.setNumberOfStylePages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> styleContentValuesVector = new Vector<ContentValues>(styleArray.length());
@@ -912,15 +965,15 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 Cursor cursor = context.getContentResolver().query(beerUri, NOTIFY_BEER_OF_THE_DAY, null, null, null);
 
                 if (cursor.moveToFirst()) {
-                    int weatherId = cursor.getInt(COLUMN_BEER_ID);
+                    int beerId = cursor.getInt(COLUMN_BEER_ID);
                     double high = cursor.getDouble(COLUMN_BEER_NAME);
                     double low = cursor.getDouble(COLUMN_BEER_DESCRIPTION);
                     String desc = cursor.getString(COLUMN_LABEL_ICON);
 
-                    int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+                    int iconId = Utility.getIconResourceForWeatherCondition(beerId);
                     Resources resources = context.getResources();
                     Bitmap largeIcon = BitmapFactory.decodeResource(resources,
-                            Utility.getArtResourceForWeatherCondition(weatherId));
+                            Utility.getArtResourceForWeatherCondition(beerId));
                     String title = context.getString(R.string.app_name);
 
                     // Define the text of the forecast.

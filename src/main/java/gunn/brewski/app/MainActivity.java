@@ -13,25 +13,19 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-
-    public static Context applicationContext;
-    public static Application application;
-
-    private static final String CATEGORY_DETAILFRAGMENT_TAG = "CATDFTAG";
-
-    private String mLocation;
+    public static BrewskiApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        applicationContext = getApplicationContext();
-        application = getApplication();
-        mLocation = Utility.getPreferredLocation(this);
+        application = new BrewskiApplication();
 
         Intent loadingScreenIntent = new Intent(this, LoadingScreenActivity.class);
         loadingScreenIntent.putExtra("screenLoading", "dashboard");
         startActivity(loadingScreenIntent);
+
+        BrewskiSyncAdapter.initializeSyncAdapter(this);
     }
 
 

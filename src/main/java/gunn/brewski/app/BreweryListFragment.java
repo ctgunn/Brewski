@@ -225,10 +225,10 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         String sortOrder = BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME + " ASC";
 
         String locationSetting = Utility.getPreferredLocation(getActivity());
-        Uri weatherForLocationUri = BrewskiContract.BreweryEntry.buildBreweryList(String.valueOf(System.currentTimeMillis()));
+        Uri breweryUri = BrewskiContract.BreweryEntry.buildBreweryList(String.valueOf(System.currentTimeMillis()));
 
         return new CursorLoader(getActivity(),
-                weatherForLocationUri,
+                breweryUri,
                 BREWERY_COLUMNS,
                 null,
                 null,
