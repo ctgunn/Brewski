@@ -5,14 +5,17 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 import gunn.brewski.app.BrewskiApplication;
 import gunn.brewski.app.MainActivity;
 
 public class BrewskiContentProvider extends ContentProvider {
+    public final String LOG_TAG = BrewskiContentProvider.class.getSimpleName();
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -782,7 +785,12 @@ public class BrewskiContentProvider extends ContentProvider {
                     }
 
                     db.setTransactionSuccessful();
-                } finally {
+                }
+                catch(SQLiteConstraintException e) {
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                }
+                finally {
                     db.endTransaction();
                 }
 
@@ -802,7 +810,12 @@ public class BrewskiContentProvider extends ContentProvider {
                     }
 
                     db.setTransactionSuccessful();
-                } finally {
+                }
+                catch(SQLiteConstraintException e) {
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                }
+                finally {
                     db.endTransaction();
                 }
 
@@ -822,7 +835,12 @@ public class BrewskiContentProvider extends ContentProvider {
                     }
 
                     db.setTransactionSuccessful();
-                } finally {
+                }
+                catch(SQLiteConstraintException e) {
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                }
+                finally {
                     db.endTransaction();
                 }
 
@@ -842,7 +860,12 @@ public class BrewskiContentProvider extends ContentProvider {
                     }
 
                     db.setTransactionSuccessful();
-                } finally {
+                }
+                catch(SQLiteConstraintException e) {
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                }
+                finally {
                     db.endTransaction();
                 }
 

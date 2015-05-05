@@ -63,45 +63,43 @@ public class LoadingScreenActivity extends FragmentActivity {
              * thread must be placed.
              */
             try {
-                BrewskiSyncAdapter.syncImmediately(LoadingScreenActivity.this);
+                if(DASHBOARD.equals(screenLoading)) {
+//                    BrewskiSyncAdapter.syncImmediately(LoadingScreenActivity.this);
+                }
+                else if(PROFILE.equals(screenLoading)) {
+                    //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.
+                }
+                else if(CATEGORIES.equals(screenLoading)) {
+                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE CATEGORIES SCREEN.
+                }
+                else if(BEERS.equals(screenLoading)) {
+                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BEERS SCREEN.
+                }
+                else if(BREWERIES.equals(screenLoading)) {
+                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BREWERIES SCREEN.
+                }
+                else {
+                    Log.d(LOG_TAG, "User is trying to access a screen that doesn't exist.");
+                }
 
-//                if(DASHBOARD.equals(screenLoading)) {
-//
-//                }
-//                else if(PROFILE.equals(screenLoading)) {
-//                    //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.
-//                }
-//                else if(CATEGORIES.equals(screenLoading)) {
-//                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE CATEGORIES SCREEN.
-//                }
-//                else if(BEERS.equals(screenLoading)) {
-//                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BEERS SCREEN.
-//                }
-//                else if(BREWERIES.equals(screenLoading)) {
-//                    //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE BREWERIES SCREEN.
-//                }
-//                else {
-//                    Log.d(LOG_TAG, "User is trying to access a screen that doesn't exist.");
-//                }
+                //Get the current thread's token
+                synchronized (this) {
+                    //Initialize an integer (that will act as a counter) to zero
+                    int counter = 0;
 
-//                //Get the current thread's token
-//                synchronized (this) {
-//                    //Initialize an integer (that will act as a counter) to zero
-//                    int counter = 0;
-//
-//                    //While the counter is smaller than four
-//                    while(counter <= 4) {
-//                        //Wait 850 milliseconds
-//                        this.wait(850);
-//
-//                        //Increment the counter
-//                        counter++;
-//
-//                        //Set the current progress.
-//                        //This value is going to be passed to the onProgressUpdate() method.
-//                        publishProgress(counter * 15);
-//                    }
-//                }
+                    //While the counter is smaller than four
+                    while(counter <= 4) {
+                        //Wait 850 milliseconds
+                        this.wait(850);
+
+                        //Increment the counter
+                        counter++;
+
+                        //Set the current progress.
+                        //This value is going to be passed to the onProgressUpdate() method.
+                        publishProgress(counter * 15);
+                    }
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();

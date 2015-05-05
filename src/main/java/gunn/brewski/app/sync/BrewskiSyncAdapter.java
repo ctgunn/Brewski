@@ -15,6 +15,7 @@ import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -688,7 +689,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 //                notifyBeerOfTheDay();
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + beerContentValuesVector.size() + "Beers Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + beerContentValuesVector.size() + " Beers Inserted");
 
             if(breweryContentValuesVector.size() > 0) {
                 ContentValues[] breweryContentValuesArray = new ContentValues[breweryContentValuesVector.size()];
@@ -696,7 +697,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 getContext().getContentResolver().bulkInsert(BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI, breweryContentValuesArray);
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + breweryContentValuesVector.size() + "Breweries Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + breweryContentValuesVector.size() + " Breweries Inserted");
 
             if(categoryContentValuesVector.size() > 0) {
                 ContentValues[] categoryContentValuesArray = new ContentValues[categoryContentValuesVector.size()];
@@ -704,7 +705,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 getContext().getContentResolver().bulkInsert(BrewskiContract.CategoryEntry.CATEGORY_CONTENT_URI, categoryContentValuesArray);
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + categoryContentValuesVector.size() + "Categories Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + categoryContentValuesVector.size() + " Categories Inserted");
 
             if(styleContentValuesVector.size() > 0) {
                 ContentValues[] styleContentValuesArray = new ContentValues[styleContentValuesVector.size()];
@@ -712,9 +713,13 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 getContext().getContentResolver().bulkInsert(BrewskiContract.StyleEntry.STYLE_CONTENT_URI, styleContentValuesArray);
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + styleContentValuesVector.size() + "Styles Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + styleContentValuesVector.size() + " Styles Inserted");
         }
         catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        catch(SQLiteConstraintException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }

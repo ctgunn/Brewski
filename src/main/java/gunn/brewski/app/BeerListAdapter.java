@@ -30,13 +30,15 @@ public class BeerListAdapter extends CursorAdapter {
         public final TextView descriptionView;
         public final TextView breweryNameView;
         public final TextView categoryNameView;
+        public final TextView styleNameView;
 
         public ViewHolder(View view) {
-            largeLabelView = (ImageView) view.findViewById(R.id.list_item_icon);
-            nameView = (TextView) view.findViewById(R.id.list_item_date_textview);
-            descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-            breweryNameView = (TextView) view.findViewById(R.id.list_item_high_textview);
-            categoryNameView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            largeLabelView = (ImageView) view.findViewById(R.id.list_item_beer_label);
+            nameView = (TextView) view.findViewById(R.id.list_item_beer_name_textview);
+            descriptionView = (TextView) view.findViewById(R.id.list_item_beer_description_textview);
+            breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
+            categoryNameView = (TextView) view.findViewById(R.id.list_item_category_name_textview);
+            styleNameView = (TextView) view.findViewById(R.id.list_item_style_name_textview);
         }
     }
 
@@ -49,7 +51,7 @@ public class BeerListAdapter extends CursorAdapter {
         // Choose the layout type
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
-        switch (viewType) {
+        switch (0) {
             case VIEW_TYPE_BEER: {
                 layoutId = R.layout.list_item_beer;
                 break;
@@ -108,6 +110,10 @@ public class BeerListAdapter extends CursorAdapter {
 
         // Read low temperature from cursor
         String categoryName = cursor.getString(BeerListFragment.COL_CATEGORY_ID);
+        viewHolder.categoryNameView.setText(categoryName);
+
+        // Read low temperature from cursor
+        String styleName = cursor.getString(BeerListFragment.COL_STYLE_ID);
         viewHolder.categoryNameView.setText(categoryName);
     }
 
