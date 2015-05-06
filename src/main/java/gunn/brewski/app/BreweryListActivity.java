@@ -1,12 +1,14 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class BreweryListActivity extends ActionBarActivity {
+public class BreweryListActivity extends ActionBarActivity implements BreweryListFragment.Callback {
     private final String LOG_TAG = BreweryListActivity.class.getSimpleName();
 
     private static final String BREWERY_DETAIL_FRAGMENT_TAG = "BREWDFTAG";
@@ -52,17 +54,24 @@ public class BreweryListActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(BreweryDetailFragment.BREWERY_DETAIL_URI, contentUri);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            BreweryDetailFragment breweryDetailFragment = new BreweryDetailFragment();
+            breweryDetailFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.brewery_detail_container, breweryDetailFragment, BREWERY_DETAIL_FRAGMENT_TAG)
+                    .commit();
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            Intent intent = new Intent(this, BreweryDetailActivity.class).setData(contentUri);
+            startActivity(intent);
+        }
     }
 }

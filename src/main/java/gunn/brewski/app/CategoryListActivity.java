@@ -1,15 +1,17 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class CategoryListActivity extends ActionBarActivity {
+public class CategoryListActivity extends ActionBarActivity implements CategoryListFragment.Callback {
     private final String LOG_TAG = BreweryListActivity.class.getSimpleName();
 
-    private static final String CATEGORY_DETAILFRAGMENT_TAG = "CATDFTAG";
+    private static final String CATEGORY_DETAIL_FRAGMENT_TAG = "CATDFTAG";
 
     private boolean mTwoPane;
 
@@ -30,7 +32,7 @@ public class CategoryListActivity extends ActionBarActivity {
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.category_detail_container, new CategoryDetailFragment(), CATEGORY_DETAILFRAGMENT_TAG)
+                        .replace(R.id.category_detail_container, new CategoryDetailFragment(), CATEGORY_DETAIL_FRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -52,17 +54,24 @@ public class CategoryListActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(CategoryDetailFragment.CATEGORY_DETAIL_URI, contentUri);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            CategoryDetailFragment categoryDetailFragment = new CategoryDetailFragment();
+            categoryDetailFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.category_detail_container, categoryDetailFragment, CATEGORY_DETAIL_FRAGMENT_TAG)
+                    .commit();
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            Intent intent = new Intent(this, CategoryDetailActivity.class).setData(contentUri);
+            startActivity(intent);
+        }
     }
 }

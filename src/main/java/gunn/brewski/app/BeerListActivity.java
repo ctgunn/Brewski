@@ -11,7 +11,7 @@ import android.view.MenuItem;
 public class BeerListActivity extends ActionBarActivity implements BeerListFragment.Callback {
     private final String LOG_TAG = BeerListActivity.class.getSimpleName();
 
-    private static final String BEER_DETAILFRAGMENT_TAG = "BEERDFTAG";
+    private static final String BEER_DETAIL_FRAGMENT_TAG = "BEERDFTAG";
 
     private boolean mTwoPane;
 
@@ -31,7 +31,7 @@ public class BeerListActivity extends ActionBarActivity implements BeerListFragm
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.beer_detail_container, new BeerDetailFragment(), BEER_DETAILFRAGMENT_TAG)
+                        .replace(R.id.beer_detail_container, new BeerDetailFragment(), BEER_DETAIL_FRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -65,7 +65,7 @@ public class BeerListActivity extends ActionBarActivity implements BeerListFragm
             beerDetailFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.beer_detail_container, beerDetailFragment, BEER_DETAILFRAGMENT_TAG)
+                    .replace(R.id.beer_detail_container, beerDetailFragment, BEER_DETAIL_FRAGMENT_TAG)
                     .commit();
         }
         else {

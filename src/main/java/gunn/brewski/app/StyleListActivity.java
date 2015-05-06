@@ -1,12 +1,14 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class StyleListActivity extends ActionBarActivity {
+public class StyleListActivity extends ActionBarActivity implements StyleListFragment.Callback {
     private final String LOG_TAG = StyleListActivity.class.getSimpleName();
 
     private static final String STYLE_DETAIL_FRAGMENT_TAG = "STYLEDFTAG";
@@ -52,17 +54,24 @@ public class StyleListActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(StyleDetailFragment.STYLE_DETAIL_URI, contentUri);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            StyleDetailFragment styleDetailFragment = new StyleDetailFragment();
+            styleDetailFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.style_detail_container, styleDetailFragment, STYLE_DETAIL_FRAGMENT_TAG)
+                    .commit();
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            Intent intent = new Intent(this, StyleDetailActivity.class).setData(contentUri);
+            startActivity(intent);
+        }
     }
 }
