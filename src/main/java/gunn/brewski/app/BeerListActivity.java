@@ -1,12 +1,14 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class BeerListActivity extends ActionBarActivity {
+public class BeerListActivity extends ActionBarActivity implements BeerListFragment.Callback {
     private final String LOG_TAG = BeerListActivity.class.getSimpleName();
 
     private static final String BEER_DETAILFRAGMENT_TAG = "BEERDFTAG";
@@ -51,17 +53,24 @@ public class BeerListActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(BeerDetailFragment.BEER_DETAIL_URI, contentUri);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            BeerDetailFragment beerDetailFragment = new BeerDetailFragment();
+            beerDetailFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.beer_detail_container, beerDetailFragment, BEER_DETAILFRAGMENT_TAG)
+                    .commit();
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            Intent intent = new Intent(this, BeerDetailActivity.class).setData(contentUri);
+            startActivity(intent);
+        }
     }
 }

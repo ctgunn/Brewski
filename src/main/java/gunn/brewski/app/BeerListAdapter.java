@@ -85,7 +85,7 @@ public class BeerListAdapter extends CursorAdapter {
             }
             case VIEW_TYPE_SELECTED_BEER: {
                 // Get weather icon
-                viewHolder.largeLabelView.setImageResource(Utility.getIconResourceForWeatherCondition(
+                viewHolder.largeLabelView.setImageResource(Utility.getIconResourceForLabel(
                         cursor.getInt(BeerListFragment.COL_LABEL_LARGE)));
                 break;
             }
