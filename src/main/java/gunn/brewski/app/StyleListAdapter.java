@@ -42,18 +42,18 @@ public class StyleListAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         // Choose the layout type
-        int viewType = getItemViewType(cursor.getPosition());
+//        int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
-        switch (viewType) {
-            case VIEW_TYPE_STYLE: {
-                layoutId = R.layout.list_item_brewery;
-                break;
-            }
-            case VIEW_TYPE_SELECTED_STYLE: {
-                layoutId = R.layout.list_item_brewery_selected;
-                break;
-            }
-        }
+//        switch (viewType) {
+//            case VIEW_TYPE_STYLE: {
+//                layoutId = R.layout.list_item_brewery;
+//                break;
+//            }
+//            case VIEW_TYPE_SELECTED_STYLE: {
+//                layoutId = R.layout.list_item_brewery_selected;
+//                break;
+//            }
+//        }
 
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 

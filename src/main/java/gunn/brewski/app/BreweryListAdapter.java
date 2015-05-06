@@ -72,21 +72,21 @@ public class BreweryListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        int viewType = getItemViewType(cursor.getPosition());
-        switch (viewType) {
-            case VIEW_TYPE_BREWERY: {
-                // Get weather icon
-                viewHolder.largeImageView.setImageResource(Utility.getArtResourceForWeatherCondition(
-                        cursor.getInt(BreweryListFragment.COL_IMAGE_LARGE)));
-                break;
-            }
-            case VIEW_TYPE_SELECTED_BREWERY: {
-                // Get weather icon
-                viewHolder.largeImageView.setImageResource(Utility.getIconResourceForWeatherCondition(
-                        cursor.getInt(BreweryListFragment.COL_BREWERY_ID)));
-                break;
-            }
-        }
+//        int viewType = getItemViewType(cursor.getPosition());
+//        switch (viewType) {
+//            case VIEW_TYPE_BREWERY: {
+//                // Get weather icon
+//                viewHolder.largeImageView.setImageResource(Utility.getArtResourceForWeatherCondition(
+//                        cursor.getInt(BreweryListFragment.COL_IMAGE_LARGE)));
+//                break;
+//            }
+//            case VIEW_TYPE_SELECTED_BREWERY: {
+//                // Get weather icon
+//                viewHolder.largeImageView.setImageResource(Utility.getIconResourceForWeatherCondition(
+//                        cursor.getInt(BreweryListFragment.COL_BREWERY_ID)));
+//                break;
+//            }
+//        }
 
         // Read date from cursor
         String breweryName = cursor.getString(BreweryListFragment.COL_BREWERY_NAME);

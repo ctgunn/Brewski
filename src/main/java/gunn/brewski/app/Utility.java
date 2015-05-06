@@ -189,33 +189,33 @@ public class Utility {
     /**
      * Helper method to provide the icon resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
-     * @param resourceId from OpenWeatherMap API response
+     * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding icon. -1 if no relation is found.
      */
-    public static int getIconResourceForLabel(int resourceId) {
+    public static int getIconResourceForWeatherCondition(int weatherId) {
         // Based on weather code data found at:
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-        if (resourceId >= 200 && resourceId <= 232) {
+        if (weatherId >= 200 && weatherId <= 232) {
             return R.drawable.ic_storm;
-        } else if (resourceId >= 300 && resourceId <= 321) {
+        } else if (weatherId >= 300 && weatherId <= 321) {
             return R.drawable.ic_light_rain;
-        } else if (resourceId >= 500 && resourceId <= 504) {
+        } else if (weatherId >= 500 && weatherId <= 504) {
             return R.drawable.ic_rain;
-        } else if (resourceId == 511) {
+        } else if (weatherId == 511) {
             return R.drawable.ic_snow;
-        } else if (resourceId >= 520 && resourceId <= 531) {
+        } else if (weatherId >= 520 && weatherId <= 531) {
             return R.drawable.ic_rain;
-        } else if (resourceId >= 600 && resourceId <= 622) {
+        } else if (weatherId >= 600 && weatherId <= 622) {
             return R.drawable.ic_snow;
-        } else if (resourceId >= 701 && resourceId <= 761) {
+        } else if (weatherId >= 701 && weatherId <= 761) {
             return R.drawable.ic_fog;
-        } else if (resourceId == 761 || resourceId == 781) {
+        } else if (weatherId == 761 || weatherId == 781) {
             return R.drawable.ic_storm;
-        } else if (resourceId == 800) {
+        } else if (weatherId == 800) {
             return R.drawable.ic_clear;
-        } else if (resourceId == 801) {
+        } else if (weatherId == 801) {
             return R.drawable.ic_light_clouds;
-        } else if (resourceId >= 802 && resourceId <= 804) {
+        } else if (weatherId >= 802 && weatherId <= 804) {
             return R.drawable.ic_cloudy;
         }
         return -1;

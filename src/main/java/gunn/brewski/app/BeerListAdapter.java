@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 /**
  * Created by SESA300553 on 4/2/2015.
  */
@@ -72,49 +74,53 @@ public class BeerListAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        try {
+            ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+//            int viewType = getItemViewType(cursor.getPosition());
+//            switch (viewType) {
+//                case VIEW_TYPE_BEER: {
+//                    // Get weather icon
+//                    viewHolder.largeLabelView.setImageResource(Utility.drawableFromUrl(
+//                            cursor.getString(BeerListFragment.COL_LABEL_LARGE)));
+//                    break;
+//                }
+//                case VIEW_TYPE_SELECTED_BEER: {
+//                    // Get weather icon
+//                    viewHolder.largeLabelView.setImageResource(Utility.getIconResourceForLabel(
+//                            cursor.getInt(BeerListFragment.COL_LABEL_LARGE)));
+//                    break;
+//                }
+//            }
 
-        int viewType = getItemViewType(cursor.getPosition());
-        switch (viewType) {
-            case VIEW_TYPE_BEER: {
-                // Get weather icon
-                viewHolder.largeLabelView.setImageResource(Utility.getArtResourceForWeatherCondition(
-                        cursor.getInt(BeerListFragment.COL_LABEL_LARGE)));
-                break;
-            }
-            case VIEW_TYPE_SELECTED_BEER: {
-                // Get weather icon
-                viewHolder.largeLabelView.setImageResource(Utility.getIconResourceForLabel(
-                        cursor.getInt(BeerListFragment.COL_LABEL_LARGE)));
-                break;
-            }
+            // Read date from cursor
+            String beerName = cursor.getString(BeerListFragment.COL_BEER_NAME);
+            // Find TextView and set formatted date on it
+            viewHolder.nameView.setText(beerName);
+
+            // Read weather forecast from cursor
+            String beerDescription = cursor.getString(BeerListFragment.COL_BEER_DESCRIPTION);
+            // Find TextView and set weather forecast on it
+            viewHolder.descriptionView.setText(beerDescription);
+
+            // For accessibility, add a content description to the icon field
+            viewHolder.largeLabelView.setContentDescription(beerDescription);
+
+            // Read high temperature from cursor
+            String breweryName = cursor.getString(BeerListFragment.COL_BREWERY_ID);
+            viewHolder.breweryNameView.setText(breweryName);
+
+            // Read low temperature from cursor
+            String categoryName = cursor.getString(BeerListFragment.COL_CATEGORY_ID);
+            viewHolder.categoryNameView.setText(categoryName);
+
+            // Read low temperature from cursor
+            String styleName = cursor.getString(BeerListFragment.COL_STYLE_ID);
+            viewHolder.categoryNameView.setText(categoryName);
         }
-
-        // Read date from cursor
-        String beerName = cursor.getString(BeerListFragment.COL_BEER_NAME);
-        // Find TextView and set formatted date on it
-        viewHolder.nameView.setText(beerName);
-
-        // Read weather forecast from cursor
-        String beerDescription = cursor.getString(BeerListFragment.COL_BEER_DESCRIPTION);
-        // Find TextView and set weather forecast on it
-        viewHolder.descriptionView.setText(beerDescription);
-
-        // For accessibility, add a content description to the icon field
-        viewHolder.largeLabelView.setContentDescription(beerDescription);
-
-        // Read high temperature from cursor
-        String breweryName = cursor.getString(BeerListFragment.COL_BREWERY_ID);
-        viewHolder.breweryNameView.setText(breweryName);
-
-        // Read low temperature from cursor
-        String categoryName = cursor.getString(BeerListFragment.COL_CATEGORY_ID);
-        viewHolder.categoryNameView.setText(categoryName);
-
-        // Read low temperature from cursor
-        String styleName = cursor.getString(BeerListFragment.COL_STYLE_ID);
-        viewHolder.categoryNameView.setText(categoryName);
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
