@@ -63,15 +63,15 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_BEER_ID = 0;
-    static final int COL_BEER_NAME = 1;
-    static final int COL_BEER_DESCRIPTION = 2;
-    static final int COL_BREWERY_ID = 3;
-    static final int COL_CATEGORY_ID = 4;
-    static final int COL_STYLE_ID = 5;
-    static final int COL_LABEL_LARGE = 6;
-    static final int COL_LABEL_MEDIUM = 7;
-    static final int COL_LABEL_ICON = 8;
+    static final int COL_BEER_ID = 1;
+    static final int COL_BEER_NAME = 2;
+    static final int COL_BEER_DESCRIPTION = 3;
+    static final int COL_BREWERY_ID = 4;
+    static final int COL_CATEGORY_ID = 5;
+    static final int COL_STYLE_ID = 6;
+    static final int COL_LABEL_LARGE = 7;
+    static final int COL_LABEL_MEDIUM = 8;
+    static final int COL_LABEL_ICON = 9;
 
     /**
      * A callback interface that all activities containing this fragment must

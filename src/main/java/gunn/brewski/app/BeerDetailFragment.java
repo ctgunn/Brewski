@@ -53,15 +53,15 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
     // must change.
-    public static final int COL_BEER_ID = 0;
-    public static final int COL_BEER_NAME = 1;
-    public static final int COL_BEER_DESCRIPTION = 2;
-    public static final int COL_BREWERY_ID = 3;
-    public static final int COL_CATEGORY_ID = 4;
-    public static final int COL_STYLE_ID = 5;
-    public static final int COL_LABEL_LARGE = 6;
-    public static final int COL_LABEL_MEDIUM = 7;
-    public static final int COL_LABEL_ICON = 8;
+    public static final int COL_BEER_ID = 1;
+    public static final int COL_BEER_NAME = 2;
+    public static final int COL_BEER_DESCRIPTION = 3;
+    public static final int COL_BREWERY_ID = 4;
+    public static final int COL_CATEGORY_ID = 5;
+    public static final int COL_STYLE_ID = 6;
+    public static final int COL_LABEL_LARGE = 7;
+    public static final int COL_LABEL_MEDIUM = 8;
+    public static final int COL_LABEL_ICON = 9;
 
     private ImageView mBeerLabelIconView;
     private TextView mBeerNameView;
@@ -88,8 +88,8 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         mBeerNameView = (TextView) rootView.findViewById(R.id.detail_beer_name_textview);
         mBeerDescriptionView = (TextView) rootView.findViewById(R.id.detail_beer_description_textview);
         mBreweryNameView = (TextView) rootView.findViewById(R.id.detail_brew_name_textview);
-        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_category_name_textview);
-        mStyleNameView = (TextView) rootView.findViewById(R.id.detail_style_name_textview);
+        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_cat_name_textview);
+        mStyleNameView = (TextView) rootView.findViewById(R.id.detail_sty_name_textview);
         return rootView;
     }
 
@@ -161,7 +161,7 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             int beerId = data.getInt(COL_BEER_ID);
 
             // Use weather art image
-            mBeerLabelIconView.setImageResource(Utility.getArtResourceForWeatherCondition(beerId));
+            //mBeerLabelIconView.setImageResource(Utility.getArtResourceForWeatherCondition(beerId));
 
             // Read description from cursor and update view
             String beerName = data.getString(COL_BEER_NAME);
@@ -179,12 +179,22 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             mBreweryNameView.setText(breweryName);
 
             // Read description from cursor and update view
-            String categoryName = data.getString(COL_CATEGORY_ID);
-            mCategoryNameView.setText(categoryName);
+            if(null != data.getString(COL_CATEGORY_ID)) {
+                String categoryName = data.getString(COL_CATEGORY_ID);
+                mCategoryNameView.setText(categoryName);
+            }
+            else {
+                mCategoryNameView.setText("N/A");
+            }
 
             // Read description from cursor and update view
-            String styleName = data.getString(COL_STYLE_ID);
-            mStyleNameView.setText(styleName);
+            if(null != data.getString(COL_STYLE_ID)) {
+                String styleName = data.getString(COL_STYLE_ID);
+                mStyleNameView.setText(styleName);
+            }
+            else {
+                mStyleNameView.setText("N/A");
+            }
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mBeerShareActionProvider != null) {

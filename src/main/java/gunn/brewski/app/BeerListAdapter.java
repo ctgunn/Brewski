@@ -30,17 +30,17 @@ public class BeerListAdapter extends CursorAdapter {
         public final ImageView largeLabelView;
         public final TextView nameView;
         public final TextView descriptionView;
-        public final TextView breweryNameView;
-        public final TextView categoryNameView;
-        public final TextView styleNameView;
+//        public final TextView breweryNameView;
+//        public final TextView categoryNameView;
+//        public final TextView styleNameView;
 
         public ViewHolder(View view) {
             largeLabelView = (ImageView) view.findViewById(R.id.list_item_beer_label);
             nameView = (TextView) view.findViewById(R.id.list_item_beer_name_textview);
             descriptionView = (TextView) view.findViewById(R.id.list_item_beer_description_textview);
-            breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
-            categoryNameView = (TextView) view.findViewById(R.id.list_item_category_name_textview);
-            styleNameView = (TextView) view.findViewById(R.id.list_item_style_name_textview);
+//            breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
+//            categoryNameView = (TextView) view.findViewById(R.id.list_item_category_name_textview);
+//            styleNameView = (TextView) view.findViewById(R.id.list_item_style_name_textview);
         }
     }
 
@@ -107,16 +107,16 @@ public class BeerListAdapter extends CursorAdapter {
             viewHolder.largeLabelView.setContentDescription(beerDescription);
 
             // Read high temperature from cursor
-            String breweryName = cursor.getString(BeerListFragment.COL_BREWERY_ID);
-            viewHolder.breweryNameView.setText(breweryName);
-
-            // Read low temperature from cursor
-            String categoryName = cursor.getString(BeerListFragment.COL_CATEGORY_ID);
-            viewHolder.categoryNameView.setText(categoryName);
-
-            // Read low temperature from cursor
-            String styleName = cursor.getString(BeerListFragment.COL_STYLE_ID);
-            viewHolder.categoryNameView.setText(categoryName);
+//            String breweryName = cursor.getString(BeerListFragment.COL_BREWERY_ID);
+//            viewHolder.breweryNameView.setText(breweryName);
+//
+//            // Read low temperature from cursor
+//            String categoryName = cursor.getString(BeerListFragment.COL_CATEGORY_ID);
+//            viewHolder.categoryNameView.setText(categoryName);
+//
+//            // Read low temperature from cursor
+//            String styleName = cursor.getString(BeerListFragment.COL_STYLE_ID);
+//            viewHolder.categoryNameView.setText(categoryName);
         }
         catch(Exception e) {
             e.printStackTrace();
