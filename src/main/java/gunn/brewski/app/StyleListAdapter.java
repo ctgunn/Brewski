@@ -29,9 +29,9 @@ public class StyleListAdapter extends CursorAdapter {
         public final TextView styleDescriptionView;
 
         public ViewHolder(View view) {
-            styleNameView = (TextView) view.findViewById(R.id.list_item_date_textview);
-            styleShortNameView = (TextView) view.findViewById(R.id.list_item_high_textview);
-            styleDescriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
+            styleNameView = (TextView) view.findViewById(R.id.list_item_style_name_textview);
+            styleShortNameView = (TextView) view.findViewById(R.id.list_item_style_short_name_textview);
+            styleDescriptionView = (TextView) view.findViewById(R.id.list_item_style_description_textview);
         }
     }
 
@@ -91,7 +91,7 @@ public class StyleListAdapter extends CursorAdapter {
             styleDescription = cursor.getString(StyleListFragment.COL_STYLE_DESCRIPTION);
         }
 
-        viewHolder.styleDescriptionView.setText(styleDescription);
+        viewHolder.styleDescriptionView.setText("Description: \n" + styleDescription);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
