@@ -59,11 +59,11 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_STYLE_ID = 0;
-    static final int COL_STYLE_NAME = 1;
-    static final int COL_STYLE_SHORT_NAME = 2;
-    static final int COL_STYLE_DESCRIPTION = 3;
-    static final int COL_CATEGORY_ID = 4;
+    static final int COL_STYLE_ID = 1;
+    static final int COL_STYLE_NAME = 2;
+    static final int COL_STYLE_SHORT_NAME = 3;
+    static final int COL_STYLE_DESCRIPTION = 4;
+    static final int COL_CATEGORY_ID = 5;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -132,7 +132,15 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(BrewskiContract.StyleEntry.buildStyleList(cursor.getString(COL_STYLE_ID)));
+//                    ((Callback) getActivity()).onItemSelected(
+//                        BrewskiContract.StyleEntry.buildStyleList(
+//                            cursor.getString(COL_STYLE_ID)
+//                        )
+//                    );
+
+                    ((Callback) getActivity()).onItemSelected(
+                            BrewskiContract.StyleEntry.STYLE_CONTENT_URI
+                    );
                 }
 
                 mPosition = position;
@@ -163,11 +171,11 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
 
     // since we read the location when we create the loader, all we need to do is restart things
     void onLocationChanged( ) {
-        updateWeather();
+        updateStyle();
         getLoaderManager().restartLoader(STYLE_LIST_LOADER, null, this);
     }
 
-    private void updateWeather() {
+    private void updateStyle() {
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
@@ -218,7 +226,11 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         // Sort order:  Ascending, by date.
         String sortOrder = BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " ASC";
 
-        Uri styleListUri = BrewskiContract.StyleEntry.buildStyleList(String.valueOf(System.currentTimeMillis()));
+//        Uri styleListUri = BrewskiContract.StyleEntry.buildStyleList(
+//            String.valueOf(System.currentTimeMillis())
+//        );
+
+        Uri styleListUri = BrewskiContract.StyleEntry.STYLE_CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 styleListUri,

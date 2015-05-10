@@ -62,14 +62,14 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_BREWERY_ID = 0;
-    static final int COL_BREWERY_NAME = 1;
-    static final int COL_BREWERY_DESCRIPTION = 2;
-    static final int COL_BREWERY_WEBSITE = 3;
-    static final int COL_ESTABLISHED = 4;
-    static final int COL_IMAGE_LARGE = 5;
-    static final int COL_IMAGE_MEDIUM = 6;
-    static final int COL_IMAGE_ICON = 7;
+    static final int COL_BREWERY_ID = 1;
+    static final int COL_BREWERY_NAME = 2;
+    static final int COL_BREWERY_DESCRIPTION = 3;
+    static final int COL_BREWERY_WEBSITE = 4;
+    static final int COL_ESTABLISHED = 5;
+    static final int COL_IMAGE_LARGE = 6;
+    static final int COL_IMAGE_MEDIUM = 7;
+    static final int COL_IMAGE_ICON = 8;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -137,8 +137,17 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+
                 if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(BrewskiContract.BreweryEntry.buildBreweryList(cursor.getString(COL_BREWERY_ID)));
+//                    ((Callback) getActivity()).onItemSelected(
+//                        BrewskiContract.BreweryEntry.buildBreweryList(
+//                            cursor.getString(COL_BREWERY_ID)
+//                        )
+//                    );
+
+                    ((Callback) getActivity()).onItemSelected(
+                        BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI
+                    );
                 }
 
                 mPosition = position;
@@ -169,11 +178,11 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
     // since we read the location when we create the loader, all we need to do is restart things
     void onLocationChanged( ) {
-        updateWeather();
+        updateBrewery();
         getLoaderManager().restartLoader(BREWERY_LIST_LOADER, null, this);
     }
 
-    private void updateWeather() {
+    private void updateBrewery() {
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
@@ -225,7 +234,11 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         String sortOrder = BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME + " ASC";
 
         String locationSetting = Utility.getPreferredLocation(getActivity());
-        Uri breweryUri = BrewskiContract.BreweryEntry.buildBreweryList(String.valueOf(System.currentTimeMillis()));
+//        Uri breweryUri = BrewskiContract.BreweryEntry.buildBreweryList(
+//            String.valueOf(System.currentTimeMillis())
+//        );
+
+        Uri breweryUri = BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 breweryUri,

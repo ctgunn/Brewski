@@ -44,16 +44,16 @@ public class StyleListAdapter extends CursorAdapter {
         // Choose the layout type
 //        int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
-//        switch (viewType) {
-//            case VIEW_TYPE_STYLE: {
-//                layoutId = R.layout.list_item_brewery;
-//                break;
-//            }
-//            case VIEW_TYPE_SELECTED_STYLE: {
-//                layoutId = R.layout.list_item_brewery_selected;
-//                break;
-//            }
-//        }
+        switch (0) {
+            case VIEW_TYPE_STYLE: {
+                layoutId = R.layout.list_item_style;
+                break;
+            }
+            case VIEW_TYPE_SELECTED_STYLE: {
+                layoutId = R.layout.list_item_style_selected;
+                break;
+            }
+        }
 
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 
@@ -67,16 +67,30 @@ public class StyleListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
+        String styleName = "";
         // Read date from cursor
-        String styleName = cursor.getString(StyleListFragment.COL_STYLE_NAME);
-        viewHolder.styleNameView.setText(styleName);
+        if(null != cursor.getString(StyleListFragment.COL_STYLE_NAME)) {
+            styleName = cursor.getString(StyleListFragment.COL_STYLE_NAME);
+        }
+
+        viewHolder.styleNameView.setText("Name: " + styleName);
 
         // Read high temperature from cursor
-        String styleShortName = cursor.getString(StyleListFragment.COL_STYLE_SHORT_NAME);
-        viewHolder.styleShortNameView.setText(styleShortName);
+        String styleShortName = "";
+
+        if(null != cursor.getString(StyleListFragment.COL_STYLE_SHORT_NAME)) {
+            styleShortName = cursor.getString(StyleListFragment.COL_STYLE_SHORT_NAME);
+        }
+
+        viewHolder.styleShortNameView.setText("Short Name: " + styleShortName);
 
         // Read weather forecast from cursor
-        String styleDescription = cursor.getString(StyleListFragment.COL_STYLE_DESCRIPTION);
+        String styleDescription = "";
+
+        if(null != cursor.getString(StyleListFragment.COL_STYLE_DESCRIPTION)) {
+            styleDescription = cursor.getString(StyleListFragment.COL_STYLE_DESCRIPTION);
+        }
+
         viewHolder.styleDescriptionView.setText(styleDescription);
     }
 

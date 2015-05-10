@@ -25,18 +25,18 @@ public class BreweryListAdapter extends CursorAdapter {
      * Cache of the children views for a forecast list item.
      */
     public static class ViewHolder {
-        public final ImageView largeImageView;
+//        public final ImageView largeImageView;
         public final TextView breweryNameView;
         public final TextView breweryDescriptionView;
         public final TextView establishedView;
         public final TextView websiteView;
 
         public ViewHolder(View view) {
-            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
-            breweryNameView = (TextView) view.findViewById(R.id.list_item_date_textview);
-            breweryDescriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-            establishedView = (TextView) view.findViewById(R.id.list_item_high_textview);
-            websiteView = (TextView) view.findViewById(R.id.list_item_low_textview);
+//            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
+            breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
+            breweryDescriptionView = (TextView) view.findViewById(R.id.list_item_brewery_description_textview);
+            establishedView = (TextView) view.findViewById(R.id.list_item_established_textview);
+            websiteView = (TextView) view.findViewById(R.id.list_item_website_textview);
         }
     }
 
@@ -49,7 +49,7 @@ public class BreweryListAdapter extends CursorAdapter {
         // Choose the layout type
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
-        switch (viewType) {
+        switch (0) {
             case VIEW_TYPE_BREWERY: {
                 layoutId = R.layout.list_item_brewery;
                 break;
@@ -91,23 +91,23 @@ public class BreweryListAdapter extends CursorAdapter {
         // Read date from cursor
         String breweryName = cursor.getString(BreweryListFragment.COL_BREWERY_NAME);
         // Find TextView and set formatted date on it
-        viewHolder.breweryNameView.setText(breweryName);
+        viewHolder.breweryNameView.setText("Name: " + breweryName);
 
         // Read weather forecast from cursor
         String breweryDescription = cursor.getString(BreweryListFragment.COL_BREWERY_DESCRIPTION);
         // Find TextView and set weather forecast on it
-        viewHolder.breweryDescriptionView.setText(breweryDescription);
+        viewHolder.breweryDescriptionView.setText("Description: \n" + breweryDescription);
 
         // For accessibility, add a content description to the icon field
-        viewHolder.largeImageView.setContentDescription(breweryDescription);
+//        viewHolder.largeImageView.setContentDescription(breweryDescription);
 
         // Read high temperature from cursor
         String established = cursor.getString(BreweryListFragment.COL_ESTABLISHED);
-        viewHolder.establishedView.setText(established);
+        viewHolder.establishedView.setText("Established: " + established);
 
         // Read low temperature from cursor
         String website = cursor.getString(BreweryListFragment.COL_BREWERY_WEBSITE);
-        viewHolder.websiteView.setText(website);
+        viewHolder.websiteView.setText("Website: " + website);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {

@@ -27,9 +27,13 @@ public class BrewskiContract {
     // At least, let's hope not.  Don't be that dev, reader.  Don't be that dev.
 
     public static final String PATH_PROFILE = "profile";
+    public static final String PATH_CATEGORIES = "categories";
     public static final String PATH_CATEGORY = "category";
+    public static final String PATH_BEERS = "beers";
     public static final String PATH_BEER = "beer";
+    public static final String PATH_BREWERIES = "breweries";
     public static final String PATH_BREWERY = "brewery";
+    public static final String PATH_STYLES = "styles";
     public static final String PATH_STYLE = "style";
     public static final String PATH_X_ANALYSIS = "x_analysis";
 

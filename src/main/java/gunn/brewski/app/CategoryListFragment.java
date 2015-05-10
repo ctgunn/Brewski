@@ -58,8 +58,8 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_CATEGORY_ID = 0;
-    static final int COL_CATEGORY_NAME = 1;
+    static final int COL_CATEGORY_ID = 1;
+    static final int COL_CATEGORY_NAME = 2;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -98,7 +98,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 //            updateWeather();
 //            return true;
 //        }
-        if (id == R.id.action_category_list) {
+        if(id == R.id.action_category_list) {
 //            openPreferredLocationInMap();
             return true;
         }
@@ -128,7 +128,15 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(BrewskiContract.CategoryEntry.buildCategoryList(cursor.getString(COL_CATEGORY_ID)));
+//                    ((Callback) getActivity()).onItemSelected(
+//                        BrewskiContract.CategoryEntry.buildCategoryList(
+//                            cursor.getString(COL_CATEGORY_ID)
+//                        )
+//                    );
+
+                    ((Callback) getActivity()).onItemSelected(
+                        BrewskiContract.CategoryEntry.CATEGORY_CONTENT_URI
+                    );
                 }
 
                 mPosition = position;
@@ -159,11 +167,11 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 
     // since we read the location when we create the loader, all we need to do is restart things
     void onLocationChanged() {
-        updateWeather();
+        updateCategory();
         getLoaderManager().restartLoader(CATEGORY_LIST_LOADER, null, this);
     }
 
-    private void updateWeather() {
+    private void updateCategory() {
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
@@ -214,7 +222,11 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
         // Sort order:  Ascending, by date.
         String sortOrder = BrewskiContract.CategoryEntry.COLUMN_CATEGORY_NAME + " ASC";
 
-        Uri categoryListUri = BrewskiContract.CategoryEntry.buildCategoryList(String.valueOf(System.currentTimeMillis()));
+//        Uri categoryListUri = BrewskiContract.CategoryEntry.buildCategoryList(
+//            String.valueOf(System.currentTimeMillis())
+//        );
+
+        Uri categoryListUri = BrewskiContract.CategoryEntry.CATEGORY_CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 categoryListUri,

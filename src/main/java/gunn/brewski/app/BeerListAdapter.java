@@ -96,12 +96,12 @@ public class BeerListAdapter extends CursorAdapter {
             // Read date from cursor
             String beerName = cursor.getString(BeerListFragment.COL_BEER_NAME);
             // Find TextView and set formatted date on it
-            viewHolder.nameView.setText(beerName);
+            viewHolder.nameView.setText("Name: " + beerName);
 
             // Read weather forecast from cursor
             String beerDescription = cursor.getString(BeerListFragment.COL_BEER_DESCRIPTION);
             // Find TextView and set weather forecast on it
-            viewHolder.descriptionView.setText(beerDescription);
+            viewHolder.descriptionView.setText("Description: \n" + beerDescription);
 
             // For accessibility, add a content description to the icon field
             viewHolder.largeLabelView.setContentDescription(beerDescription);

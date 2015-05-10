@@ -24,14 +24,17 @@
 
     <string name="dashboard_button_profile">Profile</string>
     <string name="dashboard_button_categories">Categories</string>
+    <string name="dashboard_button_styles">Styles</string>
     <string name="dashboard_button_beers">Beers</string>
     <string name="dashboard_button_breweries">Breweries</string>
 
     <string name="title_activity_loading_screen">Loading&#8230;</string>
-    <string name="title_activity_category_detail">CategoryDetailActivity</string>
-    <string name="title_activity_beer_detail">BeerDetailActivity</string>
-    <string name="title_activity_brewery">BreweryActivity</string>
-    <string name="title_activity_brewery_detail">BreweryDetailActivity</string>
+    <string name="title_activity_category_detail">Category Detail</string>
+    <string name="title_activity_style_detail">Style Detail</string>
+    <string name="title_activity_beer_detail">Beer Detail</string>
+    <string name="title_activity_brewery_detail">Brewery Detail</string>
+
+    <string name="footer_info">Gunn Enterprises, Inc. © 2015</string>
 
     <!-- Strings related to Settings -->
 
@@ -174,7 +177,6 @@
     <!-- Strings related to Notification preference -->
     <string name="pref_last_notification">last_notification</string>
     <string name="title_activity_style_list">StyleListActivity</string>
-    <string name="title_activity_style_detail">Style Detail</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

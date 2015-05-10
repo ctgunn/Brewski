@@ -22,6 +22,7 @@ public class LoadingScreenActivity extends FragmentActivity {
     public static final String DASHBOARD = "dashboard";
     public static final String PROFILE = "profile";
     public static final String CATEGORIES = "categories";
+    public static final String STYLES = "styles";
     public static final String BEERS = "beers";
     public static final String BREWERIES = "breweries";
     public static final String SCREEN_LOADING = "screenLoading";
@@ -51,7 +52,7 @@ public class LoadingScreenActivity extends FragmentActivity {
         protected void onPreExecute() {
             //Create a new progress dialog
             progressDialog = ProgressDialog.show(LoadingScreenActivity.this,"Loading...",
-                    "Loading app, please wait...", false, false);
+                    "Loading " + screenLoading + ", please wait...", false, false);
         }
 
         //The code to be executed in a background thread.
@@ -69,7 +70,7 @@ public class LoadingScreenActivity extends FragmentActivity {
                 else if(PROFILE.equals(screenLoading)) {
                     //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.
                 }
-                else if(CATEGORIES.equals(screenLoading)) {
+                else if(STYLES.equals(screenLoading)) {
                     //TODO: CALL QUERY THAT WILL POPULATE THE LIST VIEW ON THE CATEGORIES SCREEN.
                 }
                 else if(BEERS.equals(screenLoading)) {
@@ -90,7 +91,7 @@ public class LoadingScreenActivity extends FragmentActivity {
                     //While the counter is smaller than four
                     while(counter <= 4) {
                         //Wait 850 milliseconds
-                        this.wait(850);
+                        this.wait(250);
 
                         //Increment the counter
                         counter++;
@@ -130,9 +131,9 @@ public class LoadingScreenActivity extends FragmentActivity {
                 Intent profileIntent = new Intent(LoadingScreenActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
             }
-            else if(CATEGORIES.equals(screenLoading)) {
-                Intent categoryIntent = new Intent(LoadingScreenActivity.this, CategoryListActivity.class);
-                startActivity(categoryIntent);
+            else if(STYLES.equals(screenLoading)) {
+                Intent styleIntent = new Intent(LoadingScreenActivity.this, StyleListActivity.class);
+                startActivity(styleIntent);
             }
             else if(BEERS.equals(screenLoading)) {
                 Intent beerIntent = new Intent(LoadingScreenActivity.this, BeerListActivity.class);

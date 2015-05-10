@@ -15,7 +15,7 @@
     <Button
         android:id="@+id/btn_categories"
         style="@style/DashboardButton"
-        android:text="@string/dashboard_button_categories" />
+        android:text="@string/dashboard_button_styles" />
         <!--android:drawableTop="@drawable/btn_friends"-->
 
     <!--  Beers Button -->

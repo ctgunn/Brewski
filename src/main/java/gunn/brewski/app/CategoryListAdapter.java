@@ -42,16 +42,16 @@ public class CategoryListAdapter extends android.support.v4.widget.CursorAdapter
 //        int viewType = getItemViewType(cursor.getPosition());
         int layoutId = 0;
 
-//        switch (viewType) {
-//            case VIEW_TYPE_CATEGORY: {
-//                layoutId = R.layout.list_item_category;
-//                break;
-//            }
-//            case VIEW_TYPE_CATEGORY_SELECTED: {
-//                layoutId = R.layout.list_item_category_selected;
-//                break;
-//            }
-//        }
+        switch (0) {
+            case VIEW_TYPE_CATEGORY: {
+                layoutId = R.layout.list_item_category;
+                break;
+            }
+            case VIEW_TYPE_CATEGORY_SELECTED: {
+                layoutId = R.layout.list_item_category_selected;
+                break;
+            }
+        }
 
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 
