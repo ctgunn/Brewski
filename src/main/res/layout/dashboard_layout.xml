@@ -3,20 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:background="#f8f9fe" >
+    android:background="@color/brewski_middle_grey" >
     <!--  Profile Button -->
-    <Button
-        android:id="@+id/btn_profile"
-        style="@style/DashboardButton"
-        android:text="@string/dashboard_button_profile" />
+    <!--<Button-->
+        <!--android:id="@+id/btn_profile"-->
+        <!--style="@style/DashboardButton"-->
+        <!--android:text="@string/dashboard_button_profile" />-->
         <!--android:drawableTop="@drawable/btn_newsfeed"-->
-
-    <!--  Categories Button -->
-    <Button
-        android:id="@+id/btn_categories"
-        style="@style/DashboardButton"
-        android:text="@string/dashboard_button_styles" />
-        <!--android:drawableTop="@drawable/btn_friends"-->
 
     <!--  Beers Button -->
     <Button
@@ -31,4 +24,11 @@
         style="@style/DashboardButton"
         android:text="@string/dashboard_button_breweries" />
         <!--android:drawableTop="@drawable/btn_places"-->
+
+    <!--  Styles Button -->
+    <Button
+        android:id="@+id/btn_categories"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_styles" />
+    <!--android:drawableTop="@drawable/btn_friends"-->
 </gunn.brewski.app.DashboardLayout>

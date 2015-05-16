@@ -73,4 +73,10 @@ public class BeerListActivity extends ActionBarActivity implements BeerListFragm
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent dashboardIntent = new Intent(this, DashboardActivity.class);
+        startActivity(dashboardIntent);
+    }
 }

@@ -74,4 +74,10 @@ public class CategoryListActivity extends ActionBarActivity implements CategoryL
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent dashboardIntent = new Intent(this, DashboardActivity.class);
+        startActivity(dashboardIntent);
+    }
 }

@@ -2,14 +2,10 @@
 <resources>
 
     <color name="white">#FFFFFF</color>
-    <color name="grey">#cccccc</color>
-    <color name="grey_700">#646464</color>
     <color name="black">#000000</color>
 
-    <color name="sunshine_light_blue">#ff64c2f4</color>
-    <color name="sunshine_blue">#ff1ca8f4</color>
-    <color name="sunshine_dark_blue">#0288D1</color>
-
-    <color name="footer_text">#606060</color>
-
+    <color name="brewski_dark_grey">#242424</color>
+    <color name="brewski_middle_grey">#444444</color>
+    <color name="brewski_light_grey">#a9a9a9</color>
+    <color name="brewski_yellow">#f9e84e</color>
 </resources>

@@ -28,15 +28,15 @@ public class BreweryListAdapter extends CursorAdapter {
 //        public final ImageView largeImageView;
         public final TextView breweryNameView;
         public final TextView breweryDescriptionView;
-        public final TextView establishedView;
-        public final TextView websiteView;
+//        public final TextView establishedView;
+//        public final TextView websiteView;
 
         public ViewHolder(View view) {
 //            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
             breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
             breweryDescriptionView = (TextView) view.findViewById(R.id.list_item_brewery_description_textview);
-            establishedView = (TextView) view.findViewById(R.id.list_item_established_textview);
-            websiteView = (TextView) view.findViewById(R.id.list_item_website_textview);
+//            establishedView = (TextView) view.findViewById(R.id.list_item_established_textview);
+//            websiteView = (TextView) view.findViewById(R.id.list_item_website_textview);
         }
     }
 
@@ -103,11 +103,11 @@ public class BreweryListAdapter extends CursorAdapter {
 
         // Read high temperature from cursor
         String established = cursor.getString(BreweryListFragment.COL_ESTABLISHED);
-        viewHolder.establishedView.setText("Established: " + established);
+//        viewHolder.establishedView.setText("Established: " + established);
 
         // Read low temperature from cursor
         String website = cursor.getString(BreweryListFragment.COL_BREWERY_WEBSITE);
-        viewHolder.websiteView.setText("Website: " + website);
+//        viewHolder.websiteView.setText("Website: " + website);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {

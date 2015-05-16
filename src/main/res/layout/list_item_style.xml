@@ -23,14 +23,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@color/brewski_middle_grey"/>
 
         <TextView
             android:id="@+id/list_item_style_short_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@color/brewski_middle_grey"/>
 
         <TextView
             android:id="@+id/list_item_style_description_textview"
@@ -38,6 +42,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@color/brewski_middle_grey"/>
     </LinearLayout>
 </LinearLayout>

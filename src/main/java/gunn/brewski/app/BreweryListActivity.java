@@ -74,4 +74,10 @@ public class BreweryListActivity extends ActionBarActivity implements BreweryLis
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent dashboardIntent = new Intent(this, DashboardActivity.class);
+        startActivity(dashboardIntent);
+    }
 }

@@ -74,4 +74,10 @@ public class StyleListActivity extends ActionBarActivity implements StyleListFra
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent dashboardIntent = new Intent(this, DashboardActivity.class);
+        startActivity(dashboardIntent);
+    }
 }

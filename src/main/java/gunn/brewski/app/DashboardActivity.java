@@ -17,7 +17,7 @@ public class DashboardActivity extends ActionBarActivity {
          * Creating all buttons instances
          * */
         // Dashboard News feed button
-        final Button btn_profile = (Button) findViewById(R.id.btn_profile);
+//        final Button btn_profile = (Button) findViewById(R.id.btn_profile);
 
         // Dashboard Friends button
         final Button btn_categories = (Button) findViewById(R.id.btn_categories);
@@ -33,13 +33,13 @@ public class DashboardActivity extends ActionBarActivity {
          * */
 
         // Listening to News Feed button click
-        btn_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Launching News Feed Screen
-                showLoadingScreen(btn_profile.getText().toString().toLowerCase());
-            }
-        });
+//        btn_profile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Launching News Feed Screen
+//                showLoadingScreen(btn_profile.getText().toString().toLowerCase());
+//            }
+//        });
 
         // Listening Friends button click
         btn_categories.setOnClickListener(new View.OnClickListener() {
