@@ -65,11 +65,6 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
     static final int COL_BREWERY_ID = 1;
     static final int COL_BREWERY_NAME = 2;
     static final int COL_BREWERY_DESCRIPTION = 3;
-    static final int COL_BREWERY_WEBSITE = 4;
-    static final int COL_ESTABLISHED = 5;
-    static final int COL_IMAGE_LARGE = 6;
-    static final int COL_IMAGE_MEDIUM = 7;
-    static final int COL_IMAGE_ICON = 8;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -104,10 +99,6 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-//        if (id == R.id.action_refresh) {
-//            updateWeather();
-//            return true;
-//        }
         if (id == R.id.action_brewery_list) {
 //            openPreferredLocationInMap();
             return true;
@@ -139,12 +130,6 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
 
                 if (cursor != null) {
-//                    ((Callback) getActivity()).onItemSelected(
-//                        BrewskiContract.BreweryEntry.buildBreweryList(
-//                            cursor.getString(COL_BREWERY_ID)
-//                        )
-//                    );
-
                     ((Callback) getActivity()).onItemSelected(
                         BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI
                     );
@@ -154,14 +139,7 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
-        // If there's instance state, mine it for useful information.
-        // The end-goal here is that the user never knows that turning their device sideways
-        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
-        // or magically appeared to take advantage of room, but data or place in the app was never
-        // actually *lost*.
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            // The listview probably hasn't even been populated yet.  Actually perform the
-            // swapout in onLoadFinished.
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
@@ -186,31 +164,6 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
-//    private void openPreferredLocationInMap() {
-//        // Using the URI scheme for showing a location found on a map.  This super-handy
-//        // intent can is detailed in the "Common Intents" page of Android's developer site:
-//        // http://developer.android.com/guide/components/intents-common.html#Maps
-//        if ( null != mBreweryListAdapter ) {
-//            Cursor c = mBreweryListAdapter.getCursor();
-//            if ( null != c ) {
-//                c.moveToPosition(0);
-//                String posLat = c.getString(COL_COORD_LAT);
-//                String posLong = c.getString(COL_COORD_LONG);
-//                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
-//
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setData(geoLocation);
-//
-//                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                    startActivity(intent);
-//                } else {
-//                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
-//                }
-//            }
-//
-//        }
-//    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // When tablets rotate, the currently selected list item needs to be saved.
@@ -227,23 +180,16 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         // This is called when a new Loader needs to be created.  This
         // fragment only uses one loader, so we don't care about checking the id.
 
-        // To only show current and future dates, filter the query to return weather only for
-        // dates after or including today.
-
-        // Sort order:  Ascending, by date.
+        // Sort order:  Ascending, by brewery name.
         String sortOrder = BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME + " ASC";
-
-        String locationSetting = Utility.getPreferredLocation(getActivity());
-//        Uri breweryUri = BrewskiContract.BreweryEntry.buildBreweryList(
-//            String.valueOf(System.currentTimeMillis())
-//        );
 
         Uri breweryUri = BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 breweryUri,
                 BREWERY_COLUMNS,
-                null,
+                BrewskiContract.BreweryEntry.TABLE_NAME + "." +
+                BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME + " IS NOT NULL",
                 null,
                 sortOrder);
     }

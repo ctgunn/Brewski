@@ -63,7 +63,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
     static final int COL_STYLE_NAME = 2;
     static final int COL_STYLE_SHORT_NAME = 3;
     static final int COL_STYLE_DESCRIPTION = 4;
-    static final int COL_CATEGORY_ID = 5;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -98,10 +97,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-//        if (id == R.id.action_refresh) {
-//            updateWeather();
-//            return true;
-//        }
         if (id == R.id.action_style_list) {
 //            openPreferredLocationInMap();
             return true;
@@ -132,12 +127,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-//                    ((Callback) getActivity()).onItemSelected(
-//                        BrewskiContract.StyleEntry.buildStyleList(
-//                            cursor.getString(COL_STYLE_ID)
-//                        )
-//                    );
-
                     ((Callback) getActivity()).onItemSelected(
                             BrewskiContract.StyleEntry.STYLE_CONTENT_URI
                     );
@@ -147,11 +136,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
-        // If there's instance state, mine it for useful information.
-        // The end-goal here is that the user never knows that turning their device sideways
-        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
-        // or magically appeared to take advantage of room, but data or place in the app was never
-        // actually *lost*.
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             // The listview probably hasn't even been populated yet.  Actually perform the
             // swapout in onLoadFinished.
@@ -179,31 +163,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         BrewskiSyncAdapter.syncImmediately(getActivity());
     }
 
-//    private void openPreferredLocationInMap() {
-//        // Using the URI scheme for showing a location found on a map.  This super-handy
-//        // intent can is detailed in the "Common Intents" page of Android's developer site:
-//        // http://developer.android.com/guide/components/intents-common.html#Maps
-//        if ( null != mBreweryListAdapter ) {
-//            Cursor c = mBreweryListAdapter.getCursor();
-//            if ( null != c ) {
-//                c.moveToPosition(0);
-//                String posLat = c.getString(COL_COORD_LAT);
-//                String posLong = c.getString(COL_COORD_LONG);
-//                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
-//
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setData(geoLocation);
-//
-//                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                    startActivity(intent);
-//                } else {
-//                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
-//                }
-//            }
-//
-//        }
-//    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // When tablets rotate, the currently selected list item needs to be saved.
@@ -217,25 +176,18 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // This is called when a new Loader needs to be created.  This
-        // fragment only uses one loader, so we don't care about checking the id.
-
-        // To only show current and future dates, filter the query to return weather only for
-        // dates after or including today.
-
         // Sort order:  Ascending, by date.
         String sortOrder = BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " ASC";
-
-//        Uri styleListUri = BrewskiContract.StyleEntry.buildStyleList(
-//            String.valueOf(System.currentTimeMillis())
-//        );
 
         Uri styleListUri = BrewskiContract.StyleEntry.STYLE_CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 styleListUri,
                 STYLE_COLUMNS,
-                null,
+                BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                    BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " IS NOT NULL AND " +
+                    BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                    BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION + " IS NOT NULL",
                 null,
                 sortOrder);
     }

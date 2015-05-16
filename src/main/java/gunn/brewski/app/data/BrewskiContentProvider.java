@@ -151,6 +151,13 @@ public class BrewskiContentProvider extends ContentProvider {
                 " WHERE " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
                 BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = ?";
 
+    private static final String sStyles =
+            BrewskiContract.StyleEntry.TABLE_NAME +
+                " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " IS NOT NULL AND " +
+                BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION + " IS NOT NULL";
+
     private static final String sIndividualStyle =
             BrewskiContract.StyleEntry.TABLE_NAME +
                 " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
@@ -370,6 +377,24 @@ public class BrewskiContentProvider extends ContentProvider {
                 projection,
                 selection,
                 selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getStyles(Uri uri, String[] projection, String sortOrder) {
+        String styleId = BrewskiApplication.getCurrentStyleId();
+
+        String selection;
+
+        selection = sStyles;
+
+        return sBrewskiStyleQueryBuilder.query(
+                mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                null,
                 null,
                 null,
                 sortOrder

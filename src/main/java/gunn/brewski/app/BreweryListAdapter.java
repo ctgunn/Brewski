@@ -28,15 +28,11 @@ public class BreweryListAdapter extends CursorAdapter {
 //        public final ImageView largeImageView;
         public final TextView breweryNameView;
         public final TextView breweryDescriptionView;
-//        public final TextView establishedView;
-//        public final TextView websiteView;
 
         public ViewHolder(View view) {
 //            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
             breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
             breweryDescriptionView = (TextView) view.findViewById(R.id.list_item_brewery_description_textview);
-//            establishedView = (TextView) view.findViewById(R.id.list_item_established_textview);
-//            websiteView = (TextView) view.findViewById(R.id.list_item_website_textview);
         }
     }
 
@@ -91,23 +87,20 @@ public class BreweryListAdapter extends CursorAdapter {
         // Read date from cursor
         String breweryName = cursor.getString(BreweryListFragment.COL_BREWERY_NAME);
         // Find TextView and set formatted date on it
-        viewHolder.breweryNameView.setText("Name: " + breweryName);
+        viewHolder.breweryNameView.setText(breweryName);
 
-        // Read weather forecast from cursor
-        String breweryDescription = cursor.getString(BreweryListFragment.COL_BREWERY_DESCRIPTION);
+        String breweryDescription = "";
+
+        if(null != cursor.getString(BreweryListFragment.COL_BREWERY_DESCRIPTION)) {
+            breweryDescription = cursor.getString(BreweryListFragment.COL_BREWERY_DESCRIPTION);
+        }
+
+        if(breweryDescription.length() > 100) {
+            breweryDescription = breweryDescription.substring(0, 100) + "...";
+        }
+
         // Find TextView and set weather forecast on it
-        viewHolder.breweryDescriptionView.setText("Description: \n" + breweryDescription);
-
-        // For accessibility, add a content description to the icon field
-//        viewHolder.largeImageView.setContentDescription(breweryDescription);
-
-        // Read high temperature from cursor
-        String established = cursor.getString(BreweryListFragment.COL_ESTABLISHED);
-//        viewHolder.establishedView.setText("Established: " + established);
-
-        // Read low temperature from cursor
-        String website = cursor.getString(BreweryListFragment.COL_BREWERY_WEBSITE);
-//        viewHolder.websiteView.setText("Website: " + website);
+        viewHolder.breweryDescriptionView.setText(breweryDescription);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {

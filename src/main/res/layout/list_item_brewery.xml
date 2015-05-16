@@ -32,8 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="12sp"
-            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/brewski_yellow"
             android:background="@color/brewski_middle_grey"/>
 
         <TextView
@@ -46,30 +47,4 @@
             android:textColor="@color/white"
             android:background="@color/brewski_middle_grey"/>
     </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="5"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/list_item_established_textview"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:fontFamily="sans-serif-condensed"-->
-            <!--android:textAppearance="?android:textAppearanceSmall"-->
-            <!--android:textSize="12sp"/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/list_item_website_textview"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:fontFamily="sans-serif-condensed"-->
-            <!--android:textAppearance="?android:textAppearanceSmall"-->
-            <!--android:textSize="12sp"/>-->
-    <!--</LinearLayout>-->
 </LinearLayout>

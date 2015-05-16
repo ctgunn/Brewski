@@ -25,12 +25,10 @@ public class StyleListAdapter extends CursorAdapter {
      */
     public static class ViewHolder {
         public final TextView styleNameView;
-        public final TextView styleShortNameView;
         public final TextView styleDescriptionView;
 
         public ViewHolder(View view) {
             styleNameView = (TextView) view.findViewById(R.id.list_item_style_name_textview);
-            styleShortNameView = (TextView) view.findViewById(R.id.list_item_style_short_name_textview);
             styleDescriptionView = (TextView) view.findViewById(R.id.list_item_style_description_textview);
         }
     }
@@ -73,25 +71,23 @@ public class StyleListAdapter extends CursorAdapter {
             styleName = cursor.getString(StyleListFragment.COL_STYLE_NAME);
         }
 
-        viewHolder.styleNameView.setText("Name: " + styleName);
-
-        // Read high temperature from cursor
-        String styleShortName = "";
-
         if(null != cursor.getString(StyleListFragment.COL_STYLE_SHORT_NAME)) {
-            styleShortName = cursor.getString(StyleListFragment.COL_STYLE_SHORT_NAME);
+            styleName += " (" + cursor.getString(StyleListFragment.COL_STYLE_SHORT_NAME) + ")";
         }
 
-        viewHolder.styleShortNameView.setText("Short Name: " + styleShortName);
+        viewHolder.styleNameView.setText(styleName);
 
-        // Read weather forecast from cursor
         String styleDescription = "";
 
         if(null != cursor.getString(StyleListFragment.COL_STYLE_DESCRIPTION)) {
             styleDescription = cursor.getString(StyleListFragment.COL_STYLE_DESCRIPTION);
         }
 
-        viewHolder.styleDescriptionView.setText("Description: \n" + styleDescription);
+        if(styleDescription.length() > 100) {
+            styleDescription = styleDescription.substring(0, 100) + "...";
+        }
+
+        viewHolder.styleDescriptionView.setText(styleDescription);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {

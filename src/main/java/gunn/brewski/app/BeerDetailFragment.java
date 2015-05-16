@@ -176,12 +176,12 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
 
             // Read description from cursor and update view
             String breweryName = data.getString(COL_BREWERY_ID);
-            mBreweryNameView.setText(breweryName);
+            mBreweryNameView.setText("Brewery: " + breweryName);
 
             // Read description from cursor and update view
             if(null != data.getString(COL_CATEGORY_ID)) {
                 String categoryName = data.getString(COL_CATEGORY_ID);
-                mCategoryNameView.setText(categoryName);
+                mCategoryNameView.setText("Category: " + categoryName);
             }
             else {
                 mCategoryNameView.setText("N/A");
@@ -190,7 +190,7 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             // Read description from cursor and update view
             if(null != data.getString(COL_STYLE_ID)) {
                 String styleName = data.getString(COL_STYLE_ID);
-                mStyleNameView.setText(styleName);
+                mStyleNameView.setText("Style: " + styleName);
             }
             else {
                 mStyleNameView.setText("N/A");
