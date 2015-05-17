@@ -33,28 +33,14 @@
         <item name="android:background">@color/brewski_dark_grey</item>
     </style>
 
-    <style name="BeerListStyle">
+    <style name="ListStyle">
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@color/brewski_middle_grey</item>
         <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
         for two-pane layout -->
     </style>
 
-    <style name="BreweryListStyle">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@color/brewski_middle_grey</item>
-        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
-        for two-pane layout -->
-    </style>
-
-    <style name="CategoryListStyle">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@color/brewski_middle_grey</item>
-        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
-        for two-pane layout -->
-    </style>
-
-    <style name="StylesListStyle">
+    <style name="DetailStyle">
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@color/brewski_middle_grey</item>
         <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications

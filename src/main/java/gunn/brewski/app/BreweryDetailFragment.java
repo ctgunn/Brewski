@@ -51,14 +51,12 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
     // must change.
-    public static final int COL_BREWERY_ID = 0;
-    public static final int COL_BREWERY_NAME = 1;
-    public static final int COL_BREWERY_DESCRIPTION = 2;
-    public static final int COL_BREWERY_WEBSITE = 3;
-    public static final int COL_ESTABLISHED = 4;
-    public static final int COL_IMAGE_LARGE = 5;
-    public static final int COL_IMAGE_MEDIUM = 6;
-    public static final int COL_IMAGE_ICON = 7;
+    public static final int COL_BREWERY_ID = 1;
+    public static final int COL_BREWERY_NAME = 2;
+    public static final int COL_BREWERY_DESCRIPTION = 3;
+    public static final int COL_BREWERY_WEBSITE = 4;
+    public static final int COL_ESTABLISHED = 5;
+    public static final int COL_IMAGE_ICON = 8;
 
     private ImageView mBreweryIconView;
     private TextView mBreweryNameView;

@@ -55,16 +55,16 @@ public class StyleDetailFragment extends android.support.v4.app.Fragment impleme
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
     // must change.
-    public static final int COL_STYLE_ID = 0;
-    public static final int COL_STYLE_NAME = 1;
-    public static final int COL_STYLE_SHORT_NAME = 2;
-    public static final int COL_STYLE_DESCRIPTION = 3;
-    public static final int COL_CATEGORY_ID = 4;
+    public static final int COL_STYLE_ID = 1;
+    public static final int COL_STYLE_NAME = 2;
+    public static final int COL_STYLE_SHORT_NAME = 3;
+    public static final int COL_STYLE_DESCRIPTION = 4;
+    public static final int COL_CATEGORY_ID = 5;
 
     private TextView mStyleNameView;
-    private TextView mStyleShortNameView;
+//    private TextView mStyleShortNameView;
     private TextView mStyleDescriptionView;
-    private TextView mCategoryNameView;
+//    private TextView mCategoryNameView;
 
     public StyleDetailFragment() {
         setHasOptionsMenu(true);
@@ -81,9 +81,9 @@ public class StyleDetailFragment extends android.support.v4.app.Fragment impleme
 
         View rootView = inflater.inflate(R.layout.fragment_style_detail, container, false);
         mStyleNameView = (TextView) rootView.findViewById(R.id.detail_style_name_textview);
-        mStyleShortNameView = (TextView) rootView.findViewById(R.id.detail_style_short_name_textview);
+//        mStyleShortNameView = (TextView) rootView.findViewById(R.id.detail_style_short_name_textview);
         mStyleDescriptionView = (TextView) rootView.findViewById(R.id.detail_style_description_textview);
-        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_style_category_name_textview);
+//        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_style_category_name_textview);
 
         return rootView;
     }
@@ -154,17 +154,17 @@ public class StyleDetailFragment extends android.support.v4.app.Fragment impleme
             String styleName = data.getString(COL_STYLE_NAME);
             mStyleNameView.setText(styleName);
 
-            // Read description from cursor and update view
-            String styleShortName = data.getString(COL_STYLE_SHORT_NAME);
-            mStyleShortNameView.setText(styleShortName);
+//            // Read description from cursor and update view
+//            String styleShortName = data.getString(COL_STYLE_SHORT_NAME);
+//            mStyleShortNameView.setText(styleShortName);
 
             // Read description from cursor and update view
             String styleDescription = data.getString(COL_STYLE_DESCRIPTION);
             mStyleDescriptionView.setText(styleDescription);
 
-            // Read description from cursor and update view
-            String styleCategoryName = data.getString(COL_CATEGORY_ID);
-            mCategoryNameView.setText(styleCategoryName);
+//            // Read description from cursor and update view
+//            String styleCategoryName = data.getString(COL_CATEGORY_ID);
+//            mCategoryNameView.setText(styleCategoryName);
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mStyleShareActionProvider != null) {

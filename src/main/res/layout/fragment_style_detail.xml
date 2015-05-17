@@ -1,7 +1,8 @@
 <!-- Master layout. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="@style/DetailStyle">
 
     <LinearLayout
         android:gravity="center_vertical"
@@ -17,16 +18,7 @@
             android:id="@+id/detail_style_name_textview"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="24sp" />
-
-        <!-- Header: Day, Date -->
-        <TextView
-            android:fontFamily="sans-serif-condensed"
-            android:id="@+id/detail_style_short_name_textview"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/brewski_yellow"
             android:textSize="24sp" />
 
         <TextView
@@ -35,29 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <!-- Main content: high, low, art, weather state -->
-        <LinearLayout
-            android:gravity="center_horizontal"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:gravity="left"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:fontFamily="sans-serif-light"
-                    android:id="@+id/detail_style_category_name_textview"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textSize="96sp" />
-            </LinearLayout>
-        </LinearLayout>
+            android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

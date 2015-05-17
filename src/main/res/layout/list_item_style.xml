@@ -26,7 +26,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/brewski_yellow"
-            android:background="@color/brewski_middle_grey"/>
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/list_item_style_description_textview"
@@ -36,6 +36,6 @@
             android:textAppearance="?android:textAppearanceSmall"
             android:textSize="12sp"
             android:textColor="@color/white"
-            android:background="@color/brewski_middle_grey"/>
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 </LinearLayout>

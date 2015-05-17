@@ -7,7 +7,7 @@
     tools:context="gunn.brewski.app.StyleListFragment">
 
     <ListView
-        style="@style/StylesListStyle"
+        style="@style/ListStyle"
         android:id="@+id/listview_style"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

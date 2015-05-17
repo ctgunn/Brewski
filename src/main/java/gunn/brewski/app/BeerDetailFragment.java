@@ -59,15 +59,13 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
     public static final int COL_BREWERY_ID = 4;
     public static final int COL_CATEGORY_ID = 5;
     public static final int COL_STYLE_ID = 6;
-    public static final int COL_LABEL_LARGE = 7;
-    public static final int COL_LABEL_MEDIUM = 8;
     public static final int COL_LABEL_ICON = 9;
 
     private ImageView mBeerLabelIconView;
     private TextView mBeerNameView;
     private TextView mBeerDescriptionView;
     private TextView mBreweryNameView;
-    private TextView mCategoryNameView;
+//    private TextView mCategoryNameView;
     private TextView mStyleNameView;
 
     public BeerDetailFragment() {
@@ -88,8 +86,9 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         mBeerNameView = (TextView) rootView.findViewById(R.id.detail_beer_name_textview);
         mBeerDescriptionView = (TextView) rootView.findViewById(R.id.detail_beer_description_textview);
         mBreweryNameView = (TextView) rootView.findViewById(R.id.detail_brew_name_textview);
-        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_cat_name_textview);
+//        mCategoryNameView = (TextView) rootView.findViewById(R.id.detail_cat_name_textview);
         mStyleNameView = (TextView) rootView.findViewById(R.id.detail_sty_name_textview);
+
         return rootView;
     }
 
@@ -115,6 +114,7 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, mBeer + BEER_SHARE_HASHTAG);
+
         return shareIntent;
     }
 
@@ -169,23 +169,24 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
 
             // Read description from cursor and update view
             String beerDescription = data.getString(COL_BEER_DESCRIPTION);
-            mBeerDescriptionView.setText(beerDescription);
+            mBeerDescriptionView.setText("Description: \n" + beerDescription);
 
             // For accessibility, add a content description to the icon field
             mBeerLabelIconView.setContentDescription(beerDescription);
 
             // Read description from cursor and update view
             String breweryName = data.getString(COL_BREWERY_ID);
+
             mBreweryNameView.setText("Brewery: " + breweryName);
 
-            // Read description from cursor and update view
-            if(null != data.getString(COL_CATEGORY_ID)) {
-                String categoryName = data.getString(COL_CATEGORY_ID);
-                mCategoryNameView.setText("Category: " + categoryName);
-            }
-            else {
-                mCategoryNameView.setText("N/A");
-            }
+//            // Read description from cursor and update view
+//            if(null != data.getString(COL_CATEGORY_ID)) {
+//                String categoryName = data.getString(COL_CATEGORY_ID);
+//                mCategoryNameView.setText("Category: " + categoryName);
+//            }
+//            else {
+//                mCategoryNameView.setText("N/A");
+//            }
 
             // Read description from cursor and update view
             if(null != data.getString(COL_STYLE_ID)) {

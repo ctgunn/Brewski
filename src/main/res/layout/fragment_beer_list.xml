@@ -7,7 +7,7 @@
     tools:context="gunn.brewski.app.BeerListFragment">
 
     <ListView
-        style="@style/BeerListStyle"
+        style="@style/ListStyle"
         android:id="@+id/listview_beer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
