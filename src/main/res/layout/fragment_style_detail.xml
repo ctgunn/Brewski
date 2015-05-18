@@ -23,10 +23,20 @@
 
         <TextView
             android:fontFamily="sans-serif-condensed"
+            android:id="@+id/detail_style_short_name_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:paddingTop="8sp"
+            android:paddingBottom="16sp"/>
+
+        <TextView
+            android:fontFamily="sans-serif-condensed"
             android:id="@+id/detail_style_description_textview"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 </ScrollView>

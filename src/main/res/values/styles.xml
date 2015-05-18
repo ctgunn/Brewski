@@ -5,6 +5,11 @@
         <item name="colorPrimaryDark">@color/brewski_middle_grey</item>
     </style>
 
+    <!-- Main activity theme. -->
+    <style name="BrewskiTheme" parent="AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Brewski.NoTitle</item>
+    </style>
+
     <style name="ActionBarCompat">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">0dp</item>
@@ -12,6 +17,12 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@color/brewski_middle_grey</item>
         <!--<item name="android:background">@drawable/actionbar_background</item>-->
+    </style>
+
+    <!-- main activity action bar styles -->
+    <style name="ActionBar.Solid.Brewski.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="logo">@drawable/brewski_actionbar_logo</item>
     </style>
 
     <style name="DashboardButton">

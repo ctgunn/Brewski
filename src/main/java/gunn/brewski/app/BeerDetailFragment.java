@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.data.BrewskiContract.BeerEntry;
 
@@ -59,7 +61,7 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
     public static final int COL_BREWERY_ID = 4;
     public static final int COL_CATEGORY_ID = 5;
     public static final int COL_STYLE_ID = 6;
-    public static final int COL_LABEL_ICON = 9;
+    public static final int COL_LABEL_MEDIUM = 8;
 
     private ImageView mBeerLabelIconView;
     private TextView mBeerNameView;
@@ -160,8 +162,12 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             // Read weather condition ID from cursor
             int beerId = data.getInt(COL_BEER_ID);
 
-            // Use weather art image
-            //mBeerLabelIconView.setImageResource(Utility.getArtResourceForWeatherCondition(beerId));
+            if (null != data.getString(COL_LABEL_MEDIUM)) {
+                ImageLoader.getInstance().displayImage(data.getString(COL_LABEL_MEDIUM), mBeerLabelIconView);
+            }
+            else {
+                mBeerLabelIconView.setImageResource(R.drawable.brewski_default);
+            }
 
             // Read description from cursor and update view
             String beerName = data.getString(COL_BEER_NAME);

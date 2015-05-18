@@ -102,8 +102,8 @@ public class BrewskiContract {
             return ContentUris.withAppendedId(CATEGORY_CONTENT_URI, id);
         }
 
-        public static Uri buildCategoryList(String category_id) {
-            return CATEGORY_CONTENT_URI.buildUpon().appendPath(category_id).build();
+        public static Uri buildCategoryUriWithCategoryId(String categoryId) {
+            return CATEGORY_CONTENT_URI.buildUpon().appendPath("categoryId").appendPath(categoryId).build();
         }
     }
 
@@ -145,6 +145,22 @@ public class BrewskiContract {
         public static Uri buildBeerUri(long id) {
             return ContentUris.withAppendedId(BEER_CONTENT_URI, id);
         }
+
+        public static Uri buildBeerUriWithBeerId(String beerId) {
+            return BEER_CONTENT_URI.buildUpon().appendPath("beerId").appendPath(beerId).build();
+        }
+
+        public static Uri buildBeerUriWithBreweryId(String breweryId) {
+            return BEER_CONTENT_URI.buildUpon().appendPath("breweryId").appendPath(breweryId).build();
+        }
+
+        public static Uri buildBeerUriWithCategoryId(String categoryId) {
+            return BEER_CONTENT_URI.buildUpon().appendPath("categoryId").appendPath(categoryId).build();
+        }
+
+        public static Uri buildBeerUriWithStyleId(String styleId) {
+            return BEER_CONTENT_URI.buildUpon().appendPath("styleId").appendPath(styleId).build();
+        }
     }
 
     public static final class BreweryEntry implements BaseColumns {
@@ -184,8 +200,8 @@ public class BrewskiContract {
             return ContentUris.withAppendedId(BREWERY_CONTENT_URI, id);
         }
 
-        public static Uri buildBreweryList(String brewery_id) {
-            return BREWERY_CONTENT_URI.buildUpon().appendPath(brewery_id).build();
+        public static Uri buildBreweryUriWithBreweryId(String breweryId) {
+            return BREWERY_CONTENT_URI.buildUpon().appendPath("breweryId").appendPath(breweryId).build();
         }
     }
 
@@ -217,8 +233,8 @@ public class BrewskiContract {
             return ContentUris.withAppendedId(STYLE_CONTENT_URI, id);
         }
 
-        public static Uri buildStyleList(String style_id) {
-            return STYLE_CONTENT_URI.buildUpon().appendPath(style_id).build();
+        public static Uri buildStyleUriWithStyleId(String styleId) {
+            return STYLE_CONTENT_URI.buildUpon().appendPath("styleId").appendPath(styleId).build();
         }
     }
 

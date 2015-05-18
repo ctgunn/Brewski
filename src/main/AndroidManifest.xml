@@ -5,6 +5,9 @@
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Include following permission if you want to cache images on SD card -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -16,11 +19,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name=".MainActivity"
+            android:theme="@style/BrewskiTheme"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +30,7 @@
         </activity>
         <activity
             android:name=".DashboardActivity"
+            android:theme="@style/BrewskiTheme"
             android:label="@string/title_activity_dashboard" >
         </activity>
         <activity
@@ -49,6 +50,10 @@
             android:label="@string/title_activity_category_list" >
         </activity>
         <activity
+            android:name=".StyleListActivity"
+            android:label="@string/title_activity_style_list" >
+        </activity>
+        <activity
             android:name=".LoadingScreenActivity"
             android:label="@string/title_activity_loading_screen" >
         </activity>
@@ -63,6 +68,14 @@
         <activity
             android:name=".BreweryDetailActivity"
             android:label="@string/title_activity_brewery_detail" >
+        </activity>
+        <activity
+            android:name=".StyleDetailActivity"
+            android:label="@string/title_activity_style_detail" >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/app_name" >
         </activity>
 
         <provider

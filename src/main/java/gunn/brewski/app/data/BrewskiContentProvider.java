@@ -21,17 +21,12 @@ public class BrewskiContentProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private BrewskiDbHelper mOpenHelper;
 
-//    static final int WEATHER = 100;
-//    static final int WEATHER_WITH_LOCATION = 101;
-//    static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
-//    static final int LOCATION = 300;
-
     static final int BEER = 100;
     static final int INDIVIDUAL_BEER = 101;
     static final int BREWERY_OF_BEER = 102;
     static final int CATEGORY_OF_BEER = 103;
     static final int STYLE_OF_BEER = 104;
-//    static final int INGREDIENTS_OF_BEER = 105;
+    static final int INGREDIENTS_OF_BEER = 105;
     static final int BREWERY = 200;
     static final int INDIVIDUAL_BREWERY = 201;
     static final int BEERS_OF_BREWERY = 202;
@@ -63,9 +58,8 @@ public class BrewskiContentProvider extends ContentProvider {
     }
 
     private static final String sIndividualBeer =
-            BrewskiContract.BeerEntry.TABLE_NAME +
-                " WHERE " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
-                BrewskiContract.BeerEntry.COLUMN_BEER_ID + "= ? ";
+            BrewskiContract.BeerEntry.TABLE_NAME + "." +
+                BrewskiContract.BeerEntry.COLUMN_BEER_ID + " = ? ";
 
     private static final String sBreweryOfBeer =
             BrewskiContract.BreweryEntry.TABLE_NAME + " INNER JOIN " +
@@ -105,9 +99,8 @@ public class BrewskiContentProvider extends ContentProvider {
     //TODO: CREATE BEER INGREDIENTS QUERY.
 
     private static final String sIndividualBrewery =
-            BrewskiContract.BreweryEntry.TABLE_NAME +
-                " WHERE " + BrewskiContract.BreweryEntry.TABLE_NAME + "." +
-                BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " + ?";
+            BrewskiContract.BreweryEntry.TABLE_NAME + "." +
+                BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " = ?";
 
     private static final String sBeersOfBrewery =
             BrewskiContract.BeerEntry.TABLE_NAME + " INNER JOIN " +
@@ -122,8 +115,7 @@ public class BrewskiContentProvider extends ContentProvider {
     // TODO: CREATE BREWERY LOCATIONS QUERY.
 
     private static final String sIndividualCategory =
-            BrewskiContract.CategoryEntry.TABLE_NAME +
-                " WHERE " + BrewskiContract.CategoryEntry.TABLE_NAME + "." +
+            BrewskiContract.CategoryEntry.TABLE_NAME + "." +
                 BrewskiContract.CategoryEntry.COLUMN_CATEGORY_ID + " = ?";
 
     private static final String sStylesOfCategory =
@@ -159,8 +151,7 @@ public class BrewskiContentProvider extends ContentProvider {
                 BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION + " IS NOT NULL";
 
     private static final String sIndividualStyle =
-            BrewskiContract.StyleEntry.TABLE_NAME +
-                " WHERE " + BrewskiContract.StyleEntry.TABLE_NAME + "." +
+            BrewskiContract.StyleEntry.TABLE_NAME + "." +
                 BrewskiContract.StyleEntry.COLUMN_STYLE_ID + " = ?";
 
     private static final String sCategoryOfStyle =
@@ -459,26 +450,26 @@ public class BrewskiContentProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, BrewskiContract.PATH_BEER, BEER);
-        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INDIVIDUAL_BEER);
-        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", BREWERY_OF_BEER);
-        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", CATEGORY_OF_BEER);
-        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", STYLE_OF_BEER);
-//        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/*", INGREDIENTS_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/beerId/*", INDIVIDUAL_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/breweryId/*", BREWERY_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/categoryId/*", CATEGORY_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/styleId/*", STYLE_OF_BEER);
+        matcher.addURI(authority, BrewskiContract.PATH_BEER + "/ingredientsId/*", INGREDIENTS_OF_BEER);
 
         matcher.addURI(authority, BrewskiContract.PATH_BREWERY, BREWERY);
-        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", INDIVIDUAL_BREWERY);
-        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", BEERS_OF_BREWERY);
-        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/*", LOCATIONS_OF_BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/breweryId/*", INDIVIDUAL_BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/beers/*", BEERS_OF_BREWERY);
+        matcher.addURI(authority, BrewskiContract.PATH_BREWERY + "/locations/*", LOCATIONS_OF_BREWERY);
 
         matcher.addURI(authority, BrewskiContract.PATH_CATEGORY, CATEGORY);
-        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", INDIVIDUAL_CATEGORY);
-        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", STYLES_OF_CATEGORY);
-        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/*", BEERS_OF_CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/categoryId/*", INDIVIDUAL_CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/styles/*", STYLES_OF_CATEGORY);
+        matcher.addURI(authority, BrewskiContract.PATH_CATEGORY + "/beers/*", BEERS_OF_CATEGORY);
 
         matcher.addURI(authority, BrewskiContract.PATH_STYLE, STYLE);
-        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", INDIVIDUAL_STYLE);
-        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", CATEGORY_OF_STYLE);
-        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/*", BEERS_OF_STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/styleId/*", INDIVIDUAL_STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/categoryId/*", CATEGORY_OF_STYLE);
+        matcher.addURI(authority, BrewskiContract.PATH_STYLE + "/beers/*", BEERS_OF_STYLE);
 
         return matcher;
     }

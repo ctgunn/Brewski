@@ -1,5 +1,6 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -140,9 +142,10 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                BrewskiApplication.setCurrentBeerId(cursor.getString(COL_BEER_ID));
                 if (cursor != null) {
                     ((Callback) getActivity()).onItemSelected(
-                        BrewskiContract.BeerEntry.BEER_CONTENT_URI
+                        BrewskiContract.BeerEntry.buildBeerUriWithBeerId(cursor.getString(COL_BEER_ID))
                     );
                 }
 

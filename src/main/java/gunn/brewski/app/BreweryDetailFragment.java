@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import gunn.brewski.app.data.BrewskiContract.BreweryEntry;
 
 /**
@@ -56,7 +58,7 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
     public static final int COL_BREWERY_DESCRIPTION = 3;
     public static final int COL_BREWERY_WEBSITE = 4;
     public static final int COL_ESTABLISHED = 5;
-    public static final int COL_IMAGE_ICON = 8;
+    public static final int COL_IMAGE_MEDIUM = 7;
 
     private ImageView mBreweryIconView;
     private TextView mBreweryNameView;
@@ -153,7 +155,12 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
             int breweryId = data.getInt(COL_BREWERY_ID);
 
             // Use weather art image
-            mBreweryIconView.setImageResource(data.getInt(COL_IMAGE_ICON));
+            if (null != data.getString(COL_IMAGE_MEDIUM)) {
+                ImageLoader.getInstance().displayImage(data.getString(COL_IMAGE_MEDIUM), mBreweryIconView);
+            }
+            else {
+                mBreweryIconView.setImageResource(R.drawable.brewski_default);
+            }
 
             // Read date from cursor and update views for day of week and date
             String breweryName = data.getString(COL_BREWERY_NAME);

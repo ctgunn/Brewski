@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 /**
  * Created by SESA300553 on 4/2/2015.
  */
@@ -25,12 +27,12 @@ public class BreweryListAdapter extends CursorAdapter {
      * Cache of the children views for a forecast list item.
      */
     public static class ViewHolder {
-//        public final ImageView largeImageView;
+        public final ImageView largeImageView;
         public final TextView breweryNameView;
         public final TextView breweryDescriptionView;
 
         public ViewHolder(View view) {
-//            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
+            largeImageView = (ImageView) view.findViewById(R.id.list_item_icon);
             breweryNameView = (TextView) view.findViewById(R.id.list_item_brewery_name_textview);
             breweryDescriptionView = (TextView) view.findViewById(R.id.list_item_brewery_description_textview);
         }
@@ -68,21 +70,12 @@ public class BreweryListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-//        int viewType = getItemViewType(cursor.getPosition());
-//        switch (viewType) {
-//            case VIEW_TYPE_BREWERY: {
-//                // Get weather icon
-//                viewHolder.largeImageView.setImageResource(Utility.getArtResourceForWeatherCondition(
-//                        cursor.getInt(BreweryListFragment.COL_IMAGE_LARGE)));
-//                break;
-//            }
-//            case VIEW_TYPE_SELECTED_BREWERY: {
-//                // Get weather icon
-//                viewHolder.largeImageView.setImageResource(Utility.getIconResourceForWeatherCondition(
-//                        cursor.getInt(BreweryListFragment.COL_BREWERY_ID)));
-//                break;
-//            }
-//        }
+        if (null != cursor.getString(BreweryListFragment.COL_IMAGE_MEDIUM)) {
+            ImageLoader.getInstance().displayImage(cursor.getString(BreweryListFragment.COL_IMAGE_MEDIUM), viewHolder.largeImageView);
+        }
+        else {
+            viewHolder.largeImageView.setImageResource(R.drawable.brewski_default);
+        }
 
         // Read date from cursor
         String breweryName = cursor.getString(BreweryListFragment.COL_BREWERY_NAME);

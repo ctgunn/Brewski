@@ -17,17 +17,19 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
             <FrameLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content">
+                android:layout_width="80dp"
+                android:layout_height="80dp">
 
                 <ImageView
                     android:id="@+id/detail_brewery_icon"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"/>
             </FrameLayout>
 
             <LinearLayout
@@ -35,8 +37,7 @@
                 android:layout_gravity="left"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="vertical">
 
         <!-- Header: Day, Date -->
                 <TextView

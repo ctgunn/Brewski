@@ -9,7 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
 import java.io.IOException;
+import java.net.URL;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Created by SESA300553 on 4/2/2015.
@@ -67,30 +76,21 @@ public class BeerListAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, Context context, final Cursor cursor) {
         try {
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
+            final ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-//            int viewType = getItemViewType(cursor.getPosition());
-//            switch (viewType) {
-//                case VIEW_TYPE_BEER: {
-//                    // Get weather icon
-//                    viewHolder.largeLabelView.setImageResource(Utility.drawableFromUrl(
-//                            cursor.getString(BeerListFragment.COL_LABEL_LARGE)));
-//                    break;
-//                }
-//                case VIEW_TYPE_SELECTED_BEER: {
-//                    // Get weather icon
-//                    viewHolder.largeLabelView.setImageResource(Utility.getIconResourceForLabel(
-//                            cursor.getInt(BeerListFragment.COL_LABEL_LARGE)));
-//                    break;
-//                }
-//            }
+            if (null != cursor.getString(BeerListFragment.COL_LABEL_MEDIUM)) {
+                ImageLoader.getInstance().displayImage(cursor.getString(BeerListFragment.COL_LABEL_MEDIUM), viewHolder.largeLabelView);
+            }
+            else {
+                viewHolder.largeLabelView.setImageResource(R.drawable.brewski_default);
+            }
 
             // Read date from cursor
             String beerName = cursor.getString(BeerListFragment.COL_BEER_NAME);
             // Find TextView and set formatted date on it
-            viewHolder.nameView.setText("Name: " + beerName);
+            viewHolder.nameView.setText(beerName);
 
             // Read weather forecast from cursor
             String beerDescription = cursor.getString(BeerListFragment.COL_BEER_DESCRIPTION);

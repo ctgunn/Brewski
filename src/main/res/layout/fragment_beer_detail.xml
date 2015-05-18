@@ -21,8 +21,8 @@
             android:padding="16dp">
 
             <FrameLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content">
+                android:layout_width="80dp"
+                android:layout_height="80dp">
 
                 <ImageView
                     android:id="@+id/detail_beer_icon"

@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
 
@@ -20,6 +23,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         application = new BrewskiApplication();
+
+        // Create global configuration and initialize ImageLoader with this config
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
 
         Intent loadingScreenIntent = new Intent(this, LoadingScreenActivity.class);
         loadingScreenIntent.putExtra("screenLoading", "dashboard");

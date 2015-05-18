@@ -65,6 +65,7 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
     static final int COL_BREWERY_ID = 1;
     static final int COL_BREWERY_NAME = 2;
     static final int COL_BREWERY_DESCRIPTION = 3;
+    static final int COL_IMAGE_MEDIUM = 7;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -128,10 +129,10 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-
+                BrewskiApplication.setCurrentBreweryId(cursor.getString(COL_BREWERY_ID));
                 if (cursor != null) {
                     ((Callback) getActivity()).onItemSelected(
-                        BrewskiContract.BreweryEntry.BREWERY_CONTENT_URI
+                            BrewskiContract.BreweryEntry.buildBreweryUriWithBreweryId(cursor.getString(COL_BREWERY_ID))
                     );
                 }
 

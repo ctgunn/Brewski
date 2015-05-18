@@ -21,16 +21,22 @@ import java.util.Date;
  * Created by SESA300553 on 4/2/2015.
  */
 public class Utility {
-    public static Drawable drawableFromUrl(String url) throws IOException {
+    public static Bitmap drawableFromUrl(String url) throws IOException {
         Bitmap x;
 
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        HttpURLConnection connection = (HttpURLConnection)new URL(url) .openConnection();
+        connection.setRequestProperty("User-agent","Mozilla/4.0");
+
         connection.connect();
         InputStream input = connection.getInputStream();
 
         x = BitmapFactory.decodeStream(input);
+        
+        return x;
 
-        return new BitmapDrawable(x);
+//        URL newurl = new URL(url);
+//        Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
+//        return mIcon_val;
     }
 
 

@@ -126,9 +126,10 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                BrewskiApplication.setCurrentStyleId(cursor.getString(COL_STYLE_ID));
                 if (cursor != null) {
                     ((Callback) getActivity()).onItemSelected(
-                            BrewskiContract.StyleEntry.STYLE_CONTENT_URI
+                            BrewskiContract.StyleEntry.buildStyleUriWithStyleId(cursor.getString(COL_STYLE_ID))
                     );
                 }
 
