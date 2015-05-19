@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.data.BrewskiContract.BeerEntry;
 
 /**
@@ -97,7 +96,7 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_beer_detail, menu);
+        inflater.inflate(R.menu.menu_beer_detail_fragment, menu);
 
         // Retrieve the share menu item
         MenuItem menuItem = menu.findItem(R.id.action_beer_share);
@@ -185,15 +184,6 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
 
             mBreweryNameView.setText("Brewery: " + breweryName);
 
-//            // Read description from cursor and update view
-//            if(null != data.getString(COL_CATEGORY_ID)) {
-//                String categoryName = data.getString(COL_CATEGORY_ID);
-//                mCategoryNameView.setText("Category: " + categoryName);
-//            }
-//            else {
-//                mCategoryNameView.setText("N/A");
-//            }
-
             // Read description from cursor and update view
             if(null != data.getString(COL_STYLE_ID)) {
                 String styleName = data.getString(COL_STYLE_ID);
@@ -202,6 +192,8 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             else {
                 mStyleNameView.setText("N/A");
             }
+
+            mBeer = "Check out this beer, " + beerName + ", made by brewery, " + breweryName + ", that I found on this cool new app, BREWSKI.";
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mBeerShareActionProvider != null) {

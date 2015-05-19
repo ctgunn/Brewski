@@ -1,6 +1,5 @@
 package gunn.brewski.app;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -85,7 +83,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_category_list, menu);
+        inflater.inflate(R.menu.menu_category_list_fragment, menu);
     }
 
     @Override
@@ -98,7 +96,7 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 //            updateWeather();
 //            return true;
 //        }
-        if(id == R.id.action_category_list) {
+        if(id == R.id.action_category_list_share) {
 //            openPreferredLocationInMap();
             return true;
         }

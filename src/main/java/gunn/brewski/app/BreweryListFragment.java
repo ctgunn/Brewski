@@ -1,5 +1,6 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +35,11 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
 public class BreweryListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = BreweryListFragment.class.getSimpleName();
     private BreweryListAdapter mBreweryListAdapter;
+
+    private static final String BREWERIES_SHARE_HASHTAG = " #BrewskiBreweries";
+
+    private ShareActionProvider mBreweriesShareActionProvider;
+    private String mBreweries;
 
     private ListView mBreweryListView;
     private int mPosition = ListView.INVALID_POSITION;
@@ -91,21 +99,28 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_brewery_list, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_beer_list_fragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_beer_list_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mBreweriesShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+        if (mBreweries != null) {
+            mBreweriesShareActionProvider.setShareIntent(createShareBreweriesIntent());
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_brewery_list) {
-//            openPreferredLocationInMap();
-            return true;
-        }
+    private Intent createShareBreweriesIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mBreweries + BREWERIES_SHARE_HASHTAG);
 
-        return super.onOptionsItemSelected(item);
+        return shareIntent;
     }
 
     @Override
@@ -202,6 +217,13 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             mBreweryListView.smoothScrollToPosition(mPosition);
+        }
+
+        mBreweries = "Check out all these awesome breweries that I found on this cool new app, BREWSKI.";
+
+        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+        if (mBreweriesShareActionProvider != null) {
+            mBreweriesShareActionProvider.setShareIntent(createShareBreweriesIntent());
         }
     }
 

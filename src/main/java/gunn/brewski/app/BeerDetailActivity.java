@@ -33,7 +33,7 @@ public class BeerDetailActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_beer_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_beer_detail_activity, menu);
         return true;
     }
 

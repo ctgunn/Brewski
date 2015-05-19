@@ -92,7 +92,7 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_brewery_detail, menu);
+        inflater.inflate(R.menu.menu_brewery_detail_fragment, menu);
 
         // Retrieve the share menu item
         MenuItem menuItem = menu.findItem(R.id.action_brewery_share);
@@ -102,11 +102,11 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
 
         // If onLoadFinished happens before this, we can go ahead and set the share intent now.
         if (mBrewery != null) {
-            mBreweryShareActionProvider.setShareIntent(createShareForecastIntent());
+            mBreweryShareActionProvider.setShareIntent(createShareBreweryIntent());
         }
     }
 
-    private Intent createShareForecastIntent() {
+    private Intent createShareBreweryIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
@@ -181,9 +181,11 @@ public class BreweryDetailFragment extends Fragment implements LoaderManager.Loa
             String established = data.getString(COL_ESTABLISHED);
             mEstablishedView.setText(established);
 
+            mBrewery = "Check out this brewery, " + breweryName + ", that I found on this cool new app, BREWSKI.";
+
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mBreweryShareActionProvider != null) {
-                mBreweryShareActionProvider.setShareIntent(createShareForecastIntent());
+                mBreweryShareActionProvider.setShareIntent(createShareBreweryIntent());
             }
         }
     }

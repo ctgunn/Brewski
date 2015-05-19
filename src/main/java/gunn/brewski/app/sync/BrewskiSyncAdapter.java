@@ -943,9 +943,9 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         Context context = getContext();
         //checking the last update and notify if it' the first of the day
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
+        String displayNotificationsKey = context.getString(R.string.app_name);
         boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
-                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
+                Boolean.parseBoolean(context.getString(R.string.app_name)));
 
         if ( displayNotifications ) {
 
@@ -967,27 +967,27 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                     double low = cursor.getDouble(COLUMN_BEER_DESCRIPTION);
                     String desc = cursor.getString(COLUMN_LABEL_ICON);
 
-                    int iconId = Utility.getIconResourceForWeatherCondition(beerId);
-                    Resources resources = context.getResources();
-                    Bitmap largeIcon = BitmapFactory.decodeResource(resources,
-                            Utility.getArtResourceForWeatherCondition(beerId));
-                    String title = context.getString(R.string.app_name);
-
-                    // Define the text of the forecast.
-                    String contentText = String.format(context.getString(R.string.format_notification),
-                            desc,
-                            Utility.formatTemperature(context, high),
-                            Utility.formatTemperature(context, low));
+//                    int iconId = Utility.getIconResourceForWeatherCondition(beerId);
+//                    Resources resources = context.getResources();
+//                    Bitmap largeIcon = BitmapFactory.decodeResource(resources,
+//                            Utility.getArtResourceForWeatherCondition(beerId));
+//                    String title = context.getString(R.string.app_name);
+//
+//                    // Define the text of the forecast.
+//                    String contentText = String.format(context.getString(R.string.format_notification),
+//                            desc,
+//                            Utility.formatTemperature(context, high),
+//                            Utility.formatTemperature(context, low));
 
                     // NotificationCompatBuilder is a very convenient way to build backward-compatible
                     // notifications.  Just throw in some data.
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(getContext())
-                                    .setColor(resources.getColor(R.color.brewski_dark_grey))
-                                    .setSmallIcon(iconId)
-                                    .setLargeIcon(largeIcon)
-                                    .setContentTitle(title)
-                                    .setContentText(contentText);
+//                    NotificationCompat.Builder mBuilder =
+//                            new NotificationCompat.Builder(getContext())
+//                                    .setColor(resources.getColor(R.color.brewski_dark_grey))
+//                                    .setSmallIcon(iconId)
+//                                    .setLargeIcon(largeIcon)
+//                                    .setContentTitle(title)
+//                                    .setContentText(contentText);
 
                     // Make something interesting happen when the user clicks on the notification.
                     // In this case, opening the app is sufficient.
@@ -1004,12 +1004,12 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                                     0,
                                     PendingIntent.FLAG_UPDATE_CURRENT
                             );
-                    mBuilder.setContentIntent(resultPendingIntent);
+//                    mBuilder.setContentIntent(resultPendingIntent);
 
                     NotificationManager mNotificationManager =
                             (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
-                    mNotificationManager.notify(BEER_NOTIFICATION_ID, mBuilder.build());
+//                    mNotificationManager.notify(BEER_NOTIFICATION_ID, mBuilder.build());
 
                     //refreshing last sync
                     SharedPreferences.Editor editor = prefs.edit();

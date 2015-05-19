@@ -16,10 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.data.BrewskiContract.StyleEntry;
 
 
@@ -89,7 +87,7 @@ public class StyleDetailFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_style_detail, menu);
+        inflater.inflate(R.menu.menu_style_detail_fragment, menu);
 
         // Retrieve the share menu item
         MenuItem menuItem = menu.findItem(R.id.action_style_share);
@@ -99,11 +97,11 @@ public class StyleDetailFragment extends android.support.v4.app.Fragment impleme
 
         // If onLoadFinished happens before this, we can go ahead and set the share intent now.
         if (mStyle != null) {
-            mStyleShareActionProvider.setShareIntent(createShareForecastIntent());
+            mStyleShareActionProvider.setShareIntent(createShareStyleIntent());
         }
     }
 
-    private Intent createShareForecastIntent() {
+    private Intent createShareStyleIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
@@ -160,9 +158,11 @@ public class StyleDetailFragment extends android.support.v4.app.Fragment impleme
             String styleDescription = data.getString(COL_STYLE_DESCRIPTION);
             mStyleDescriptionView.setText(styleDescription);
 
+            mStyle = "Check out this style of beer, " + styleName + ", that I found on this cool new app, BREWSKI.";
+
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mStyleShareActionProvider != null) {
-                mStyleShareActionProvider.setShareIntent(createShareForecastIntent());
+                mStyleShareActionProvider.setShareIntent(createShareStyleIntent());
             }
         }
     }

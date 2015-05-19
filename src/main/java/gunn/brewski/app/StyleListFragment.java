@@ -1,5 +1,6 @@
 package gunn.brewski.app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +35,11 @@ import gunn.brewski.app.sync.BrewskiSyncAdapter;
 public class StyleListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = StyleListFragment.class.getSimpleName();
     private StyleListAdapter mStyleListAdapter;
+
+    private static final String STYLES_SHARE_HASHTAG = " #BrewskiStyles";
+
+    private ShareActionProvider mStylesShareActionProvider;
+    private String mStyles;
 
     private ListView mStyleListView;
     private int mPosition = ListView.INVALID_POSITION;
@@ -88,21 +96,28 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_style_list, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_style_list_fragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_style_list_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mStylesShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+        if (mStyles != null) {
+            mStylesShareActionProvider.setShareIntent(createShareStylesIntent());
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_style_list) {
-//            openPreferredLocationInMap();
-            return true;
-        }
+    private Intent createShareStylesIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mStyles + STYLES_SHARE_HASHTAG);
 
-        return super.onOptionsItemSelected(item);
+        return shareIntent;
     }
 
     @Override
@@ -200,6 +215,13 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             mStyleListView.smoothScrollToPosition(mPosition);
+        }
+
+        mStyles = "Check out all these awesome styles of beer that I found on this cool new app, BREWSKI.";
+
+        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+        if (mStylesShareActionProvider != null) {
+            mStylesShareActionProvider.setShareIntent(createShareStylesIntent());
         }
     }
 

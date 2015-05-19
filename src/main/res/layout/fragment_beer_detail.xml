@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
             <FrameLayout
                 android:layout_width="80dp"
@@ -28,7 +29,8 @@
                     android:id="@+id/detail_beer_icon"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"/>
             </FrameLayout>
 
             <LinearLayout
