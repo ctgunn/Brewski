@@ -148,19 +148,21 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-                // if it cannot seek to that position.
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                BrewskiApplication.setCurrentBeerId(cursor.getString(COL_BEER_ID));
-                if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(
-                        BrewskiContract.BeerEntry.buildBeerUriWithBeerId(cursor.getString(COL_BEER_ID))
-                    );
-                }
+            // CursorAdapter returns a cursor at the correct position for getItem(), or null
+            // if it cannot seek to that position.
+            Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+            BrewskiApplication.setCurrentBeerId(cursor.getString(COL_BEER_ID));
+            if (cursor != null) {
+                ((Callback) getActivity()).onItemSelected(
+                    BrewskiContract.BeerEntry.buildBeerUriWithBeerId(cursor.getString(COL_BEER_ID))
+                );
+            }
 
-                mPosition = position;
+            mPosition = position;
             }
         });
+
+
 
         // If there's instance state, mine it for useful information.
         // The end-goal here is that the user never knows that turning their device sideways

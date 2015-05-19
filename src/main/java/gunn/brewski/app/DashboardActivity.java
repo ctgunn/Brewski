@@ -32,8 +32,6 @@ public class DashboardActivity extends ActionBarActivity {
          * Handling all button click events
          * */
 
-        // Listening to News Feed button click
-//        btn_profile.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                // Launching News Feed Screen
