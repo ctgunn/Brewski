@@ -1,6 +1,9 @@
 package gunn.brewski.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +19,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import gunn.brewski.app.data.BrewskiContract;
@@ -44,42 +49,32 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
     private ListView mBeerListView;
     private int mPosition = ListView.INVALID_POSITION;
     private boolean mUseTodayLayout;
+    private boolean loadingMore;
+    private IntentFilter beerFilter;
 
     private static final String SELECTED_KEY = "selected_position";
 
-    private static final int BEER_LIST_LOADER = 0;
-    // For the forecast view we're showing only a small subset of the stored data.
-    // Specify the columns we need.
-    private static final String[] BEER_COLUMNS = {
-            // In this case the id needs to be fully qualified with a table name, since
-            // the content provider joins the location & weather tables in the background
-            // (both have an _id column)
-            // On the one hand, that's annoying.  On the other, you can search the weather table
-            // using the location set by the user, which is only in the Location table.
-            // So the convenience is worth it.
-            BrewskiContract.BeerEntry.TABLE_NAME + "." + BrewskiContract.BeerEntry._ID,
-            BrewskiContract.BeerEntry.COLUMN_BEER_ID,
-            BrewskiContract.BeerEntry.COLUMN_BEER_NAME,
-            BrewskiContract.BeerEntry.COLUMN_BEER_DESCRIPTION,
-            BrewskiContract.BeerEntry.COLUMN_BREWERY_ID,
-            BrewskiContract.BeerEntry.COLUMN_CATEGORY_ID,
-            BrewskiContract.BeerEntry.COLUMN_STYLE_ID,
-            BrewskiContract.BeerEntry.COLUMN_LABEL_LARGE,
-            BrewskiContract.BeerEntry.COLUMN_LABEL_MEDIUM,
-            BrewskiContract.BeerEntry.COLUMN_LABEL_ICON
+    private BroadcastReceiver beerReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            loadingMore = false;
+            getLoaderManager().restartLoader(BEER_LIST_LOADER, null, BeerListFragment.this);
+        }
     };
 
-    // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
-    // must change.
+    private static final int BEER_LIST_LOADER = 0;
+
+    private static final String[] BEER_COLUMNS = {
+        BrewskiContract.BeerEntry.TABLE_NAME + "." + BrewskiContract.BeerEntry._ID,
+        BrewskiContract.BeerEntry.COLUMN_BEER_ID,
+        BrewskiContract.BeerEntry.COLUMN_BEER_NAME,
+        BrewskiContract.BeerEntry.COLUMN_BEER_DESCRIPTION,
+        BrewskiContract.BeerEntry.COLUMN_LABEL_MEDIUM
+    };
+
     static final int COL_BEER_ID = 1;
     static final int COL_BEER_NAME = 2;
     static final int COL_BEER_DESCRIPTION = 3;
-    static final int COL_BREWERY_ID = 4;
-    static final int COL_CATEGORY_ID = 5;
-    static final int COL_STYLE_ID = 6;
-    static final int COL_LABEL_LARGE = 7;
-    static final int COL_LABEL_MEDIUM = 8;
-    static final int COL_LABEL_ICON = 9;
+    static final int COL_LABEL_MEDIUM = 4;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -101,7 +96,8 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-//        updateBrewski();
+
+        beerFilter = new IntentFilter("moreBeersLoaded");
     }
 
     @Override
@@ -134,8 +130,6 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // The ForecastAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
         mBeerListAdapter = new BeerListAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_beer_list, container, false);
@@ -162,7 +156,26 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
             }
         });
 
+        mBeerListView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                int lastInScreen = firstVisibleItem + visibleItemCount;
+
+                if ((lastInScreen >= (totalItemCount - 25)) && !(loadingMore)) {
+                    loadingMore = true;
+                    syncBeer();
+                }
+
+                mPosition = ListView.INVALID_POSITION;
+            }
+        });
 
         // If there's instance state, mine it for useful information.
         // The end-goal here is that the user never knows that turning their device sideways
@@ -186,14 +199,8 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         super.onActivityCreated(savedInstanceState);
     }
 
-    // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged( ) {
-        updateBrewski();
-        getLoaderManager().restartLoader(BEER_LIST_LOADER, null, this);
-    }
-
-    private void updateBrewski() {
-        BrewskiSyncAdapter.syncImmediately(getActivity());
+    private void syncBeer() {
+        BrewskiSyncAdapter.syncImmediately(getActivity(), "beer");
     }
 
     @Override
@@ -238,6 +245,8 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
             mBeerListView.smoothScrollToPosition(mPosition);
         }
 
+        loadingMore = false;
+
         mBeers = "Check out all these awesome beers that I found on this cool new app, BREWSKI.";
 
         // If onCreateOptionsMenu has already happened, we need to update the share intent now.
@@ -256,5 +265,18 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         if (mBeerListAdapter != null) {
             mBeerListAdapter.setUseTodayLayout(mUseTodayLayout);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPosition = ListView.INVALID_POSITION;
+        getActivity().registerReceiver(beerReceiver, beerFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(beerReceiver);
     }
 }

@@ -24,6 +24,7 @@ public class BrewskiApplication extends Application {
     private static Context context;
     private static Application application;
 
+    @Override
     public void onCreate() {
         super.onCreate();
         BrewskiApplication.context = getApplicationContext();

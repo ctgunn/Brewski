@@ -65,7 +65,7 @@ public class LoadingScreenActivity extends FragmentActivity {
              */
             try {
                 if(DASHBOARD.equals(screenLoading)) {
-//                    BrewskiSyncAdapter.syncImmediately(LoadingScreenActivity.this);
+
                 }
                 else if(PROFILE.equals(screenLoading)) {
                     //TODO: CALL QUERIES THAT WILL POPULATE THE LIST VIEWS ON THE PROFILE SCREEN.

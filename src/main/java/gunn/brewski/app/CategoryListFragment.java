@@ -163,40 +163,9 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
         super.onActivityCreated(savedInstanceState);
     }
 
-    // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged() {
-        updateCategory();
-        getLoaderManager().restartLoader(CATEGORY_LIST_LOADER, null, this);
+    private void syncCategory() {
+        BrewskiSyncAdapter.syncImmediately(getActivity(), "category");
     }
-
-    private void updateCategory() {
-        BrewskiSyncAdapter.syncImmediately(getActivity());
-    }
-
-//    private void openPreferredLocationInMap() {
-//        // Using the URI scheme for showing a location found on a map.  This super-handy
-//        // intent can is detailed in the "Common Intents" page of Android's developer site:
-//        // http://developer.android.com/guide/components/intents-common.html#Maps
-//        if (null != mCategoryListAdapter) {
-//            Cursor c = mCategoryListAdapter.getCursor();
-//            if (null != c) {
-//                c.moveToPosition(0);
-//                String posLat = c.getString(COL_COORD_LAT);
-//                String posLong = c.getString(COL_COORD_LONG);
-//                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
-//
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setData(geoLocation);
-//
-//                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                    startActivity(intent);
-//                } else {
-//                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
-//                }
-//            }
-//
-//        }
-//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

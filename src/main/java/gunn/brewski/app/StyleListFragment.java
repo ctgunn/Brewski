@@ -1,6 +1,9 @@
 package gunn.brewski.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -23,15 +27,6 @@ import android.widget.ListView;
 import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.sync.BrewskiSyncAdapter;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {link OnFragmentInteractionListener}
- * interface.
- */
 public class StyleListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = StyleListFragment.class.getSimpleName();
     private StyleListAdapter mStyleListAdapter;
@@ -44,25 +39,26 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
     private ListView mStyleListView;
     private int mPosition = ListView.INVALID_POSITION;
     private boolean mUseTodayLayout;
+    private boolean loadingMore;
+    private IntentFilter styleFilter;
 
     private static final String SELECTED_KEY = "selected_position";
 
+    private BroadcastReceiver styleReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            loadingMore = false;
+            getLoaderManager().restartLoader(STYLE_LIST_LOADER, null, StyleListFragment.this);
+        }
+    };
+
     private static final int STYLE_LIST_LOADER = 1;
-    // For the forecast view we're showing only a small subset of the stored data.
-    // Specify the columns we need.
+
     private static final String[] STYLE_COLUMNS = {
-        // In this case the id needs to be fully qualified with a table name, since
-        // the content provider joins the location & weather tables in the background
-        // (both have an _id column)
-        // On the one hand, that's annoying.  On the other, you can search the weather table
-        // using the location set by the user, which is only in the Location table.
-        // So the convenience is worth it.
         BrewskiContract.StyleEntry.TABLE_NAME + "." + BrewskiContract.StyleEntry._ID,
         BrewskiContract.StyleEntry.COLUMN_STYLE_ID,
         BrewskiContract.StyleEntry.COLUMN_STYLE_NAME,
         BrewskiContract.StyleEntry.COLUMN_STYLE_SHORT_NAME,
-        BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION,
-        BrewskiContract.StyleEntry.COLUMN_CATEGORY_ID
+        BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION
     };
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
@@ -92,6 +88,8 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
+        styleFilter = new IntentFilter("moreStylesLoaded");
     }
 
     @Override
@@ -123,9 +121,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // The ForecastAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
         mStyleListAdapter = new StyleListAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_brewery_list, container, false);
@@ -152,6 +147,30 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
+//        mStyleListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem,
+//                                 int visibleItemCount, int totalItemCount) {
+//
+//                int lastInScreen = firstVisibleItem + visibleItemCount;
+//
+//                if ((lastInScreen >= (totalItemCount - 25)) && !(loadingMore)) {
+//                    loadingMore = true;
+//                    syncStyle();
+//                }
+//
+//                mPosition = lastInScreen + 5;
+//            }
+//        });
+
+        loadingMore = true;
+        syncStyle();
+
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             // The listview probably hasn't even been populated yet.  Actually perform the
             // swapout in onLoadFinished.
@@ -169,14 +188,8 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         super.onActivityCreated(savedInstanceState);
     }
 
-    // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged( ) {
-        updateStyle();
-        getLoaderManager().restartLoader(STYLE_LIST_LOADER, null, this);
-    }
-
-    private void updateStyle() {
-        BrewskiSyncAdapter.syncImmediately(getActivity());
+    private void syncStyle() {
+        BrewskiSyncAdapter.syncImmediately(getActivity(), "style");
     }
 
     @Override
@@ -198,14 +211,14 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         Uri styleListUri = BrewskiContract.StyleEntry.STYLE_CONTENT_URI;
 
         return new CursorLoader(getActivity(),
-                styleListUri,
-                STYLE_COLUMNS,
+            styleListUri,
+            STYLE_COLUMNS,
+            BrewskiContract.StyleEntry.TABLE_NAME + "." +
+                BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " IS NOT NULL AND " +
                 BrewskiContract.StyleEntry.TABLE_NAME + "." +
-                    BrewskiContract.StyleEntry.COLUMN_STYLE_NAME + " IS NOT NULL AND " +
-                    BrewskiContract.StyleEntry.TABLE_NAME + "." +
-                    BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION + " IS NOT NULL",
-                null,
-                sortOrder);
+                BrewskiContract.StyleEntry.COLUMN_STYLE_DESCRIPTION + " IS NOT NULL",
+            null,
+            sortOrder);
     }
 
     @Override
@@ -216,6 +229,8 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
             // to, do so now.
             mStyleListView.smoothScrollToPosition(mPosition);
         }
+
+        loadingMore = false;
 
         mStyles = "Check out all these awesome styles of beer that I found on this cool new app, BREWSKI.";
 
@@ -235,5 +250,17 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         if (mStyleListAdapter != null) {
             mStyleListAdapter.setUseTodayLayout(mUseTodayLayout);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(styleReceiver, styleFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(styleReceiver);
     }
 }

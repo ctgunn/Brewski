@@ -45,11 +45,8 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         BeerEntry.COLUMN_BEER_NAME,
         BeerEntry.COLUMN_BEER_DESCRIPTION,
         BeerEntry.COLUMN_BREWERY_ID,
-        BeerEntry.COLUMN_CATEGORY_ID,
         BeerEntry.COLUMN_STYLE_ID,
-        BeerEntry.COLUMN_LABEL_LARGE,
-        BeerEntry.COLUMN_LABEL_MEDIUM,
-        BeerEntry.COLUMN_LABEL_ICON,
+        BeerEntry.COLUMN_LABEL_MEDIUM
     };
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
@@ -58,9 +55,8 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
     public static final int COL_BEER_NAME = 2;
     public static final int COL_BEER_DESCRIPTION = 3;
     public static final int COL_BREWERY_ID = 4;
-    public static final int COL_CATEGORY_ID = 5;
-    public static final int COL_STYLE_ID = 6;
-    public static final int COL_LABEL_MEDIUM = 8;
+    public static final int COL_STYLE_ID = 5;
+    public static final int COL_LABEL_MEDIUM = 6;
 
     private ImageView mBeerLabelIconView;
     private TextView mBeerNameView;

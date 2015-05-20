@@ -1,6 +1,9 @@
 package gunn.brewski.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -44,28 +48,26 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
     private ListView mBreweryListView;
     private int mPosition = ListView.INVALID_POSITION;
     private boolean mUseTodayLayout;
+    private boolean loadingMore;
+    private IntentFilter breweryFilter;
 
     private static final String SELECTED_KEY = "selected_position";
 
+    private BroadcastReceiver breweryReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            loadingMore = false;
+            getLoaderManager().restartLoader(BREWERY_LIST_LOADER, null, BreweryListFragment.this);
+        }
+    };
+
     private static final int BREWERY_LIST_LOADER = 1;
-    // For the forecast view we're showing only a small subset of the stored data.
-    // Specify the columns we need.
+
     private static final String[] BREWERY_COLUMNS = {
-            // In this case the id needs to be fully qualified with a table name, since
-            // the content provider joins the location & weather tables in the background
-            // (both have an _id column)
-            // On the one hand, that's annoying.  On the other, you can search the weather table
-            // using the location set by the user, which is only in the Location table.
-            // So the convenience is worth it.
-            BrewskiContract.BreweryEntry.TABLE_NAME + "." + BrewskiContract.BreweryEntry._ID,
-            BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID,
-            BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME,
-            BrewskiContract.BreweryEntry.COLUMN_BREWERY_DESCRIPTION,
-            BrewskiContract.BreweryEntry.COLUMN_BREWERY_WEBSITE,
-            BrewskiContract.BreweryEntry.COLUMN_ESTABLISHED,
-            BrewskiContract.BreweryEntry.COLUMN_IMAGE_LARGE,
-            BrewskiContract.BreweryEntry.COLUMN_IMAGE_MEDIUM,
-            BrewskiContract.BreweryEntry.COLUMN_IMAGE_ICON
+        BrewskiContract.BreweryEntry.TABLE_NAME + "." + BrewskiContract.BreweryEntry._ID,
+        BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID,
+        BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME,
+        BrewskiContract.BreweryEntry.COLUMN_BREWERY_DESCRIPTION,
+        BrewskiContract.BreweryEntry.COLUMN_IMAGE_MEDIUM
     };
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
@@ -73,7 +75,7 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
     static final int COL_BREWERY_ID = 1;
     static final int COL_BREWERY_NAME = 2;
     static final int COL_BREWERY_DESCRIPTION = 3;
-    static final int COL_IMAGE_MEDIUM = 7;
+    static final int COL_IMAGE_MEDIUM = 4;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -95,6 +97,8 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
+        breweryFilter = new IntentFilter("moreBreweriesLoaded");
     }
 
     @Override
@@ -155,6 +159,27 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
+        mBreweryListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                int lastInScreen = firstVisibleItem + visibleItemCount;
+
+                if ((lastInScreen >= (totalItemCount - 25)) && !(loadingMore)) {
+                    loadingMore = true;
+                    syncBrewery();
+                }
+
+                mPosition = ListView.INVALID_POSITION;
+            }
+        });
+
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
@@ -170,14 +195,8 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         super.onActivityCreated(savedInstanceState);
     }
 
-    // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged( ) {
-        updateBrewery();
-        getLoaderManager().restartLoader(BREWERY_LIST_LOADER, null, this);
-    }
-
-    private void updateBrewery() {
-        BrewskiSyncAdapter.syncImmediately(getActivity());
+    private void syncBrewery() {
+        BrewskiSyncAdapter.syncImmediately(getActivity(), "brewery");
     }
 
     @Override
@@ -219,6 +238,8 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
             mBreweryListView.smoothScrollToPosition(mPosition);
         }
 
+        loadingMore = false;
+
         mBreweries = "Check out all these awesome breweries that I found on this cool new app, BREWSKI.";
 
         // If onCreateOptionsMenu has already happened, we need to update the share intent now.
@@ -237,5 +258,18 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         if (mBreweryListAdapter != null) {
             mBreweryListAdapter.setUseTodayLayout(mUseTodayLayout);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPosition = ListView.INVALID_POSITION;
+        getActivity().registerReceiver(breweryReceiver, breweryFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(breweryReceiver);
     }
 }

@@ -51,6 +51,7 @@ import gunn.brewski.app.data.BrewskiContract;
  */
 public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
+    public static final String CALLING_LIST = "callingList";
     public final String LOG_TAG = BrewskiSyncAdapter.class.getSimpleName();
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
@@ -59,6 +60,11 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final long DAY_IN_MILLIS = SYNC_INTERVAL;
     private static final int BEER_NOTIFICATION_ID = 3004;
     private static final int BREWERY_NOTIFICATION_ID = 4004;
+
+    private int beerPage = 1;
+    private int breweryPage = 1;
+    private int categoryPage = 1;
+    private int stylePage = 1;
 
 
     private static final String[] NOTIFY_BEER_OF_THE_DAY = new String[] {
@@ -82,10 +88,32 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
 
-        performBeerSync();
-//        performBrewerySync();
-//        performCategorySync();
-//        performStyleSync();
+        String callingList = extras.getString(CALLING_LIST);
+
+        Intent intent = new Intent();
+        intent.setAction("moreBeersLoaded");
+
+        if(callingList.equals("beer")) {
+            performBeerSync();
+            intent.setAction("moreBeersLoaded");
+        }
+        else if(callingList.equals("brewery")) {
+            performBrewerySync();
+            intent.setAction("moreBreweriesLoaded");
+        }
+        else if(callingList.equals("category")) {
+            performCategorySync();
+            intent.setAction("moreCategoriesLoaded");
+        }
+        else if(callingList.equals("style")) {
+            performStyleSync();
+            intent.setAction("moreStylesLoaded");
+        }
+        else {
+            performBeerSync();
+        }
+
+        getContext().sendBroadcast(intent);
 
         return;
     }
@@ -96,14 +124,17 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         HttpURLConnection beerUrlConnection = null;
         BufferedReader beerReader = null;
 
+        if(null == BrewskiApplication.getCurrentBeerPage()) {
+            BrewskiApplication.setCurrentBeerPage(1);
+        }
+
         // Will contain the raw JSON response as a string.
         String beerJsonStr = null;
 
         String format = "json";
         String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
         String endpoint = "beers";
-//        String page = MainActivity.application.getCurrentBeerPage().toString();
-        String page = "1";
+        String page = String.valueOf(BrewskiApplication.getCurrentBeerPage());
         String withBreweries = "Y";
 
         try {
@@ -155,6 +186,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
             beerJsonStr = beerBuffer.toString();
 
+            BrewskiApplication.setCurrentBeerPage(BrewskiApplication.getCurrentBeerPage() + 1);
+
             getBeerDataFromJson(beerJsonStr);
         }
         catch (IOException e) {
@@ -188,13 +221,17 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         HttpURLConnection breweryUrlConnection = null;
         BufferedReader breweryReader = null;
 
+        if(null == BrewskiApplication.getCurrentBreweryPage()) {
+            BrewskiApplication.setCurrentBreweryPage(1);
+        }
+
         // Will contain the raw JSON response as a string.
         String breweryJsonStr = null;
 
         String format = "json";
         String api_key = "1be59a6cc44af64d5c7d6aafad061f23";
         String endpoint = "breweries";
-        String page = BrewskiApplication.getCurrentBreweryPage().toString();
+        String page = String.valueOf(BrewskiApplication.getCurrentBreweryPage());
         String withGuilds = "Y";
         String withLocations = "Y";
         String withAlternateNames = "Y";
@@ -249,6 +286,8 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
                 // Stream was empty.  No point in parsing.
                 return;
             }
+
+            BrewskiApplication.setCurrentBreweryPage(BrewskiApplication.getCurrentBreweryPage() + 1);
 
             breweryJsonStr = breweryBuffer.toString();
 
@@ -365,6 +404,10 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         // so that they can be closed in the finally block.
         HttpURLConnection styleUrlConnection = null;
         BufferedReader styleReader = null;
+
+        if(null == BrewskiApplication.getCurrentStylePage()) {
+            BrewskiApplication.setCurrentStylePage(1);
+        }
 
         // Will contain the raw JSON response as a string.
         String styleJsonStr = null;
@@ -1094,10 +1137,11 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
      * Helper method to have the sync adapter sync immediately
      * @param context The context used to access the account service
      */
-    public static void syncImmediately(Context context) {
+    public static void syncImmediately(Context context, String listName) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putString(CALLING_LIST, listName);
 
         ContentResolver.requestSync(getSyncAccount(context), context.getString(R.string.content_authority), bundle);
     }
@@ -1155,7 +1199,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Finally, let's do a sync to get things started
          */
-        syncImmediately(context);
+        syncImmediately(context, "default");
     }
 
     public static void initializeSyncAdapter(Context context) {
