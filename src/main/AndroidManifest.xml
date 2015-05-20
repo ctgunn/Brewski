@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="gunn.brewski.app" >
 
-    <!-- This permission is necessary in order for Sunshine to perform network access. -->
+    <!-- This permission is necessary in order for Brewski to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Include following permission if you want to cache images on SD card -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
 
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
