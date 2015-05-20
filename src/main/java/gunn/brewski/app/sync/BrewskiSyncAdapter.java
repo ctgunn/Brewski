@@ -817,14 +817,39 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 breweryId = breweryInfo.getString(BDB_BREWERY_ID);
                 breweryName = breweryInfo.getString(BDB_BREWERY_NAME);
-                breweryDescription = breweryInfo.getString(BDB_BREWERY_DESCRIPTION);
-                breweryWebsite = breweryInfo.getString(BDB_BREWERY_WEBSITE);
-                breweryEstablished = breweryInfo.getString(BDB_BREWERY_ESTABLISHED);
 
-                JSONObject breweryImages = breweryInfo.getJSONObject(BDB_BREWERY_IMAGES);
-                breweryImageLarge = breweryImages.getString(BDB_BREWERY_IMAGE_LARGE);
-                breweryImageMedium = breweryImages.getString(BDB_BREWERY_IMAGE_MEDIUM);
-                breweryImageIcon = breweryImages.getString(BDB_BREWERY_IMAGE_ICON);
+                if(breweryInfo.has(BDB_BREWERY_DESCRIPTION)) {
+                    breweryDescription = breweryInfo.getString(BDB_BREWERY_DESCRIPTION);
+                }
+                else {
+                    breweryDescription = null;
+                }
+
+                if(breweryInfo.has(BDB_BREWERY_WEBSITE)) {
+                    breweryWebsite = breweryInfo.getString(BDB_BREWERY_WEBSITE);
+                }
+                else {
+                    breweryWebsite = null;
+                }
+
+                if(breweryInfo.has(BDB_BREWERY_ESTABLISHED)) {
+                    breweryEstablished = breweryInfo.getString(BDB_BREWERY_ESTABLISHED);
+                }
+                else {
+                    breweryEstablished = null;
+                }
+
+                if(breweryInfo.has(BDB_BREWERY_IMAGES)) {
+                    JSONObject breweryImages = breweryInfo.getJSONObject(BDB_BREWERY_IMAGES);
+                    breweryImageLarge = breweryImages.getString(BDB_BREWERY_IMAGE_LARGE);
+                    breweryImageMedium = breweryImages.getString(BDB_BREWERY_IMAGE_MEDIUM);
+                    breweryImageIcon = breweryImages.getString(BDB_BREWERY_IMAGE_ICON);
+                }
+                else {
+                    breweryImageIcon = null;
+                    breweryImageMedium = null;
+                    breweryImageLarge = null;
+                }
 
                 ContentValues breweryValues = new ContentValues();
 
