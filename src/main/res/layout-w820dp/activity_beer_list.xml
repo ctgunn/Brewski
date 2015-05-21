@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    tools:context="gunn.brewski.app.BeerListActivity">
+
+    <fragment
+        android:id="@+id/fragment_beer_list"
+        android:name="gunn.brewski.app.BeerListFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        tools:context="gunn.brewski.app.BeerListFragment"
+        tools:layout="@android:layout/list_content" />
+
+    <FrameLayout
+        android:id="@+id/beer_detail_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" />
+</LinearLayout>

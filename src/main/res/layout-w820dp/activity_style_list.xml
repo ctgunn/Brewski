@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    tools:context="gunn.brewski.app.StyleListActivity">
+
+    <fragment
+        android:id="@+id/fragment_style_list"
+        android:name="gunn.brewski.app.StyleListFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        tools:context="gunn.brewski.app.StyleListFragment"
+        tools:layout="@android:layout/list_content" />
+
+    <FrameLayout
+        android:id="@+id/style_detail_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" />
+</LinearLayout>
