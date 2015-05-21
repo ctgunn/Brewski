@@ -540,7 +540,6 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = beerJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray beerArray = beerJson.getJSONArray(BDB_DATA);
 
-            BrewskiApplication.setCurrentBeerPage(Integer.parseInt(currentPage) + 1);
             BrewskiApplication.setNumberOfBeerPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
@@ -792,7 +791,6 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
             String numberOfPages = breweryJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray breweryArray = breweryJson.getJSONArray(BDB_DATA);
 
-            BrewskiApplication.setCurrentBreweryPage(Integer.parseInt(currentPage) + 1);
             BrewskiApplication.setNumberOfBreweryPages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
@@ -952,12 +950,7 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
         try {
             JSONObject styleJson = new JSONObject(styleJsonStr);
-            String currentPage = styleJson.getString(BDB_CURRENT_PAGE);
-            String numberOfPages = styleJson.getString(BDB_NUMBER_OF_PAGES);
             JSONArray styleArray = styleJson.getJSONArray(BDB_DATA);
-
-            BrewskiApplication.setCurrentStylePage(Integer.parseInt(currentPage) + 1);
-            BrewskiApplication.setNumberOfStylePages(Integer.parseInt(numberOfPages));
 
             // Insert the new beer information into the database
             Vector<ContentValues> styleContentValuesVector = new Vector<ContentValues>(styleArray.length());
@@ -975,11 +968,28 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 styleId = styleInfo.getString(BDB_STYLE_ID);
                 styleName = styleInfo.getString(BDB_STYLE_NAME);
-                styleShortName = styleInfo.getString(BDB_STYLE_SHORT_NAME);
-                styleDescription = styleInfo.getString(BDB_STYLE_DESCRIPTION);
 
-                JSONObject categoryInfo = styleInfo.getJSONObject(BDB_STYLE_CATEGORY);
-                styleCategoryId = categoryInfo.getString(BDB_STYLE_CATEGORY_ID);
+                if(styleInfo.has(BDB_STYLE_SHORT_NAME)) {
+                    styleShortName = styleInfo.getString(BDB_STYLE_SHORT_NAME);
+                }
+                else {
+                    styleShortName = null;
+                }
+
+                if(styleInfo.has(BDB_STYLE_DESCRIPTION)) {
+                    styleDescription = styleInfo.getString(BDB_STYLE_DESCRIPTION);
+                }
+                else {
+                    styleDescription = null;
+                }
+
+                if(styleInfo.has(BDB_STYLE_CATEGORY)) {
+                    JSONObject categoryInfo = styleInfo.getJSONObject(BDB_STYLE_CATEGORY);
+                    styleCategoryId = categoryInfo.getString(BDB_STYLE_CATEGORY_ID);
+                }
+                else {
+                    styleCategoryId = null;
+                }
 
                 ContentValues styleValues = new ContentValues();
 

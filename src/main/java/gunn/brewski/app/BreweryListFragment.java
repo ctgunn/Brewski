@@ -106,16 +106,16 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_beer_list_fragment, menu);
 
-        // Retrieve the share menu item
-        MenuItem menuItem = menu.findItem(R.id.action_beer_list_share);
-
-        // Get the provider and hold onto it to set/change the share intent.
-        mBreweriesShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-
-        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (mBreweries != null) {
-            mBreweriesShareActionProvider.setShareIntent(createShareBreweriesIntent());
-        }
+//        // Retrieve the share menu item
+//        MenuItem menuItem = menu.findItem(R.id.action_beer_list_share);
+//
+//        // Get the provider and hold onto it to set/change the share intent.
+//        mBreweriesShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+//
+//        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+//        if (mBreweries != null) {
+//            mBreweriesShareActionProvider.setShareIntent(createShareBreweriesIntent());
+//        }
     }
 
     private Intent createShareBreweriesIntent() {
@@ -242,10 +242,10 @@ public class BreweryListFragment extends Fragment implements LoaderManager.Loade
 
         mBreweries = "Check out all these awesome breweries that I found on this cool new app, BREWSKI.";
 
-        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
-        if (mBreweriesShareActionProvider != null) {
-            mBreweriesShareActionProvider.setShareIntent(createShareBreweriesIntent());
-        }
+//        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+//        if (mBreweriesShareActionProvider != null) {
+//            mBreweriesShareActionProvider.setShareIntent(createShareBreweriesIntent());
+//        }
     }
 
     @Override

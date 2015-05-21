@@ -37,16 +37,6 @@ public class BrewskiContract {
     public static final String PATH_STYLE = "style";
     public static final String PATH_X_ANALYSIS = "x_analysis";
 
-    // To make it easy to query for the exact date, we normalize all dates that go into
-    // the database to the start of the the Julian day at UTC.
-    public static long normalizeDate(long startDate) {
-        // normalize the start date to the beginning of the (UTC) day
-        Time time = new Time();
-        time.set(startDate);
-        int julianDay = Time.getJulianDay(startDate, time.gmtoff);
-        return time.setJulianDay(julianDay);
-    }
-
     public static final class ProfileEntry implements BaseColumns {
 
         public static final Uri PROFILE_CONTENT_URI =

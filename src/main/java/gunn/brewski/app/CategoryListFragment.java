@@ -96,10 +96,10 @@ public class CategoryListFragment extends Fragment implements LoaderManager.Load
 //            updateWeather();
 //            return true;
 //        }
-        if(id == R.id.action_category_list_share) {
+//        if(id == R.id.action_category_list_share) {
 //            openPreferredLocationInMap();
-            return true;
-        }
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

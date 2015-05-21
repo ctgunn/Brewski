@@ -2,6 +2,8 @@ package gunn.brewski.app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +23,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import gunn.brewski.app.data.BrewskiContentProvider;
+import gunn.brewski.app.data.BrewskiContract;
 import gunn.brewski.app.data.BrewskiContract.BeerEntry;
+import gunn.brewski.app.data.BrewskiDbHelper;
 
 /**
  * Created by SESA300553 on 4/7/2015.
@@ -34,6 +39,8 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
     private static final String BEER_SHARE_HASHTAG = " #BrewskiBeer";
 
     private ShareActionProvider mBeerShareActionProvider;
+//    private SQLiteQueryBuilder mBeerDetailBreweryQueryBuilder;
+//    private SQLiteQueryBuilder sBeerDetailStyleQueryBuilder;
     private String mBeer;
     private Uri mBeerUri;
 
@@ -77,6 +84,12 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         if (arguments != null) {
             mBeerUri = arguments.getParcelable(BeerDetailFragment.BEER_DETAIL_URI);
         }
+
+//        mBeerDetailBreweryQueryBuilder = new SQLiteQueryBuilder();
+//        sBeerDetailStyleQueryBuilder = new SQLiteQueryBuilder();
+
+//        mBeerDetailBreweryQueryBuilder.setTables(BrewskiContract.BreweryEntry.TABLE_NAME);
+//        sBeerDetailStyleQueryBuilder.setTables(BrewskiContract.StyleEntry.TABLE_NAME);
 
         View rootView = inflater.inflate(R.layout.fragment_beer_detail, container, false);
         mBeerLabelIconView = (ImageView) rootView.findViewById(R.id.detail_beer_icon);
@@ -176,17 +189,20 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
             mBeerLabelIconView.setContentDescription(beerDescription);
 
             // Read description from cursor and update view
-            String breweryName = data.getString(COL_BREWERY_ID);
+            String breweryId = data.getString(COL_BREWERY_ID);
+            String breweryName = getBreweryName(breweryId);
 
             mBreweryNameView.setText("Brewery: " + breweryName);
 
             // Read description from cursor and update view
             if(null != data.getString(COL_STYLE_ID)) {
-                String styleName = data.getString(COL_STYLE_ID);
+                String styleId = data.getString(COL_STYLE_ID);
+                String styleName = getStyleName(styleId);
+
                 mStyleNameView.setText("Style: " + styleName);
             }
             else {
-                mStyleNameView.setText("N/A");
+                mStyleNameView.setText("Not available.");
             }
 
             mBeer = "Check out this beer, " + beerName + ", made by brewery, " + breweryName + ", that I found on this cool new app, BREWSKI.";
@@ -196,6 +212,40 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
                 mBeerShareActionProvider.setShareIntent(createShareBeerIntent());
             }
         }
+    }
+
+    public String getBreweryName(String id) {
+        String breweryName = "Not available.";
+
+        try {
+            Cursor cursor = BrewskiContentProvider.mOpenHelper.getReadableDatabase().rawQuery("SELECT brewery_id, brewery_name FROM brewery WHERE brewery_id=" + "\"" + id + "\"", null);
+
+            cursor.moveToFirst();
+            breweryName = cursor.getString(cursor.getColumnIndex(BrewskiContract.BreweryEntry.COLUMN_BREWERY_NAME));
+            cursor.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return breweryName;
+    }
+
+    public String getStyleName(String id) {
+        String styleName = "Not available.";
+
+        try {
+            Cursor cursor = BrewskiContentProvider.mOpenHelper.getReadableDatabase().rawQuery("SELECT style_id, style_name FROM style WHERE style_id=" + "\"" + id + "\"", null);
+
+            cursor.moveToFirst();
+            styleName = cursor.getString(cursor.getColumnIndex(BrewskiContract.StyleEntry.COLUMN_STYLE_NAME));
+            cursor.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return styleName;
     }
 
     @Override

@@ -97,16 +97,16 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_style_list_fragment, menu);
 
-        // Retrieve the share menu item
-        MenuItem menuItem = menu.findItem(R.id.action_style_list_share);
-
-        // Get the provider and hold onto it to set/change the share intent.
-        mStylesShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-
-        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (mStyles != null) {
-            mStylesShareActionProvider.setShareIntent(createShareStylesIntent());
-        }
+//        // Retrieve the share menu item
+//        MenuItem menuItem = menu.findItem(R.id.action_style_list_share);
+//
+//        // Get the provider and hold onto it to set/change the share intent.
+//        mStylesShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+//
+//        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+//        if (mStyles != null) {
+//            mStylesShareActionProvider.setShareIntent(createShareStylesIntent());
+//        }
     }
 
     private Intent createShareStylesIntent() {
@@ -146,27 +146,6 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
                 mPosition = position;
             }
         });
-
-//        mStyleListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-//
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem,
-//                                 int visibleItemCount, int totalItemCount) {
-//
-//                int lastInScreen = firstVisibleItem + visibleItemCount;
-//
-//                if ((lastInScreen >= (totalItemCount - 25)) && !(loadingMore)) {
-//                    loadingMore = true;
-//                    syncStyle();
-//                }
-//
-//                mPosition = lastInScreen + 5;
-//            }
-//        });
 
         loadingMore = true;
         syncStyle();
@@ -234,10 +213,10 @@ public class StyleListFragment extends Fragment implements LoaderManager.LoaderC
 
         mStyles = "Check out all these awesome styles of beer that I found on this cool new app, BREWSKI.";
 
-        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
-        if (mStylesShareActionProvider != null) {
-            mStylesShareActionProvider.setShareIntent(createShareStylesIntent());
-        }
+//        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+//        if (mStylesShareActionProvider != null) {
+//            mStylesShareActionProvider.setShareIntent(createShareStylesIntent());
+//        }
     }
 
     @Override

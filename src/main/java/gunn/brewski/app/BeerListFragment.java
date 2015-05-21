@@ -105,16 +105,16 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_beer_list_fragment, menu);
 
-        // Retrieve the share menu item
-        MenuItem menuItem = menu.findItem(R.id.action_beer_list_share);
-
-        // Get the provider and hold onto it to set/change the share intent.
-        mBeersShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-
-        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (mBeers != null) {
-            mBeersShareActionProvider.setShareIntent(createShareBeersIntent());
-        }
+//        // Retrieve the share menu item
+//        MenuItem menuItem = menu.findItem(R.id.action_beer_list_share);
+//
+//        // Get the provider and hold onto it to set/change the share intent.
+//        mBeersShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+//
+//        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+//        if (mBeers != null) {
+//            mBeersShareActionProvider.setShareIntent(createShareBeersIntent());
+//        }
     }
 
     private Intent createShareBeersIntent() {
@@ -249,10 +249,10 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 
         mBeers = "Check out all these awesome beers that I found on this cool new app, BREWSKI.";
 
-        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
-        if (mBeersShareActionProvider != null) {
-            mBeersShareActionProvider.setShareIntent(createShareBeersIntent());
-        }
+//        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+//        if (mBeersShareActionProvider != null) {
+//            mBeersShareActionProvider.setShareIntent(createShareBeersIntent());
+//        }
     }
 
     @Override

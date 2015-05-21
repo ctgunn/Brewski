@@ -3,6 +3,7 @@ package gunn.brewski.app.data;
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -19,7 +20,7 @@ public class BrewskiContentProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private BrewskiDbHelper mOpenHelper;
+    public static BrewskiDbHelper mOpenHelper;
 
     static final int BEER = 100;
     static final int INDIVIDUAL_BEER = 101;
@@ -67,9 +68,7 @@ public class BrewskiContentProvider extends ContentProvider {
                 " ON " + BrewskiContract.BreweryEntry.TABLE_NAME + "." +
                 BrewskiContract.BreweryEntry.COLUMN_BREWERY_ID + " = " +
                 BrewskiContract.BeerEntry.TABLE_NAME + "." +
-                BrewskiContract.BeerEntry.COLUMN_BREWERY_ID +
-                " WHERE " + BrewskiContract.BeerEntry.TABLE_NAME + "." +
-                BrewskiContract.BeerEntry.COLUMN_BEER_ID + " = ?";
+                BrewskiContract.BeerEntry.COLUMN_BREWERY_ID;
 
     private static final String sCategoryOfBeer =
             BrewskiContract.CategoryEntry.TABLE_NAME + " INNER JOIN " +

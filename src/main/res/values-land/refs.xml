@@ -34,5 +34,4 @@
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
     <item name="fragment_item" type="layout">@layout/fragment_style_grid</item>
-
 </resources>
