@@ -222,7 +222,7 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
         // To only show current and future dates, filter the query to return weather only for
         // dates after or including today.
 
-        // Sort order:  Ascending, by date.
+        // Sort order:  Ascending, by name.
         String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
 
         Uri beerUri = BrewskiContract.BeerEntry.BEER_CONTENT_URI;
@@ -247,7 +247,7 @@ public class BeerListFragment extends Fragment implements LoaderManager.LoaderCa
 
         loadingMore = false;
 
-        mBeers = "Check out all these awesome beers that I found on this cool new app, BREWSKI.";
+//        mBeers = "Check out all these awesome beers that I found on this cool new app, BREWSKI.";
 
 //        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
 //        if (mBeersShareActionProvider != null) {

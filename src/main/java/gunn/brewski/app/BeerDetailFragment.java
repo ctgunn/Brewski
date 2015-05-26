@@ -152,13 +152,17 @@ public class BeerDetailFragment extends Fragment implements LoaderManager.Loader
         if ( null != mBeerUri ) {
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
+
+            // Sort order:  Ascending, by name.
+            String sortOrder = BrewskiContract.BeerEntry.COLUMN_BEER_NAME + " ASC";
+
             return new CursorLoader(
-                    getActivity(),
-                    mBeerUri,
-                    BEER_DETAIL_COLUMNS,
-                    null,
-                    null,
-                    null
+                getActivity(),
+                mBeerUri,
+                BEER_DETAIL_COLUMNS,
+                null,
+                null,
+                sortOrder
             );
         }
         return null;

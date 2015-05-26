@@ -93,19 +93,19 @@ public class BrewskiSyncAdapter extends AbstractThreadedSyncAdapter {
         Intent intent = new Intent();
         intent.setAction("moreBeersLoaded");
 
-        if(callingList.equals("beer")) {
+        if("beer".equals(callingList)) {
             performBeerSync();
             intent.setAction("moreBeersLoaded");
         }
-        else if(callingList.equals("brewery")) {
+        else if("brewery".equals(callingList)) {
             performBrewerySync();
             intent.setAction("moreBreweriesLoaded");
         }
-        else if(callingList.equals("category")) {
+        else if("category".equals(callingList)) {
             performCategorySync();
             intent.setAction("moreCategoriesLoaded");
         }
-        else if(callingList.equals("style")) {
+        else if("style".equals(callingList)) {
             performStyleSync();
             intent.setAction("moreStylesLoaded");
         }
