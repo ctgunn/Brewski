@@ -99,4 +99,14 @@
     <!-- Strings related to Notification preference -->
     <string name="pref_last_notification">last_notification</string>
     <string name="title_activity_style_list">Styles</string>
+    <string name="title_activity_navigation_drawer">Menu</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
 </resources>
