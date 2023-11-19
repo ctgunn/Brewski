@@ -1,0 +1,43 @@
+<gunn.brewski.app.DashboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:background="@color/brewski_middle_grey" >
+    <!--  Profile Button -->
+    <!--<Button-->
+        <!--android:id="@+id/btn_profile"-->
+        <!--style="@style/DashboardButton"-->
+        <!--android:text="@string/dashboard_button_profile" />-->
+        <!--android:drawableTop="@drawable/btn_newsfeed"-->
+
+    <!--  Beers Button -->
+    <Button
+        android:id="@+id/btn_beers"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_beers"
+        android:background="@drawable/brewski_dashboard_banner"
+        android:textColor="@color/brewski_dark_grey"
+        android:gravity="center"
+        android:paddingBottom="10dp" />
+
+    <!--  Breweries Button -->
+    <Button
+        android:id="@+id/btn_breweries"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_breweries"
+        android:background="@drawable/brewski_dashboard_banner"
+        android:textColor="@color/brewski_dark_grey"
+        android:gravity="center"
+        android:paddingBottom="10dp"/>
+
+    <!--  Styles Button -->
+    <Button
+        android:id="@+id/btn_categories"
+        style="@style/DashboardButton"
+        android:text="@string/dashboard_button_styles"
+        android:background="@drawable/brewski_dashboard_banner"
+        android:textColor="@color/brewski_dark_grey"
+        android:gravity="center"
+        android:paddingBottom="10dp" />
+</gunn.brewski.app.DashboardLayout>
